@@ -1,7 +1,38 @@
 import "./Login.css";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useState } from "react";
+//import axios from "axios";
+
+interface ThongTin {
+  username: string;
+  password: string;
+}
+
+interface LoiDangNhap {
+  username?: string;
+  password?: string;
+}
 
 const Login = () => {
+  const [thongTinNguoiDungNhap, setThongTinNguoiDungNhap] = useState<ThongTin>({
+    username: "",
+    password: "",
+  });
+  const [loi, setLoi] = useState<LoiDangNhap>({});
+  const navigate = useNavigate();
+  const xacMinh = () => {
+    const temp: LoiDangNhap = {};
+    if (!thongTinNguoiDungNhap.username) {
+      temp.username = "Tên đăng nhập không được bỏ trống!";
+    }
+    if (!thongTinNguoiDungNhap.password) {
+      temp.password = "Mật khẩu không được bỏ trống!";
+    }
+
+    setLoi(temp);
+
+    return Object.keys(temp).length === 0;
+  };
   return (
     <div className="bg">
       <div className="loginContainer">
@@ -10,15 +41,32 @@ const Login = () => {
           <p>Đăng nhập vào tài khoản của bạn</p>
         </div>
 
-        <form className="loginForm">
+        <form
+          className="loginForm"
+          onSubmit={(e) => {
+            e.preventDefault();
+            if (xacMinh()) {
+              alert("Đăng nhập thành công");
+            }
+            navigate("/");
+          }}
+        >
           <div className="formGroup">
             <input
               className="input"
               type="text"
               id="username"
               placeholder="Tên đăng nhập"
+              onChange={(e) => {
+                setThongTinNguoiDungNhap({
+                  ...thongTinNguoiDungNhap,
+                  username: e.target.value,
+                });
+              }}
             />
-            <span className="massageError" id="usernameError"></span>
+            <span className="messageError" id="usernameError">
+              {loi ? loi.username : ""}
+            </span>
           </div>
           <div className="formGroup">
             <input
@@ -26,8 +74,16 @@ const Login = () => {
               type="password"
               id="password"
               placeholder="Mật khẩu     "
+              onChange={(e) => {
+                setThongTinNguoiDungNhap({
+                  ...thongTinNguoiDungNhap,
+                  password: e.target.value,
+                });
+              }}
             />
-            <span className="massageError" id="passwordError"></span>
+            <span className="messageError" id="passwordError">
+              {loi ? loi.password : ""}
+            </span>
           </div>
           <div className="optional">
             <div className="checkingBox">
@@ -38,16 +94,17 @@ const Login = () => {
               <Link to={"/reset"}>Quên mật khẩu</Link>
             </div>
           </div>
+          <div
+            style={{
+              padding: 20,
+            }}
+          >
+            <button type="submit" className="submitButton" onClick={() => {}}>
+              Đăng nhập
+            </button>
+          </div>
         </form>
-        <div
-          style={{
-            padding: 20,
-          }}
-        >
-          <button type="submit" className="submitButton" onClick={() => {}}>
-            Đăng nhập
-          </button>
-        </div>
+
         <div>
           Nếu bạn chưa có tài khoản thì hãy
           <Link to={"/register"}>Đăng kí</Link>
