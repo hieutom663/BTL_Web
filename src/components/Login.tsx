@@ -43,12 +43,38 @@ const Login = () => {
 
         <form
           className="loginForm"
-          onSubmit={(e) => {
+          onSubmit={async (e) => {
             e.preventDefault();
-            if (xacMinh()) {
+
+            // Kiểm tra thông tin đầu vào
+            if (!xacMinh()) return;
+
+            try {
+              const response = await fetch("http://localhost:3000/api/login", {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify(thongTinNguoiDungNhap),
+              });
+
+              const data = await response.json();
+
+              if (!response.ok) {
+                // Nếu API trả về lỗi
+                alert(data.message || "Đăng nhập thất bại");
+                return;
+              }
+
+              // Lưu token vào localStorage (nếu muốn)
+              localStorage.setItem("token", data.token);
+
               alert("Đăng nhập thành công");
+              navigate("/"); // chuyển hướng sau khi đăng nhập
+            } catch (error) {
+              console.error("Lỗi kết nối API:", error);
+              alert("Lỗi server, vui lòng thử lại");
             }
-            navigate("/");
           }}
         >
           <div className="formGroup">
@@ -104,11 +130,6 @@ const Login = () => {
             </button>
           </div>
         </form>
-
-        <div>
-          Nếu bạn chưa có tài khoản thì hãy
-          <Link to={"/register"}>Đăng kí</Link>
-        </div>
       </div>
     </div>
   );
