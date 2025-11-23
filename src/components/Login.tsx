@@ -66,11 +66,10 @@ const Login = () => {
                 return;
               }
 
-              // Lưu token vào localStorage (nếu muốn)
               localStorage.setItem("token", data.token);
 
               alert("Đăng nhập thành công");
-              navigate("/"); // chuyển hướng sau khi đăng nhập
+              navigate("/");
             } catch (error) {
               console.error("Lỗi kết nối API:", error);
               alert("Lỗi server, vui lòng thử lại");
