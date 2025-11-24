@@ -8,6 +8,7 @@ function App() {
     <BrowserRouter>
       {/* <Link to={"/login"}>Đăng nhập</Link> */}
       <Routes>
+        <Route path="/" element={<Login />} />
         <Route path="/login" element={<Login />}></Route>
         <Route path="/register" element={<Register />}></Route>
       </Routes>
