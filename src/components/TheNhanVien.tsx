@@ -1,23 +1,35 @@
 import { NhanVien } from "./TaskData";
-import { useNavigate } from "react-router-dom";
+
+const ngayThang = (str: Date) => {
+  const day = String(str.getDate()).padStart(2, "0");
+  const month = String(str.getMonth() + 1).padStart(2, "0");
+  const year = str.getFullYear();
+  const ketQua = `${day}/${month}/${year}`;
+  return ketQua;
+};
 
 const TheNhanVien = (props: {
   nhanVien: NhanVien;
   danhSachNhanVien: NhanVien[];
+  stt: number;
 }) => {
-  const { nhanVien, danhSachNhanVien } = props;
-  const navigate = useNavigate();
+  const { nhanVien, stt } = props;
 
   return (
-    <div>
-      <h3>Họ và tên: {nhanVien.ten}</h3>
-      <div>Ngày sinh: {nhanVien.namSinh.toDateString()}</div>
-      <div>Giới tính: {nhanVien.gioiTinh}</div>
-      <div>Ngày bắt đầu làm: {nhanVien.ngayBatDau.toDateString()}</div>
-      <div>Vị trí làm việc: {nhanVien.tenViTri}</div>
-      <div>Thuộc phòng/ban: {nhanVien.tenPhong}</div>
-      <div>Lương cơ bản: {nhanVien.luongCoBan}</div>
-    </div>
+    <tr>
+      <td style={{ padding: "8px 12px" }}>{stt}</td>
+      <td style={{ padding: "8px 12px" }}>{nhanVien.id}</td>
+      <td style={{ padding: "8px 12px" }}>{nhanVien.ten}</td>
+      <td style={{ padding: "8px 12px" }}>{ngayThang(nhanVien.namSinh)}</td>
+      <td style={{ padding: "8px 12px" }}>{nhanVien.gioiTinh}</td>
+      <td style={{ padding: "8px 12px" }}>{ngayThang(nhanVien.ngayBatDau)}</td>
+      <td style={{ padding: "8px 12px" }}>{nhanVien.tenViTri}</td>
+      <td style={{ padding: "8px 12px" }}>{nhanVien.tenPhong}</td>
+      <td style={{ padding: "8px 12px" }} align="center">
+        <button>Xem chi tiết</button> | <button>Sửa</button> |{" "}
+        <button>Xóa</button>
+      </td>
+    </tr>
   );
 };
 export default TheNhanVien;
