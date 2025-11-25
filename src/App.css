@@ -3,3 +3,29 @@
   padding: 0;
   box-sizing: border-box;
 }
+
+button {
+  padding: 8px 16px;
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+select {
+  padding: 8px 8px;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+input {
+  margin: 8px 8px 8px 0px;
+  width: 200px;
+  padding: 8px;
+  border: 1px solid;
+  border-radius: 8px;
+  font-size: 16px;
+}

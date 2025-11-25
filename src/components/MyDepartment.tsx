@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { danhSachNhanVien, NhanVien } from "./TaskData";
 import Sidebar from "./Sidebar";
 import Navbar from "./Navbar";
@@ -7,7 +7,7 @@ import { Link } from "react-router-dom";
 const MyDepartment = () => {
   const currentUserId = "IT001";
 
-  const [colleagues, setColleagues] = useState<NhanVien[]>([]);
+  const [nhanVienTrongBan, setNhanVienTrongBan] = useState<NhanVien[]>([]);
   const [myInfo, setMyInfo] = useState<NhanVien | null>(null);
 
   useEffect(() => {
@@ -16,7 +16,7 @@ const MyDepartment = () => {
 
     if (me) {
       const list = danhSachNhanVien.filter((e) => e.maPhong === me.maPhong);
-      setColleagues(list);
+      setNhanVienTrongBan(list);
     }
   }, []);
 
@@ -50,7 +50,7 @@ const MyDepartment = () => {
             </p>
             <p>
               Bạn đang xem danh sách nhân sự phòng:{" "}
-              <strong>{myInfo.maPhong}</strong>
+              <strong>{myInfo.tenPhong}</strong>
             </p>
           </div>
 
@@ -72,7 +72,7 @@ const MyDepartment = () => {
               </tr>
             </thead>
             <tbody>
-              {colleagues.map((emp) => (
+              {nhanVienTrongBan.map((emp) => (
                 <tr
                   key={emp.id}
                   style={{
