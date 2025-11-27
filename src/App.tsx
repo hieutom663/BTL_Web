@@ -5,6 +5,7 @@ import Login from "./components/Login";
 import Trangchu from "./components/Trangchu";
 import MyDepartment from "./components/MyDepartment";
 import DepartmentManager from "./components/DepartmentManager";
+import DepartmentDetail from "./components/DepartmentDetail"; 
 
 function App() {
   return (
@@ -13,6 +14,10 @@ function App() {
         <Route path="/login" element={<Login />}></Route>
         <Route path="/department" element={<MyDepartment />}></Route>
         <Route path="/departments" element={<DepartmentManager />}></Route>
+        
+        {/* 2. KHAI BÁO ROUTE CHO TRANG CHI TIẾT PHÒNG BAN */}
+        <Route path="/departments/:code" element={<DepartmentDetail />}></Route>
+        
         <Route
           path="/"
           element={<Trangchu danhSachNhanVien={danhSachNhanVien} />}

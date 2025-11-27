@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { danhSachPhongBan, Department } from "./TaskData";
-import { Link } from "react-router-dom";
+import { Link } from "react-router-dom"; // Đảm bảo Link được import
 import Sidebar from "./Sidebar";
 import Navbar from "./Navbar";
 
@@ -14,7 +14,7 @@ const DepartmentManager = () => {
   });
   const [isEditing, setIsEditing] = useState(false);
 
-  // --- CHỨC NĂNG THÊM / LƯU ---
+  // --- CHỨC NĂNG THÊM / LƯU --- (Giữ nguyên)
   const handleSave = () => {
     if (!formData.code || !formData.ten)
       return alert("Vui lòng nhập đủ thông tin!");
@@ -58,6 +58,7 @@ const DepartmentManager = () => {
         <Sidebar />
         <div style={{ padding: "20px", fontFamily: "sans-serif" }}>
           <h2 style={{ color: "#28a745" }}>Quản lý Danh sách Phòng ban</h2>
+          {/* Phần Thêm/Sửa Form (Giữ nguyên) */}
           <div
             style={{
               border: "1px solid #ccc",
@@ -129,6 +130,7 @@ const DepartmentManager = () => {
               )}
             </div>
           </div>
+          {/* Phần Bảng dữ liệu */}
           <table
             border={1}
             cellPadding={10}
@@ -153,6 +155,23 @@ const DepartmentManager = () => {
                   <td>{d.ten}</td>
                   <td>{d.foundedYear}</td>
                   <td>
+                    {/* THÊM NÚT XEM CHI TIẾT VÀ ĐIỀU HƯỚNG */}
+                    <Link
+                      to={`/departments/${d.code}`} // Dùng mã phòng ban để tạo URL động
+                      style={{
+                        marginRight: "5px",
+                        cursor: "pointer",
+                        backgroundColor: "#007bff", // Màu xanh dương
+                        color: "white",
+                        border: "none",
+                        padding: "5px 10px",
+                        textDecoration: "none",
+                        display: "inline-block",
+                      }}
+                    >
+                      Xem chi tiết
+                    </Link>
+                    {/* Nút Sửa */}
                     <button
                       onClick={() => handleEdit(d)}
                       style={{
@@ -165,6 +184,7 @@ const DepartmentManager = () => {
                     >
                       Sửa
                     </button>
+                    {/* Nút Xóa */}
                     <button
                       onClick={() => handleDelete(d.code)}
                       style={{
