@@ -5,12 +5,13 @@ import Login from "./components/Login";
 import Trangchu from "./components/Trangchu";
 import MyDepartment from "./components/MyDepartment";
 import DepartmentManager from "./components/DepartmentManager";
-
+import Thongtincanhan from "./components/thongtincanhan";
 function App() {
   return (
     <BrowserRouter>
       <Routes>
         <Route path="/login" element={<Login />}></Route>
+        <Route path="/profile" element={<Thongtincanhan />}></Route>
         <Route path="/department" element={<MyDepartment />}></Route>
         <Route path="/departments" element={<DepartmentManager />}></Route>
         <Route

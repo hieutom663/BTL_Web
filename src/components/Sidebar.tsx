@@ -19,12 +19,12 @@ const Navbar = () => {
         >
           <li>
             <Link to={"/"} style={{ textDecoration: "none" }}>
-              Trang chu
+              Trang chủ
             </Link>
           </li>
           <li>
-            <Link to={"/login"} style={{ textDecoration: "none" }}>
-              DangNhap
+            <Link to={"/profile"} style={{ textDecoration: "none" }}>
+              Thông tin cá nhân
             </Link>
           </li>
           <li>
