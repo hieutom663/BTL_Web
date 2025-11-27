@@ -1,112 +1,97 @@
 import React, { useState } from "react";
-import { Position, danhSachChucVu } from "./positions";
+import { NhanVien, danhSachNhanVien } from "./TaskData";
 import Sidebar from "./Sidebar";
 import Navbar from "./Navbar";
+import "./PositionList.css";
 import { Link } from "react-router-dom";
 
 export default function PositionList() {
-  const [positions, setPositions] = useState<Position[]>(danhSachChucVu);
-  const [showForm, setShowForm] = useState(false);
-  const [editing, setEditing] = useState<Position | null>(null);
-  const [form, setForm] = useState<Position>({ position_code: "", position_name: "" });
+  const allPositions = Array.from(
+    new Set(danhSachNhanVien.map((emp) => emp.chucVu))
+  );
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (editing) {
-      setPositions(
-        positions.map((pos) =>
-          pos.position_code === editing.position_code ? form : pos
-        )
-      );
+  const [selectedPositions, setSelectedPositions] = useState<string[]>([]);
+
+  const togglePosition = (pos: string) => {
+    if (selectedPositions.includes(pos)) {
+      setSelectedPositions(selectedPositions.filter((p) => p !== pos));
     } else {
-      setPositions([...positions, form]);
-    }
-    setShowForm(false);
-    setEditing(null);
-    setForm({ position_code: "", position_name: "" });
-  };
-
-  const handleEdit = (pos: Position) => {
-    setEditing(pos);
-    setForm(pos);
-    setShowForm(true);
-  };
-
-  const handleDelete = (code: string) => {
-    if (window.confirm("Xóa chức vụ này?")) {
-      setPositions(positions.filter((pos) => pos.position_code !== code));
+      setSelectedPositions([...selectedPositions, pos]);
     }
   };
+
+  const filteredEmployees = selectedPositions.length
+    ? danhSachNhanVien.filter((emp) =>
+        selectedPositions.includes(emp.chucVu)
+      )
+    : [];
 
   return (
     <div>
       <Navbar />
-      <div style={{ display: "flex" }}>
+      <div className="layout">
         <Sidebar />
 
-        <div style={{ padding: "20px", fontFamily: "sans-serif", border: "solid black 1px", width: 960 }}>
+        <div className="position-content">
           <h1>Danh sách chức vụ</h1>
 
-          {showForm && (
-            <form onSubmit={handleSubmit} style={{ marginTop: 20 }}>
-              <input
-                placeholder="Mã chức vụ"
-                value={form.position_code}
-                onChange={(e) =>
-                  setForm({ ...form, position_code: e.target.value })
-                }
-                required
-              />
-              <input
-                placeholder="Tên chức vụ"
-                value={form.position_name}
-                onChange={(e) =>
-                  setForm({ ...form, position_name: e.target.value })
-                }
-                required
-              />
-              <button type="submit">Lưu</button>
-            </form>
-          )}
-
-          <button
-            onClick={() => {
-              setShowForm(!showForm);
-              setEditing(null);
-              setForm({ position_code: "", position_name: "" });
-            }}
-            style={{ marginTop: 20 }}
-          >
-            {showForm ? "Đóng form" : "Thêm chức vụ"}
-          </button>
-
-          <table
-            border={1}
-            cellPadding={10}
-            style={{ marginTop: 20, width: "100%", borderCollapse: "collapse" }}
-          >
-            <thead>
-              <tr style={{ backgroundColor: "#0056b3", color: "white" }}>
-                <th>Mã chức vụ</th>
-                <th>Tên chức vụ</th>
-                <th>Hành động</th>
-              </tr>
-            </thead>
-            <tbody>
-              {positions.map((pos) => (
-                <tr key={pos.position_code}>
-                  <td>{pos.position_code}</td>
-                  <td>{pos.position_name}</td>
-                  <td>
-                    <button onClick={() => handleEdit(pos)}>Sửa</button>
-                    <button onClick={() => handleDelete(pos.position_code)}>Xóa</button>
-                  </td>
-                </tr>
+          <div className="position-container">
+            <div className="position-list">
+              {allPositions.map((pos) => (
+                <div
+                  key={pos}
+                  className={`position-item ${
+                    selectedPositions.includes(pos) ? "selected" : ""
+                  }`}
+                  onClick={() => togglePosition(pos)}
+                >
+                  {pos}
+                </div>
               ))}
-            </tbody>
-          </table>
+            </div>
+            <div className="employee-display">
+              {selectedPositions.length > 0 ? (
+                <>
+                  <h2>
+                    Nhân viên chức vụ:{" "}
+                    {selectedPositions.join(", ")}
+                  </h2>
+                  <div className="table-container">
+                    <table className="employee-table">
+                      <thead>
+                        <tr className="table-header">
+                          <th>Mã NV</th>
+                          <th>Họ Tên</th>
+                          <th>Phòng ban</th>
+                          <th>Chức vụ</th>
+                          <th>Lương</th>
+                          <th>Ngày bắt đầu</th>
+                          <th>Giới tính</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {filteredEmployees.map((emp) => (
+                          <tr key={emp.id}>
+                            <td>{emp.id}</td>
+                            <td>{emp.ten}</td>
+                            <td>{emp.tenPhong}</td>
+                            <td>{emp.chucVu}</td>
+                            <td>{emp.luongCoBan.toLocaleString()}₫</td>
+                            <td>{emp.ngayBatDau.toLocaleDateString()}</td>
+                            <td>{emp.gioiTinh}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </>
+              ) : (
+                <p>Chọn ít nhất một chức vụ bên trái để xem nhân viên</p>
+              )}
+            </div>
+          </div>
 
-          <div style={{ marginTop: 20 }}>
+          <div className="back-link">
             <Link to="/">Quay về trang chủ</Link>
           </div>
         </div>
