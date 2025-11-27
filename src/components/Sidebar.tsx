@@ -37,6 +37,16 @@ const Navbar = () => {
               Các phòng, ban
             </Link>
           </li>
+          <li>
+            <Link to={"/employees"} style={{ textDecoration: "none" }}>
+              Danh sách nhân viên
+            </Link>
+          </li>
+          <li>
+            <Link to={"/positions"} style={{ textDecoration: "none" }}>
+              Danh sách chức vụ
+            </Link>
+          </li>
         </ul>
       </div>
     </div>
