@@ -5,30 +5,29 @@ import Navbar from "./Navbar";
 import "./PositionList.css";
 import { Link } from "react-router-dom";
 
-export default function PositionList() {
-  const allPositions = Array.from(
-    new Set(danhSachNhanVien.map((emp) => emp.chucVu))
+export default function DanhSachChucVu() {
+  const tatCaChucVu = Array.from(
+    new Set(danhSachNhanVien.map((nv) => nv.chucVu))
   );
 
-  const [selectedPositions, setSelectedPositions] = useState<string[]>([]);
+  const [chucVuDaChon, setChucVuDaChon] = useState<string[]>([]);
 
-  const togglePosition = (pos: string) => {
-    if (selectedPositions.includes(pos)) {
-      setSelectedPositions(selectedPositions.filter((p) => p !== pos));
+  const chonChucVu = (cv: string) => {
+    if (chucVuDaChon.includes(cv)) {
+      setChucVuDaChon(chucVuDaChon.filter((c) => c !== cv));
     } else {
-      setSelectedPositions([...selectedPositions, pos]);
+      setChucVuDaChon([...chucVuDaChon, cv]);
     }
   };
 
-  const filteredEmployees = selectedPositions.length
-    ? danhSachNhanVien.filter((emp) =>
-        selectedPositions.includes(emp.chucVu)
-      )
+  const nhanVienLoc = chucVuDaChon.length
+    ? danhSachNhanVien.filter((nv) => chucVuDaChon.includes(nv.chucVu))
     : [];
 
   return (
     <div>
       <Navbar />
+
       <div className="layout">
         <Sidebar />
 
@@ -37,25 +36,24 @@ export default function PositionList() {
 
           <div className="position-container">
             <div className="position-list">
-              {allPositions.map((pos) => (
+              {tatCaChucVu.map((cv) => (
                 <div
-                  key={pos}
+                  key={cv}
                   className={`position-item ${
-                    selectedPositions.includes(pos) ? "selected" : ""
+                    chucVuDaChon.includes(cv) ? "selected" : ""
                   }`}
-                  onClick={() => togglePosition(pos)}
+                  onClick={() => chonChucVu(cv)}
                 >
-                  {pos}
+                  {cv}
                 </div>
               ))}
             </div>
+
             <div className="employee-display">
-              {selectedPositions.length > 0 ? (
+              {chucVuDaChon.length > 0 ? (
                 <>
-                  <h2>
-                    Nhân viên chức vụ:{" "}
-                    {selectedPositions.join(", ")}
-                  </h2>
+                  <h2>Nhân viên chức vụ: {chucVuDaChon.join(", ")}</h2>
+
                   <div className="table-container">
                     <table className="employee-table">
                       <thead>
@@ -69,16 +67,17 @@ export default function PositionList() {
                           <th>Giới tính</th>
                         </tr>
                       </thead>
+
                       <tbody>
-                        {filteredEmployees.map((emp) => (
-                          <tr key={emp.id}>
-                            <td>{emp.id}</td>
-                            <td>{emp.ten}</td>
-                            <td>{emp.tenPhong}</td>
-                            <td>{emp.chucVu}</td>
-                            <td>{emp.luongCoBan.toLocaleString()}₫</td>
-                            <td>{emp.ngayBatDau.toLocaleDateString()}</td>
-                            <td>{emp.gioiTinh}</td>
+                        {nhanVienLoc.map((nv) => (
+                          <tr key={nv.id}>
+                            <td>{nv.id}</td>
+                            <td>{nv.ten}</td>
+                            <td>{nv.tenPhong}</td>
+                            <td>{nv.chucVu}</td>
+                            <td>{nv.luongCoBan.toLocaleString()}₫</td>
+                            <td>{nv.ngayBatDau.toLocaleDateString()}</td>
+                            <td>{nv.gioiTinh}</td>
                           </tr>
                         ))}
                       </tbody>
