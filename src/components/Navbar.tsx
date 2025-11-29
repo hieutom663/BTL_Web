@@ -1,8 +1,10 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import logo from "./logo.jpg";
 import "./Navbar.css";
 
 const Navbar = () => {
+  const loginStatus = localStorage.getItem("token");
+  const navigate = useNavigate();
   return (
     <div
       style={{
@@ -25,10 +27,28 @@ const Navbar = () => {
           padding: 12,
           gap: 8,
           border: "1px solid black",
-          width: 200,
+          width: 300,
           justifyContent: "space-between",
         }}
       >
+        {loginStatus ? (
+          <button
+            onClick={() => {
+              localStorage.removeItem("token");
+              navigate("/login");
+            }}
+          >
+            Đăng xuất
+          </button>
+        ) : (
+          <button
+            onClick={() => {
+              navigate("/login");
+            }}
+          >
+            Đăng nhập
+          </button>
+        )}
         <div className="tb ">TB</div>
         <div className="ttcn">Giap Van Hieu</div>
       </div>

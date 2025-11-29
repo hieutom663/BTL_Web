@@ -2,6 +2,7 @@ export interface Department {
   code: string;
   ten: string;
   foundedYear: number;
+  status: string;
 }
 
 export interface NhanVien {
@@ -19,11 +20,36 @@ export interface NhanVien {
 }
 
 export const danhSachPhongBan: Department[] = [
-  { code: "PKT", ten: "Phòng Kỹ thuật", foundedYear: 2015 },
-  { code: "PKTTC", ten: "Phòng Kế toán - Tài chính", foundedYear: 2015 },
-  { code: "PNS", ten: "Phòng Nhân sự", foundedYear: 2018 },
-  { code: "PMK", ten: "Phòng Marketing", foundedYear: 2020 },
-  { code: "PKD", ten: "Phòng Kinh doanh", foundedYear: 2020 },
+  {
+    code: "PKT",
+    ten: "Phòng Kỹ thuật",
+    foundedYear: 2015,
+    status: "Đang hoạt động",
+  },
+  {
+    code: "PTC",
+    ten: "Phòng Tài chính",
+    foundedYear: 2015,
+    status: "Đang hoạt động",
+  },
+  {
+    code: "PNS",
+    ten: "Phòng Nhân sự",
+    foundedYear: 2018,
+    status: "Đang hoạt động",
+  },
+  {
+    code: "PMK",
+    ten: "Phòng Marketing",
+    foundedYear: 2020,
+    status: "Đang hoạt động",
+  },
+  {
+    code: "PKD",
+    ten: "Phòng Kinh doanh",
+    foundedYear: 2020,
+    status: "Đang hoạt động",
+  },
 ];
 
 export const danhSachNhanVien: NhanVien[] = [
@@ -140,8 +166,8 @@ export const danhSachNhanVien: NhanVien[] = [
     maViTri: "ACC",
     tenViTri: "Kế toán",
     chucVu: "Kế toán trưởng",
-    maPhong: "PKT-TC",
-    tenPhong: "Phòng Kế toán - Tài chính",
+    maPhong: "PTC",
+    tenPhong: "Phòng Tài chính",
     luongCoBan: 15000000,
   },
   {
@@ -153,8 +179,8 @@ export const danhSachNhanVien: NhanVien[] = [
     maViTri: "ACC",
     tenViTri: "Kế toán",
     chucVu: "Nhân viên",
-    maPhong: "PKT-TC",
-    tenPhong: "Phòng Kế toán - Tài chính",
+    maPhong: "PTC",
+    tenPhong: "Phòng Tài chính",
     luongCoBan: 10500000,
   },
   {
@@ -257,8 +283,8 @@ export const danhSachNhanVien: NhanVien[] = [
     maViTri: "ACC",
     tenViTri: "Thủ quỹ",
     chucVu: "Nhân viên",
-    maPhong: "PKT-TC",
-    tenPhong: "Phòng Kế toán - Tài chính",
+    maPhong: "PTC",
+    tenPhong: "Phòng Tài chính",
     luongCoBan: 9500000,
   },
   {

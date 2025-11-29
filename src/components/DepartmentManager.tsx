@@ -10,17 +10,16 @@ const DepartmentManager = () => {
   const [formData, setFormData] = useState<Department>({
     code: "",
     ten: "",
-    foundedYear: 2023,
+    foundedYear: 2025,
+    status: "",
   });
   const [isEditing, setIsEditing] = useState(false);
 
-  // --- CHỨC NĂNG THÊM / LƯU ---
   const handleSave = () => {
     if (!formData.code || !formData.ten)
       return alert("Vui lòng nhập đủ thông tin!");
 
     if (isEditing) {
-      // Logic Sửa: Tìm và cập nhật
       const updatedList = departments.map((d) =>
         d.code === formData.code ? formData : d
       );
@@ -28,7 +27,6 @@ const DepartmentManager = () => {
       setIsEditing(false);
       alert("Cập nhật thành công!");
     } else {
-      // Logic Thêm: Check trùng ID trước
       if (departments.some((d) => d.code === formData.code)) {
         return alert("Mã phòng ban đã tồn tại!");
       }
@@ -36,11 +34,9 @@ const DepartmentManager = () => {
       alert("Thêm mới thành công!");
     }
 
-    // Reset form
-    setFormData({ code: "", ten: "", foundedYear: 2023 });
+    setFormData({ code: "", ten: "", foundedYear: 2025, status: "" });
   };
 
-  // CHỨC NĂNG XÓA
   const handleDelete = (code: string) => {
     if (window.confirm(`Bạn có chắc muốn xóa phòng ${code}?`)) {
       setDepartments(departments.filter((d) => d.code !== code));
@@ -120,7 +116,12 @@ const DepartmentManager = () => {
                 <button
                   onClick={() => {
                     setIsEditing(false);
-                    setFormData({ code: "", ten: "", foundedYear: 2023 });
+                    setFormData({
+                      code: "",
+                      ten: "",
+                      foundedYear: 2025,
+                      status: "",
+                    });
                   }}
                   style={{ cursor: "pointer" }}
                 >
@@ -143,6 +144,7 @@ const DepartmentManager = () => {
                 <th>Mã Phòng</th>
                 <th>Tên Phòng Ban</th>
                 <th>Năm Thành Lập</th>
+                <th>Trạng thái</th>
                 <th>Hành động</th>
               </tr>
             </thead>
@@ -152,6 +154,7 @@ const DepartmentManager = () => {
                   <td>{d.code}</td>
                   <td>{d.ten}</td>
                   <td>{d.foundedYear}</td>
+                  <td>{d.status}</td>
                   <td>
                     <button
                       onClick={() => handleEdit(d)}

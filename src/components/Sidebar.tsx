@@ -1,7 +1,10 @@
 import { Link } from "react-router-dom";
+
 import "./Sidebar.css";
 
 const Navbar = () => {
+  //const loginStatus = localStorage.getItem("token");
+
   return (
     <div>
       <div style={{ border: "solid black 1px", height: "960px" }}>
@@ -19,14 +22,20 @@ const Navbar = () => {
         >
           <li>
             <Link to={"/"} style={{ textDecoration: "none" }}>
-              Trang chu
+              Trang chủ
             </Link>
           </li>
-          <li>
-            <Link to={"/login"} style={{ textDecoration: "none" }}>
-              DangNhap
+          {/* {!loginStatus ? (
+            <li>
+              <Link to={"/login"} style={{ textDecoration: "none" }}>
+                Đăng nhập
+              </Link>
+            </li>
+          ) : (
+            <Link to={"/user"} style={{ textDecoration: "none" }}>
+              Trang cá nhân
             </Link>
-          </li>
+          )} */}
           <li>
             <Link to={"/department"} style={{ textDecoration: "none" }}>
               Phòng, ban của bạn
@@ -35,6 +44,11 @@ const Navbar = () => {
           <li>
             <Link to={"/departments"} style={{ textDecoration: "none" }}>
               Các phòng, ban
+            </Link>
+          </li>
+          <li>
+            <Link to={"/positions"} style={{ textDecoration: "none" }}>
+              Danh sách chức vụ
             </Link>
           </li>
         </ul>

@@ -85,7 +85,8 @@ const Trangchu = (props: { danhSachNhanVien: NhanVien[] }) => {
                   <th style={{ padding: "8px 12px" }}>Ngày bắt đầu làm </th>
                   <th style={{ padding: "8px 12px" }}>Vị trí làm việc </th>
                   <th style={{ padding: "8px 12px" }}>Thuộc phòng/ban </th>
-                  <th style={{ backgroundColor: "blue", padding: "8px 12px" }}>
+                  <th style={{ padding: "8px 12px" }}>Lương cơ bản </th>
+                  <th style={{ backgroundColor: "green", padding: "8px 12px" }}>
                     Quản lý{" "}
                   </th>
                 </tr>

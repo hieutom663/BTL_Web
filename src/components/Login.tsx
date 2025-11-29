@@ -110,15 +110,6 @@ const Login = () => {
               {loi ? loi.password : ""}
             </span>
           </div>
-          <div className="optional">
-            <div className="checkingBox">
-              <input type="checkbox" id="remeber" />
-              <span>Ghi nhớ đăng nhập </span>
-            </div>
-            <div>
-              <Link to={"/reset"}>Quên mật khẩu</Link>
-            </div>
-          </div>
           <div
             style={{
               padding: 20,
