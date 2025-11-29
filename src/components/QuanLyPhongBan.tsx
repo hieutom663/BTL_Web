@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import { danhSachPhongBan, Department } from "./TaskData";
-import { Link } from "react-router-dom"; // Đảm bảo Link được import
+import { Link } from "react-router-dom";
 import Sidebar from "./Sidebar";
 import Navbar from "./Navbar";
 
-const DepartmentManager = () => {
+const QuanLyPhongBan = () => {
   const [departments, setDepartments] =
     useState<Department[]>(danhSachPhongBan);
   const [formData, setFormData] = useState<Department>({
@@ -211,4 +211,4 @@ const DepartmentManager = () => {
   );
 };
 
-export default DepartmentManager;
+export default QuanLyPhongBan;

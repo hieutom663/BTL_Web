@@ -4,7 +4,7 @@ import Sidebar from "./Sidebar";
 import Navbar from "./Navbar";
 import { Link } from "react-router-dom";
 
-const MyDepartment = () => {
+const BoPhanCuaToi = () => {
   const currentUserId = "IT001";
 
   const [nhanVienTrongBan, setNhanVienTrongBan] = useState<NhanVien[]>([]);
@@ -99,4 +99,4 @@ const MyDepartment = () => {
   );
 };
 
-export default MyDepartment;
+export default BoPhanCuaToi;

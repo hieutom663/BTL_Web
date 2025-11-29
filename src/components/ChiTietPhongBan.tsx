@@ -1,6 +1,5 @@
 import React from "react";
 import { useParams, Link } from "react-router-dom";
-// Import các interface và danh sách từ TaskData.ts
 import {
   danhSachPhongBan,
   danhSachNhanVien,
@@ -10,7 +9,7 @@ import {
 import Navbar from "./Navbar";
 import Sidebar from "./Sidebar";
 
-const DepartmentDetail = () => {
+const ChiTietPhongBan = () => {
   // Lấy tham số 'code' (Mã phòng ban) từ URL
   const { code } = useParams<{ code: string }>();
 
@@ -133,4 +132,4 @@ const DepartmentDetail = () => {
   );
 };
 
-export default DepartmentDetail;
+export default ChiTietPhongBan;
