@@ -23,7 +23,15 @@ export default function DanhSachNhanVien() {
   const [dsNhanVien, setDsNhanVien] = useState<NhanVien[]>(danhSachNhanVien);
   const [hienForm, setHienForm] = useState(false);
   const [nhanVienDangSua, setNhanVienDangSua] = useState<NhanVien | null>(null);
-  const [duLieuForm, setDuLieuForm] = useState<NhanVien>(formBanDau);
+  const [duLieuForm, setDuLieuForm] = useState<NhanVien>({ ...formBanDau });
+
+  const [trangHienTai, setTrangHienTai] = useState(1);
+  const soLuongMoiTrang = 10;
+  const tongSoTrang = Math.ceil(dsNhanVien.length / soLuongMoiTrang);
+
+  const chiSoCuoi = trangHienTai * soLuongMoiTrang;
+  const chiSoDau = chiSoCuoi - soLuongMoiTrang;
+  const nhanVienHienThi = dsNhanVien.slice(chiSoDau, chiSoCuoi);
 
   const xuLyLuu = (e: React.FormEvent) => {
     e.preventDefault();
@@ -31,28 +39,38 @@ export default function DanhSachNhanVien() {
     if (nhanVienDangSua) {
       setDsNhanVien(
         dsNhanVien.map((nv) =>
-          nv.id === nhanVienDangSua.id ? duLieuForm : nv
+          nv.id === nhanVienDangSua.id ? { ...duLieuForm } : nv
         )
       );
     } else {
-      setDsNhanVien([...dsNhanVien, duLieuForm]);
+      setDsNhanVien([...dsNhanVien, { ...duLieuForm }]);
     }
 
     setHienForm(false);
     setNhanVienDangSua(null);
-    setDuLieuForm(formBanDau);
+    setDuLieuForm({ ...formBanDau });
+    setTrangHienTai(1);
   };
 
   const xuLySua = (nv: NhanVien) => {
     setNhanVienDangSua(nv);
-    setDuLieuForm(nv);
+    setDuLieuForm({ ...nv });
     setHienForm(true);
   };
 
   const xuLyXoa = (id: string) => {
     if (window.confirm("Bạn có chắc muốn xóa nhân viên này?")) {
       setDsNhanVien(dsNhanVien.filter((nv) => nv.id !== id));
+      setTrangHienTai(1);
     }
+  };
+
+  const xuLyPrev = () => {
+    setTrangHienTai((prev) => Math.max(prev - 1, 1));
+  };
+
+  const xuLyNext = () => {
+    setTrangHienTai((prev) => Math.min(prev + 1, tongSoTrang));
   };
 
   return (
@@ -70,7 +88,7 @@ export default function DanhSachNhanVien() {
             onClick={() => {
               setHienForm(!hienForm);
               setNhanVienDangSua(null);
-              setDuLieuForm(formBanDau);
+              setDuLieuForm({ ...formBanDau });
             }}
           >
             {hienForm ? "Đóng form" : "Thêm nhân viên"}
@@ -141,10 +159,7 @@ export default function DanhSachNhanVien() {
               <select
                 value={duLieuForm.gioiTinh}
                 onChange={(e) =>
-                  setDuLieuForm({
-                    ...duLieuForm,
-                    gioiTinh: e.target.value,
-                  })
+                  setDuLieuForm({ ...duLieuForm, gioiTinh: e.target.value })
                 }
               >
                 <option value="">Chọn giới tính</option>
@@ -171,7 +186,7 @@ export default function DanhSachNhanVien() {
             </thead>
 
             <tbody>
-              {dsNhanVien.map((nv) => (
+              {nhanVienHienThi.map((nv) => (
                 <tr key={nv.id}>
                   <td>{nv.id}</td>
                   <td>{nv.ten}</td>
@@ -188,6 +203,18 @@ export default function DanhSachNhanVien() {
               ))}
             </tbody>
           </table>
+
+          <div className="pagination">
+            <button onClick={xuLyPrev} disabled={trangHienTai === 1}>
+              Prev
+            </button>
+            <span style={{ margin: "0 10px" }}>
+              Trang {trangHienTai} / {tongSoTrang}
+            </span>
+            <button onClick={xuLyNext} disabled={trangHienTai === tongSoTrang}>
+              Next
+            </button>
+          </div>
 
           <div className="back-link">
             <Link to="/">Quay về trang chủ</Link>

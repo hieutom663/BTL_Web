@@ -137,6 +137,23 @@
 .employee-table button:last-child:hover {
   background: #b21f2d;
 }
+.pagination {
+  margin-top: 10px;
+  display: flex;
+  align-items: center;
+}
+
+.pagination button {
+  padding: 5px 10px;
+  margin: 0 5px;
+  cursor: pointer;
+}
+
+.pagination button:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
 
 .back-link {
   margin-top: 20px;

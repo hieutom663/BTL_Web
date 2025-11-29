@@ -5,12 +5,13 @@ import Login from "./components/Login";
 import Trangchu from "./components/Trangchu";
 import MyDepartment from "./components/MyDepartment";
 import DepartmentManager from "./components/DepartmentManager";
+import Employee from "./components/EmployeeList";
+import PositionList from "./components/PositonList"
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Login />} />
         <Route path="/login" element={<Login />}></Route>
         <Route path="/department" element={<MyDepartment />}></Route>
         <Route path="/departments" element={<DepartmentManager />}></Route>
@@ -18,6 +19,8 @@ function App() {
           path="/"
           element={<Trangchu danhSachNhanVien={danhSachNhanVien} />}
         ></Route>
+        <Route path="/employees" element={<Employee />}></Route>
+        <Route path="/positions" element={<PositionList />}></Route>
       </Routes>
     </BrowserRouter>
   );
