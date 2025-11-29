@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-interface UserProfile {
+interface ThongTinNguoiDung {
   maNV: string;
   hoTen: string;
   email: string;
@@ -11,45 +11,45 @@ interface UserProfile {
   diaChi: string;
 }
 
-const initialData: UserProfile = {
+const duLieuKhoiTao: ThongTinNguoiDung = {
   maNV: 'NV001',
-  hoTen: 'Nguyễn Văn A',
+  hoTen: 'Giáp Văn Hiếu',
   email: 'vana@company.com',
   soDienThoai: '0901234567',
-  phongBan: 'Phòng Kỹ thuật (PKT)',
-  viTri: 'Lập trình viên Senior',
+  phongBan: 'Phòng kĩ thuật (PKT)',
+  viTri: 'Lập trình viên',
   ngaySinh: '1995-05-15',
-  diaChi: 'Số 10, Đường ABC, TP. Hồ Chí Minh',
+  diaChi: 'Số 10, Đường ABC, TP. Hà Nội',
 };
 
-// --- STYLES ---
-const styles = {
-  page: {
+// -------- STYLES ----------
+const kieuTrang = {
+  trang: {
     padding: '20px',
     maxWidth: '900px',
     margin: '0 auto',
     backgroundColor: '#f8f9fa',
     borderRadius: '8px',
-    boxShadow: '0 2px 4px rgba(0, 0, 0, 0.05)',
+    boxShadow: '0 2px 4px rgba(0,0,0,0.05)',
   },
-  heading: {
+  tieuDe: {
     color: '#343a40',
     borderBottom: '2px solid #dee2e6',
     paddingBottom: '10px',
     marginBottom: '20px',
   },
-  infoGrid: {
+  luoiThongTin: {
     display: 'grid',
     gridTemplateColumns: '150px 1fr',
     gap: '15px 20px',
     marginBottom: '25px',
   },
-  label: {
+  nhan: {
     fontWeight: 600,
     color: '#495057',
     alignSelf: 'center',
   },
-  input: {
+  oNhap: {
     width: '100%',
     padding: '10px 12px',
     border: '1px solid #ced4da',
@@ -57,15 +57,15 @@ const styles = {
     boxSizing: 'border-box' as 'border-box',
     transition: 'border-color 0.2s',
   },
-  inputDisabled: {
+  oNhapKhoa: {
     backgroundColor: '#e9ecef',
     color: '#6c757d',
     cursor: 'not-allowed',
   },
-  textArea: {
+  oVanBan: {
     resize: 'vertical' as 'vertical',
   },
-  actionButtons: {
+  khuVucNut: {
     marginTop: '30px',
     paddingTop: '20px',
     borderTop: '1px solid #dee2e6',
@@ -73,7 +73,7 @@ const styles = {
     gap: '10px',
     justifyContent: 'flex-end',
   },
-  btnPrimary: {
+  nutChinh: {
     padding: '10px 15px',
     border: 'none',
     borderRadius: '4px',
@@ -83,7 +83,7 @@ const styles = {
     color: 'white',
     transition: 'background-color 0.2s',
   },
-  btnSecondary: {
+  nutPhu: {
     padding: '10px 15px',
     border: 'none',
     borderRadius: '4px',
@@ -93,7 +93,7 @@ const styles = {
     color: 'white',
     transition: 'background-color 0.2s',
   },
-  btnLink: {
+  nutLink: {
     background: 'none',
     color: '#007bff',
     textDecoration: 'underline',
@@ -102,332 +102,273 @@ const styles = {
     border: 'none',
     cursor: 'pointer',
   },
-  alert: {
+  thongBao: {
     padding: '10px',
     marginBottom: '20px',
     borderRadius: '4px',
     border: '1px solid transparent',
   },
-  alertSuccess: {
+  thongBaoThanhCong: {
     color: '#155724',
     backgroundColor: '#d4edda',
     borderColor: '#c3e6cb',
   },
-  alertError: {
+  thongBaoLoi: {
     color: '#721c24',
     backgroundColor: '#f8d7da',
     borderColor: '#f5c6cb',
   }
 };
-// --- STYLES ---
 
-
-// --- ĐỔI MẬT KHẨU ---
+// ------------- Đổi Mật Khẩu -------------
 interface DoiMatKhauProps {
-  onCancel: () => void;
-  onSuccess: (msg: string) => void;
-  setAlertMessage: (msg: string, isError: boolean) => void;
+  huyBo: () => void;
+  thanhCong: (msg: string) => void;
+  datThongBao: (msg: string, isError: boolean) => void;
 }
 
-const DoiMatKhauForm: React.FC<DoiMatKhauProps> = ({ onCancel, onSuccess, setAlertMessage }) => {
-  const [passwords, setPasswords] = useState({
-    currentPassword: '',
-    newPassword: '',
-    confirmPassword: '',
+const FormDoiMatKhau: React.FC<DoiMatKhauProps> = ({ huyBo, thanhCong, datThongBao }) => {
+  const [matKhau, setMatKhau] = useState({
+    hienTai: '',
+    moi: '',
+    xacNhan: '',
   });
-  const [loading, setLoading] = useState(false);
+  const [dangXuLy, setDangXuLy] = useState(false);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setPasswords(prev => ({ ...prev, [e.target.name]: e.target.value }));
+  const thayDoi = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setMatKhau(prev => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
-  const handleSavePassword = async () => {
-    setAlertMessage('', false); 
-    const { currentPassword, newPassword, confirmPassword } = passwords;
+  const luuMatKhau = async () => {
+    datThongBao('', false);
 
-    if (!currentPassword || !newPassword || !confirmPassword) {
-      setAlertMessage('Vui lòng điền đầy đủ tất cả các trường mật khẩu.', true);
+    const { hienTai, moi, xacNhan } = matKhau;
+
+    if (!hienTai || !moi || !xacNhan) {
+      datThongBao('Vui lòng điền đầy đủ thông tin', true);
       return;
     }
 
-    if (newPassword !== confirmPassword) {
-      setAlertMessage('Mật khẩu mới và xác nhận mật khẩu không khớp.', true);
+    if (moi !== xacNhan) {
+      datThongBao('Mật khẩu mới không khớp', true);
       return;
     }
-    
-    if (newPassword.length < 6) {
-        setAlertMessage('Mật khẩu phải có ít nhất 6 ký tự.', true);
-        return;
+
+    if (moi.length < 6) {
+      datThongBao('Mật khẩu phải có ít nhất 6 kí tự', true);
+      return;
     }
 
-    setLoading(true);
+    setDangXuLy(true);
+    await new Promise(r => setTimeout(r, 1500));
 
-    await new Promise(resolve => setTimeout(resolve, 1500)); 
-
-    setLoading(false);
-    onSuccess('Đổi mật khẩu thành công!');
+    setDangXuLy(false);
+    thanhCong('Đổi mật khẩu thành công!');
   };
 
   return (
     <div>
-      <h3 style={{ ...styles.heading, fontSize: '1.5rem', marginTop: '10px' }}>Đổi mật khẩu</h3>
+      <h3 style={{ ...kieuTrang.tieuDe, fontSize: '1.5rem' }}>Đổi mật khẩu</h3>
 
-      <div style={styles.infoGrid}>
-        <label style={styles.label}>Mật khẩu hiện tại:</label>
-        <input 
-          type="password" 
-          name="currentPassword" 
-          value={passwords.currentPassword} 
-          onChange={handleChange} 
-          style={styles.input}
-          disabled={loading}
-        />
+      <div style={kieuTrang.luoiThongTin}>
+        <label style={kieuTrang.nhan}>Mật khẩu hiện tại:</label>
+        <input type="password" name="hienTai" value={matKhau.hienTai} onChange={thayDoi} disabled={dangXuLy} style={kieuTrang.oNhap} />
 
-        <label style={styles.label}>Mật khẩu mới:</label>
-        <input 
-          type="password" 
-          name="newPassword" 
-          value={passwords.newPassword} 
-          onChange={handleChange} 
-          style={styles.input}
-          disabled={loading}
-        />
+        <label style={kieuTrang.nhan}>Mật khẩu mới:</label>
+        <input type="password" name="moi" value={matKhau.moi} onChange={thayDoi} disabled={dangXuLy} style={kieuTrang.oNhap} />
 
-        <label style={styles.label}>Xác nhận mật khẩu mới:</label>
-        <input 
-          type="password" 
-          name="confirmPassword" 
-          value={passwords.confirmPassword} 
-          onChange={handleChange} 
-          style={styles.input}
-          disabled={loading}
-        />
+        <label style={kieuTrang.nhan}>Xác nhận mật khẩu:</label>
+        <input type="password" name="xacNhan" value={matKhau.xacNhan} onChange={thayDoi} disabled={dangXuLy} style={kieuTrang.oNhap} />
       </div>
 
-      <div style={styles.actionButtons}>
-        <button 
-          onClick={handleSavePassword} 
-          disabled={loading} 
-          style={styles.btnPrimary}
-        >
-          {loading ? 'Đang lưu...' : 'Lưu mật khẩu'}
+      <div style={kieuTrang.khuVucNut}>
+        <button onClick={luuMatKhau} disabled={dangXuLy} style={kieuTrang.nutChinh}>
+          {dangXuLy ? 'Đang lưu...' : 'Lưu mật khẩu'}
         </button>
-        <button 
-          onClick={onCancel} 
-          disabled={loading} 
-          style={styles.btnSecondary}
-        >
+        <button onClick={huyBo} disabled={dangXuLy} style={kieuTrang.nutPhu}>
           Hủy
         </button>
       </div>
     </div>
   );
 };
-//
 
+// ------------- Thông Tin Cá Nhân -------------
+const ThongTinCaNhan: React.FC = () => {
+  const [thongTin, setThongTin] = useState<ThongTinNguoiDung>(duLieuKhoiTao);
+  const [dangChinhSua, setDangChinhSua] = useState(false);
+  const [banSaoGoc, setBanSaoGoc] = useState<ThongTinNguoiDung>(duLieuKhoiTao);
+  const [dangXuLy, setDangXuLy] = useState(false);
+  const [thongBao, setThongBao] = useState('');
+  const [loi, setLoi] = useState(false);
 
-// --- THÔNG TIN CÁ NHÂN ---
-const Thongtincanhan: React.FC = () => {
-  const [userInfo, setUserInfo] = useState<UserProfile>(initialData);
-  const [isEditing, setIsEditing] = useState(false);
-  const [originalUserInfo, setOriginalUserInfo] = useState<UserProfile>(initialData);
-  const [loading, setLoading] = useState(false);
-  const [message, setMessage] = useState('');
-  const [isError, setIsError] = useState(false);
-  
-  const [showChangePassword, setShowChangePassword] = useState(false);
+  const [moFormMatKhau, setMoFormMatKhau] = useState(false);
 
   useEffect(() => {
-    setUserInfo(initialData); 
-    setOriginalUserInfo(initialData);
+    setThongTin(duLieuKhoiTao);
+    setBanSaoGoc(duLieuKhoiTao);
   }, []);
-  
-  const setAlertMessage = (msg: string, error: boolean) => {
-      setMessage(msg);
-      setIsError(error);
-  }
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
+  const datThongBao = (msg: string, isError: boolean) => {
+    setThongBao(msg);
+    setLoi(isError);
+  };
+
+  const thayDoi = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
-    setUserInfo(prev => ({ ...prev, [name]: value }));
+    setThongTin(prev => ({ ...prev, [name]: value }));
   };
 
-  const handleEdit = () => {
-    setIsEditing(true);
-    setMessage('');
-    setIsError(false);
+  const batDauChinhSua = () => {
+    setDangChinhSua(true);
+    setThongBao('');
+    setLoi(false);
   };
 
-  const handleCancel = () => {
-    setUserInfo(originalUserInfo);
-    setIsEditing(false);
-    setAlertMessage('Đã hủy thay đổi.', true);
+  const huyChinhSua = () => {
+    setThongTin(banSaoGoc);
+    setDangChinhSua(false);
+    datThongBao('Đã hủy thay đổi', true);
   };
 
-  const handleSave = async () => {
-    setLoading(true);
-    setMessage('');
-    setIsError(false);
-    
-    await new Promise(resolve => setTimeout(resolve, 1500)); 
+  const luuThongTin = async () => {
+    setDangXuLy(true);
+    setThongBao('');
+    setLoi(false);
 
-    setOriginalUserInfo(userInfo); 
-    setIsEditing(false);
-    setLoading(false);
-    setAlertMessage('Cập nhật thông tin cá nhân thành công!', false);
+    await new Promise(r => setTimeout(r, 1500));
+
+    setBanSaoGoc(thongTin);
+    setDangChinhSua(false);
+    setDangXuLy(false);
+    datThongBao('Cập nhật thông tin thành công!', false);
   };
-  
-  const handlePasswordSuccess = (msg: string) => {
-      setShowChangePassword(false);
-      setAlertMessage(msg, false);
+
+  const doiMatKhauThanhCong = (msg: string) => {
+    setMoFormMatKhau(false);
+    datThongBao(msg, false);
+  };
+
+  // --- Nếu đang mở form đổi mật khẩu ---
+  if (moFormMatKhau) {
+    return (
+      <div style={kieuTrang.trang}>
+        <h2 style={kieuTrang.tieuDe}>Thông tin cá nhân</h2>
+
+        {thongBao && (
+          <div style={{
+            ...kieuTrang.thongBao,
+            ...(loi ? kieuTrang.thongBaoLoi : kieuTrang.thongBaoThanhCong)
+          }}>
+            {thongBao}
+          </div>
+        )}
+
+        <FormDoiMatKhau
+          huyBo={() => setMoFormMatKhau(false)}
+          thanhCong={doiMatKhauThanhCong}
+          datThongBao={datThongBao}
+        />
+      </div>
+    );
   }
-
-
-  if (showChangePassword) {
-      return (
-        <div style={styles.page}>
-            <h2 style={styles.heading}>Thông tin cá nhân</h2>
-             {message && (
-                <div style={{ 
-                    ...styles.alert, 
-                    ...(isError ? styles.alertError : styles.alertSuccess)
-                }}>
-                    {message}
-                </div>
-              )}
-            <DoiMatKhauForm 
-                onCancel={() => setShowChangePassword(false)} 
-                onSuccess={handlePasswordSuccess}
-                setAlertMessage={setAlertMessage}
-            />
-        </div>
-      );
-  }
-
 
   return (
-    <div style={styles.page}>
-      <h2 style={styles.heading}>👤 Thông tin cá nhân</h2>
-      
-      {message && (
-        <div style={{ 
-            ...styles.alert, 
-            ...(isError ? styles.alertError : styles.alertSuccess)
+    <div style={kieuTrang.trang}>
+      <h2 style={kieuTrang.tieuDe}>👤 Thông tin cá nhân</h2>
+
+      {thongBao && (
+        <div style={{
+          ...kieuTrang.thongBao,
+          ...(loi ? kieuTrang.thongBaoLoi : kieuTrang.thongBaoThanhCong)
         }}>
-            {message}
+          {thongBao}
         </div>
       )}
 
-      <div style={styles.infoGrid}>
-        {/* Mã nhân viên */}
-        <label style={styles.label}>Mã nhân viên:</label>
-        <input 
-          type="text" 
-          name="maNV" 
-          value={userInfo.maNV} 
-          disabled 
-          style={{ ...styles.input, ...styles.inputDisabled }} 
-        />
-        {/* Các trường khác... */}
-        <label style={styles.label}>Họ và Tên:</label>
-        <input 
-          type="text" 
-          name="hoTen" 
-          value={userInfo.hoTen} 
-          onChange={handleChange} 
-          disabled={!isEditing} 
-          style={!isEditing ? { ...styles.input, ...styles.inputDisabled } : styles.input} 
+      <div style={kieuTrang.luoiThongTin}>
+        <label style={kieuTrang.nhan}>Mã nhân viên:</label>
+        <input type="text" name="maNV" value={thongTin.maNV} disabled style={{ ...kieuTrang.oNhap, ...kieuTrang.oNhapKhoa }} />
+
+        <label style={kieuTrang.nhan}>Họ và tên:</label>
+        <input
+          type="text"
+          name="hoTen"
+          value={thongTin.hoTen}
+          onChange={thayDoi}
+          disabled={!dangChinhSua}
+          style={!dangChinhSua ? { ...kieuTrang.oNhap, ...kieuTrang.oNhapKhoa } : kieuTrang.oNhap}
         />
 
-        <label style={styles.label}>Email:</label>
-        <input 
-          type="email" 
-          name="email" 
-          value={userInfo.email} 
-          onChange={handleChange} 
-          disabled={!isEditing} 
-          style={!isEditing ? { ...styles.input, ...styles.inputDisabled } : styles.input} 
+        <label style={kieuTrang.nhan}>Email:</label>
+        <input
+          type="email"
+          name="email"
+          value={thongTin.email}
+          onChange={thayDoi}
+          disabled={!dangChinhSua}
+          style={!dangChinhSua ? { ...kieuTrang.oNhap, ...kieuTrang.oNhapKhoa } : kieuTrang.oNhap}
         />
 
-        <label style={styles.label}>Số điện thoại:</label>
-        <input 
-          type="tel" 
-          name="soDienThoai" 
-          value={userInfo.soDienThoai} 
-          onChange={handleChange} 
-          disabled={!isEditing} 
-          style={!isEditing ? { ...styles.input, ...styles.inputDisabled } : styles.input} 
+        <label style={kieuTrang.nhan}>Số điện thoại:</label>
+        <input
+          type="tel"
+          name="soDienThoai"
+          value={thongTin.soDienThoai}
+          onChange={thayDoi}
+          disabled={!dangChinhSua}
+          style={!dangChinhSua ? { ...kieuTrang.oNhap, ...kieuTrang.oNhapKhoa } : kieuTrang.oNhap}
         />
 
-        <label style={styles.label}>Phòng ban:</label>
-        <input 
-          type="text" 
-          name="phongBan" 
-          value={userInfo.phongBan} 
-          disabled 
-          style={{ ...styles.input, ...styles.inputDisabled }} 
+        <label style={kieuTrang.nhan}>Phòng ban:</label>
+        <input type="text" name="phongBan" value={thongTin.phongBan} disabled style={{ ...kieuTrang.oNhap, ...kieuTrang.oNhapKhoa }} />
+
+        <label style={kieuTrang.nhan}>Vi tri:</label>
+        <input type="text" name="viTri" value={thongTin.viTri} disabled style={{ ...kieuTrang.oNhap, ...kieuTrang.oNhapKhoa }} />
+
+        <label style={kieuTrang.nhan}>Ngày sinh:</label>
+        <input
+          type="date"
+          name="ngaySinh"
+          value={thongTin.ngaySinh}
+          onChange={thayDoi}
+          disabled={!dangChinhSua}
+          style={!dangChinhSua ? { ...kieuTrang.oNhap, ...kieuTrang.oNhapKhoa } : kieuTrang.oNhap}
         />
-        
-        <label style={styles.label}>Vị trí:</label>
-        <input 
-          type="text" 
-          name="viTri" 
-          value={userInfo.viTri} 
-          disabled 
-          style={{ ...styles.input, ...styles.inputDisabled }} 
-        />
-        
-        <label style={styles.label}>Ngày sinh:</label>
-        <input 
-          type="date" 
-          name="ngaySinh" 
-          value={userInfo.ngaySinh} 
-          onChange={handleChange} 
-          disabled={!isEditing} 
-          style={!isEditing ? { ...styles.input, ...styles.inputDisabled } : styles.input} 
-        />
-        
-        <label style={styles.label}>Địa chỉ:</label>
-        <textarea 
-          name="diaChi" 
-          value={userInfo.diaChi} 
-          onChange={handleChange} 
-          disabled={!isEditing} 
+
+        <label style={kieuTrang.nhan}>Địa chỉ:</label>
+        <textarea
+          name="diaChi"
+          value={thongTin.diaChi}
+          onChange={thayDoi}
+          disabled={!dangChinhSua}
           rows={3}
-          style={!isEditing ? { ...styles.input, ...styles.inputDisabled, ...styles.textArea } : { ...styles.input, ...styles.textArea }} 
+          style={!dangChinhSua ? { ...kieuTrang.oNhap, ...kieuTrang.oNhapKhoa } : kieuTrang.oNhap}
         ></textarea>
       </div>
 
-      <div style={styles.actionButtons}>
-        {isEditing ? (
+      <div style={kieuTrang.khuVucNut}>
+        {dangChinhSua ? (
           <>
-            <button 
-              onClick={handleSave} 
-              disabled={loading} 
-              style={styles.btnPrimary}
-            >
-              {loading ? 'Đang lưu...' : 'Lưu thay đổi'}
+            <button onClick={luuThongTin} disabled={dangXuLy} style={kieuTrang.nutChinh}>
+              {dangXuLy ? 'Đang lưu...' : 'Lưu thay đổi'}
             </button>
-            <button 
-              onClick={handleCancel} 
-              disabled={loading} 
-              style={styles.btnSecondary}
-            >
+            <button onClick={huyChinhSua} disabled={dangXuLy} style={kieuTrang.nutPhu}>
               Hủy
             </button>
           </>
         ) : (
-          <button onClick={handleEdit} style={styles.btnPrimary}>
-           Chỉnh sửa
+          <button onClick={batDauChinhSua} style={kieuTrang.nutChinh}>
+            Chỉnh sửa
           </button>
         )}
-        {/* Nút Đổi mật khẩu đã được cập nhật */}
-        <button onClick={() => setShowChangePassword(true)} style={styles.btnLink}>
-           Đổi mật khẩu
+
+        <button onClick={() => setMoFormMatKhau(true)} style={kieuTrang.nutLink}>
+          Đổi mật khẩu
         </button>
       </div>
     </div>
   );
 };
 
-export default Thongtincanhan;
+export default ThongTinCaNhan;
