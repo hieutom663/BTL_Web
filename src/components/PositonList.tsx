@@ -35,6 +35,7 @@ export default function DanhSachChucVu() {
           <h1>Danh sách chức vụ</h1>
 
           <div className="position-container">
+
             <div className="position-list">
               {tatCaChucVu.map((cv) => (
                 <div
