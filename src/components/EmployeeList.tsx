@@ -5,7 +5,7 @@ import Sidebar from "./Sidebar";
 import Navbar from "./Navbar";
 import { Link } from "react-router-dom";
 
-export default function DanhSachNhanVienComponent() {
+export default function DanhSachNhanVien() {
   const formBanDau: NhanVien = {
     id: "",
     ten: "",
