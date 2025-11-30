@@ -2,17 +2,20 @@ import { useState } from "react";
 import Sidebar from "./Sidebar";
 import Navbar from "./Navbar";
 import TheNhanVien from "./TheNhanVien";
-import { danhSachPhongBan, NhanVien } from "./TaskData";
+import { PhongBan, NhanVien } from "./TaskData";
 
-const Trangchu = (props: { danhSachNhanVien: NhanVien[] }) => {
-  const { danhSachNhanVien } = props;
+const Trangchu = (props: {
+  danhSachNhanVien: NhanVien[];
+  danhSachPhongBan: PhongBan[];
+}) => {
+  const { danhSachNhanVien, danhSachPhongBan } = props;
   const [page, setPage] = useState(1);
   const [search, setSearch] = useState("");
   const [phongBan, setPhongBan] = useState("Tất cả");
   const timKiemTheoTenHoacId = danhSachNhanVien.filter(
     (e) =>
-      e.ten.toLowerCase().includes(search.toLowerCase()) ||
-      e.id.toLowerCase().includes(search.toLowerCase())
+      e.tenNhanVien.toLowerCase().includes(search.toLowerCase()) ||
+      e.maNhanVien.toLowerCase().includes(search.toLowerCase())
   );
   let locThemPhongBan = timKiemTheoTenHoacId;
   if (phongBan !== "Tất cả") {
@@ -21,11 +24,11 @@ const Trangchu = (props: { danhSachNhanVien: NhanVien[] }) => {
     );
   }
 
-  const itemsPerPage = 10;
-  const startIndex = (page - 1) * itemsPerPage;
-  const currentData = locThemPhongBan.slice(
-    startIndex,
-    startIndex + itemsPerPage
+  const duLieuTrongMotTrang = 10;
+  const viTriBatDau = (page - 1) * duLieuTrongMotTrang;
+  const duLieuTamThoi = locThemPhongBan.slice(
+    viTriBatDau,
+    viTriBatDau + duLieuTrongMotTrang
   );
 
   return (
@@ -56,8 +59,8 @@ const Trangchu = (props: { danhSachNhanVien: NhanVien[] }) => {
                 Tất cả
               </option>
               {danhSachPhongBan.map((e) => (
-                <option key={e.ten} value={e.ten}>
-                  {e.ten}
+                <option key={e.tenPhong} value={e.tenPhong}>
+                  {e.tenPhong}
                 </option>
               ))}
             </select>
@@ -92,11 +95,11 @@ const Trangchu = (props: { danhSachNhanVien: NhanVien[] }) => {
                 </tr>
               </thead>
               <tbody>
-                {currentData.map((item, index) => (
+                {duLieuTamThoi.map((item, index) => (
                   <TheNhanVien
                     nhanVien={item}
                     danhSachNhanVien={danhSachNhanVien}
-                    stt={(page - 1) * itemsPerPage + index + 1}
+                    stt={(page - 1) * duLieuTrongMotTrang + index + 1}
                   />
                 ))}
               </tbody>
@@ -116,7 +119,9 @@ const Trangchu = (props: { danhSachNhanVien: NhanVien[] }) => {
             <div>Trang hiện tại: {page}</div>
             <button
               onClick={() => setPage(page + 1)}
-              disabled={startIndex + itemsPerPage >= locThemPhongBan.length}
+              disabled={
+                viTriBatDau + duLieuTrongMotTrang >= locThemPhongBan.length
+              }
             >
               Next
             </button>

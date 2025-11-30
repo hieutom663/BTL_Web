@@ -1,48 +1,53 @@
 import React, { useState } from "react";
-import { danhSachPhongBan, Department } from "./TaskData";
+import { PhongBan } from "./TaskData";
 import { Link } from "react-router-dom";
 import Sidebar from "./Sidebar";
 import Navbar from "./Navbar";
 
-const DepartmentManager = () => {
-  const [departments, setDepartments] =
-    useState<Department[]>(danhSachPhongBan);
-  const [formData, setFormData] = useState<Department>({
-    code: "",
-    ten: "",
-    foundedYear: 2025,
-    status: "",
+const DepartmentManager = (props: { danhSachPhongBan: PhongBan[] }) => {
+  const { danhSachPhongBan } = props;
+  const [phongBan, setPhongBan] = useState<PhongBan[]>(danhSachPhongBan);
+  const [formData, setFormData] = useState<PhongBan>({
+    maPhong: "",
+    tenPhong: "",
+    namThanhLap: 2025,
+    trangThai: "",
   });
   const [isEditing, setIsEditing] = useState(false);
 
   const handleSave = () => {
-    if (!formData.code || !formData.ten)
+    if (!formData.maPhong || !formData.tenPhong)
       return alert("Vui lòng nhập đủ thông tin!");
 
     if (isEditing) {
-      const updatedList = departments.map((d) =>
-        d.code === formData.code ? formData : d
+      const updatedList = phongBan.map((d) =>
+        d.maPhong === formData.maPhong ? formData : d
       );
-      setDepartments(updatedList);
+      setPhongBan(updatedList);
       setIsEditing(false);
       alert("Cập nhật thành công!");
     } else {
-      if (departments.some((d) => d.code === formData.code)) {
+      if (phongBan.some((d) => d.maPhong === formData.maPhong)) {
         return alert("Mã phòng ban đã tồn tại!");
       }
-      setDepartments([...departments, formData]);
+      setPhongBan([...phongBan, formData]);
       alert("Thêm mới thành công!");
     }
 
-    setFormData({ code: "", ten: "", foundedYear: 2025, status: "" });
+    setFormData({
+      maPhong: "",
+      tenPhong: "",
+      namThanhLap: 2025,
+      trangThai: "",
+    });
   };
 
-  const handleDelete = (code: string) => {
-    if (window.confirm(`Bạn có chắc muốn xóa phòng ${code}?`)) {
-      setDepartments(departments.filter((d) => d.code !== code));
+  const handleDelete = (maPhong: string) => {
+    if (window.confirm(`Bạn có chắc muốn xóa phòng ${maPhong}?`)) {
+      setPhongBan(phongBan.filter((d) => d.maPhong !== maPhong));
     }
   };
-  const handleEdit = (dept: Department) => {
+  const handleEdit = (dept: PhongBan) => {
     setFormData(dept);
     setIsEditing(true);
   };
@@ -68,12 +73,12 @@ const DepartmentManager = () => {
               <input
                 type="text"
                 placeholder="Mã phòng"
-                value={formData.code}
+                value={formData.maPhong}
                 disabled={isEditing}
                 onChange={(e) =>
                   setFormData({
                     ...formData,
-                    code: e.target.value.toUpperCase(),
+                    maPhong: e.target.value.toUpperCase(),
                   })
                 }
                 style={{ padding: "8px", width: "120px" }}
@@ -81,20 +86,20 @@ const DepartmentManager = () => {
               <input
                 type="text"
                 placeholder="Tên phòng ban"
-                value={formData.ten}
+                value={formData.tenPhong}
                 onChange={(e) =>
-                  setFormData({ ...formData, ten: e.target.value })
+                  setFormData({ ...formData, tenPhong: e.target.value })
                 }
                 style={{ padding: "8px", flex: 1 }}
               />
               <input
                 type="number"
                 placeholder="Năm TL"
-                value={formData.foundedYear}
+                value={formData.namThanhLap}
                 onChange={(e) =>
                   setFormData({
                     ...formData,
-                    foundedYear: parseInt(e.target.value),
+                    namThanhLap: parseInt(e.target.value),
                   })
                 }
                 style={{ padding: "8px", width: "100px" }}
@@ -117,10 +122,10 @@ const DepartmentManager = () => {
                   onClick={() => {
                     setIsEditing(false);
                     setFormData({
-                      code: "",
-                      ten: "",
-                      foundedYear: 2025,
-                      status: "",
+                      maPhong: "",
+                      tenPhong: "",
+                      namThanhLap: 2025,
+                      trangThai: "",
                     });
                   }}
                   style={{ cursor: "pointer" }}
@@ -149,12 +154,12 @@ const DepartmentManager = () => {
               </tr>
             </thead>
             <tbody>
-              {departments.map((d) => (
-                <tr key={d.code}>
-                  <td>{d.code}</td>
-                  <td>{d.ten}</td>
-                  <td>{d.foundedYear}</td>
-                  <td>{d.status}</td>
+              {phongBan.map((d) => (
+                <tr key={d.maPhong}>
+                  <td>{d.maPhong}</td>
+                  <td>{d.tenPhong}</td>
+                  <td>{d.namThanhLap}</td>
+                  <td>{d.trangThai}</td>
                   <td>
                     <button
                       onClick={() => handleEdit(d)}
@@ -169,7 +174,7 @@ const DepartmentManager = () => {
                       Sửa
                     </button>
                     <button
-                      onClick={() => handleDelete(d.code)}
+                      onClick={() => handleDelete(d.maPhong)}
                       style={{
                         cursor: "pointer",
                         backgroundColor: "#dc3545",

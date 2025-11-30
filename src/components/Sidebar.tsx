@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 
 import "./Sidebar.css";
 
-const Navbar = () => {
+const Sidebar = () => {
   const loginStatus = localStorage.getItem("token");
 
   return (
@@ -37,11 +37,6 @@ const Navbar = () => {
             </Link>
           )}
           <li>
-            <Link to={"/department"} style={{ textDecoration: "none" }}>
-              Phòng, ban của bạn
-            </Link>
-          </li>
-          <li>
             <Link to={"/departments"} style={{ textDecoration: "none" }}>
               Các phòng, ban
             </Link>
@@ -51,9 +46,14 @@ const Navbar = () => {
               Danh sách chức vụ
             </Link>
           </li>
+          <li>
+            <Link to={"/timesheet/:id"} style={{ textDecoration: "none" }}>
+              Bảng chấm công
+            </Link>
+          </li>
         </ul>
       </div>
     </div>
   );
 };
-export default Navbar;
+export default Sidebar;
