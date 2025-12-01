@@ -25,6 +25,9 @@ const TheChamCong = (props: { thongTinChamCong: ThongTinChamCongThang }) => {
       <td style={{ padding: "8px 12px" }}>{thongTinChamCong.gioVaoLam}</td>
       <td style={{ padding: "8px 12px" }}>{thongTinChamCong.gioTanLam}</td>
       <td style={{ padding: "8px 12px" }}>{thongTinChamCong.tongGioLam}</td>
+      <td align="center" style={{ padding: "8px 12px" }}>
+        <button>Xem chi tiết</button>
+      </td>
     </tr>
   );
 };

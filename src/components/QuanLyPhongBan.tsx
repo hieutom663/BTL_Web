@@ -1,11 +1,12 @@
 import React, { useState } from "react";
 import { PhongBan } from "./TaskData";
-import { Link } from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 import Sidebar from "./Sidebar";
 import Navbar from "./Navbar";
 
 const QuanLyPhongBan = (props: { danhSachPhongBan: PhongBan[] }) => {
   const { danhSachPhongBan } = props;
+  const navigate = useNavigate();
   const [phongBan, setPhongBan] = useState<PhongBan[]>(danhSachPhongBan);
   const [formData, setFormData] = useState<PhongBan>({
     maPhong: "",
@@ -162,6 +163,21 @@ const QuanLyPhongBan = (props: { danhSachPhongBan: PhongBan[] }) => {
                   <td>{d.trangThai}</td>
                   <td>
                     <button
+                      onClick={() => {
+                        navigate(`/departments/${d.maPhong}`);
+                      }}
+                      style={{
+                        marginRight: "5px",
+                        cursor: "pointer",
+                        backgroundColor: "#24d48bff",
+                        border: "none",
+                        padding: "5px 10px",
+                      }}
+                    >
+                      Chi tiết
+                    </button>
+                    |{" "}
+                    <button
                       onClick={() => handleEdit(d)}
                       style={{
                         marginRight: "5px",
@@ -173,6 +189,7 @@ const QuanLyPhongBan = (props: { danhSachPhongBan: PhongBan[] }) => {
                     >
                       Sửa
                     </button>
+                    |{" "}
                     <button
                       onClick={() => handleDelete(d.maPhong)}
                       style={{

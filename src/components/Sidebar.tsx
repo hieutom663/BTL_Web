@@ -25,6 +25,11 @@ const Sidebar = () => {
               Trang chủ
             </Link>
           </li>
+          <li>
+            <Link to={"/employeelist"} style={{ textDecoration: "none" }}>
+              Danh sách nhân viên
+            </Link>
+          </li>
           {!loginStatus ? (
             <li>
               <Link to={"/login"} style={{ textDecoration: "none" }}>
@@ -42,8 +47,8 @@ const Sidebar = () => {
             </Link>
           </li>
           <li>
-            <Link to={"/positions"} style={{ textDecoration: "none" }}>
-              Danh sách chức vụ
+            <Link to={"/department"} style={{ textDecoration: "none" }}>
+              Phòng ban của tôi
             </Link>
           </li>
           <li>

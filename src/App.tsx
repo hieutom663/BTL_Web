@@ -3,12 +3,13 @@ import { useEffect, useState } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import "./App.css";
 import Login from "./components/Login";
-import Trangchu from "./components/Trangchu";
-//import MyDepartment from "./components/MyDepartment";
-import DepartmentManager from "./components/QuanLyPhongBan";
-import PositionList from "./components/PositonList";
+import Trangchu from "./components/TrangChu";
+import QuanLyPhongBan from "./components/QuanLyPhongBan";
 import ThongTinCaNhan from "./components/ThongTinCaNhan";
 import BangChamCong from "./components/BangChamCong";
+import ChiTietPhongBan from "./components/ChiTietPhongBan";
+import PhongBan from "./components/PhongBan";
+import DanhSachNhanVien from "./components/DanhSachNhanVien";
 
 function App() {
   const [danhSachNhanVien, setDanhSachNhanVien] = useState([]);
@@ -34,25 +35,33 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/login" element={<Login />}></Route>
+        <Route
+          path="/employeelist"
+          element={<DanhSachNhanVien danhSachNhanVien={danhSachNhanVien} />}
+        ></Route>
         <Route path="/profile" element={<ThongTinCaNhan />}></Route>
         <Route
           path="/departments"
-          element={<DepartmentManager danhSachPhongBan={danhSachPhongBan} />}
-        ></Route>
-        <Route path="/positions" element={<PositionList />}></Route>
-        <Route
-          path="/timesheet/"
-          element={<BangChamCong BangThongTinChamCong={BangThongTinChamCong} />}
+          element={<QuanLyPhongBan danhSachPhongBan={danhSachPhongBan} />}
         ></Route>
         <Route
-          path="/"
+          path="/department"
+          element={<PhongBan danhSachNhanVien={danhSachNhanVien} />}
+        ></Route>
+        <Route
+          path="/departments/:id"
           element={
-            <Trangchu
+            <ChiTietPhongBan
               danhSachNhanVien={danhSachNhanVien}
               danhSachPhongBan={danhSachPhongBan}
             />
           }
         ></Route>
+        <Route
+          path="/timesheet/"
+          element={<BangChamCong BangThongTinChamCong={BangThongTinChamCong} />}
+        ></Route>
+        <Route path="/" element={<Trangchu />}></Route>
       </Routes>
     </BrowserRouter>
   );

@@ -1,11 +1,4 @@
-import { NhanVien } from "./TaskData";
-
-const ngayThang = (str: Date) => {
-  const time = new Date(str).toLocaleDateString();
-  let [day, month, year] = time.split("/");
-  const ketQua = `${day.padStart(2, "0")}/${month.padStart(2, "0")}/${year}`;
-  return ketQua;
-};
+import { NhanVien, ngayThang, sinhId } from "./TaskData";
 
 const TheNhanVien = (props: {
   nhanVien: NhanVien;

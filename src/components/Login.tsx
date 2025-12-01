@@ -67,6 +67,7 @@ const Login = () => {
               }
 
               localStorage.setItem("token", data.token);
+              localStorage.setItem("id", data.token);
 
               alert("Đăng nhập thành công");
               navigate("/");
