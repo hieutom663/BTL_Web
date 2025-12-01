@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import Sidebar from "./Sidebar";
 import Navbar from "./Navbar";
 
-const DepartmentManager = (props: { danhSachPhongBan: PhongBan[] }) => {
+const QuanLyPhongBan = (props: { danhSachPhongBan: PhongBan[] }) => {
   const { danhSachPhongBan } = props;
   const [phongBan, setPhongBan] = useState<PhongBan[]>(danhSachPhongBan);
   const [formData, setFormData] = useState<PhongBan>({
@@ -199,4 +199,4 @@ const DepartmentManager = (props: { danhSachPhongBan: PhongBan[] }) => {
   );
 };
 
-export default DepartmentManager;
+export default QuanLyPhongBan;

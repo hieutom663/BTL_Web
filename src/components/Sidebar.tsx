@@ -47,7 +47,7 @@ const Sidebar = () => {
             </Link>
           </li>
           <li>
-            <Link to={"/timesheet/:id"} style={{ textDecoration: "none" }}>
+            <Link to={"/timesheet/"} style={{ textDecoration: "none" }}>
               Bảng chấm công
             </Link>
           </li>

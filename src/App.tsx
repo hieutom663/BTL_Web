@@ -5,7 +5,7 @@ import "./App.css";
 import Login from "./components/Login";
 import Trangchu from "./components/Trangchu";
 //import MyDepartment from "./components/MyDepartment";
-import DepartmentManager from "./components/DepartmentManager";
+import DepartmentManager from "./components/QuanLyPhongBan";
 import PositionList from "./components/PositonList";
 import ThongTinCaNhan from "./components/ThongTinCaNhan";
 import BangChamCong from "./components/BangChamCong";
@@ -41,7 +41,7 @@ function App() {
         ></Route>
         <Route path="/positions" element={<PositionList />}></Route>
         <Route
-          path="/timesheet/:id"
+          path="/timesheet/"
           element={<BangChamCong BangThongTinChamCong={BangThongTinChamCong} />}
         ></Route>
         <Route
