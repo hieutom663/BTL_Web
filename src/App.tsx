@@ -5,7 +5,7 @@ import Login from "./components/Login";
 import Trangchu from "./components/Trangchu";
 import MyDepartment from "./components/MyDepartment";
 import DepartmentManager from "./components/DepartmentManager";
-import Thongtincanhan from "./components/thongtincanhan";
+import Thongtincanhan from "./components/ThongTinCaNhan";
 function App() {
   return (
     <BrowserRouter>
