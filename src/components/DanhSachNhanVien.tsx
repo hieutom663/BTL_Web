@@ -22,6 +22,7 @@ export default function DanhSachNhanVien(props: {
     tenPhong: "",
     luongCoBan: 0,
     thuTuTheoNgayVaoLam: 0,
+    emailNhanVien: "",
   };
   const [dsNhanVien, setDsNhanVien] = useState<NhanVien[]>(danhSachNhanVien);
   const [nhanVienDangSua, setNhanVienDangSua] = useState<NhanVien | null>(null);
@@ -127,7 +128,7 @@ export default function DanhSachNhanVien(props: {
               {nhanVienHienThi.map((nv, index) => (
                 <tr key={nv.maNhanVien}>
                   <td>{chiSoDau + index + 1}</td>
-                  <td>{sinhId(nv)}</td>
+                  <td>{nv.maNhanVien}</td>
                   <td>{nv.tenNhanVien}</td>
                   <td>{nv.tenPhong}</td>
                   <td>{nv.chucVu}</td>

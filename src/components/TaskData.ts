@@ -33,6 +33,7 @@ export interface NhanVien {
   tenPhong: string;
   luongCoBan: number;
   thuTuTheoNgayVaoLam: number;
+  emailNhanVien: string;
 }
 
 export interface ThongTinChamCongThang {

@@ -2,7 +2,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import "./App.css";
-import Login from "./components/Login";
+import DangNhap from "./components/DangNhap";
 import Trangchu from "./components/TrangChu";
 import QuanLyPhongBan from "./components/QuanLyPhongBan";
 import ThongTinCaNhan from "./components/ThongTinCaNhan";
@@ -30,11 +30,11 @@ function App() {
       .get("http://localhost:3000/bangchamcong")
       .then((res) => setBangThongTinChamCong(res.data))
       .catch((err) => console.log("Lỗi", err));
-  });
+  }, []);
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/login" element={<Login />}></Route>
+        <Route path="/login" element={<DangNhap />}></Route>
         <Route
           path="/employeelist"
           element={<DanhSachNhanVien danhSachNhanVien={danhSachNhanVien} />}
