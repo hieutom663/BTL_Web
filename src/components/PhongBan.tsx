@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 
 const PhongBan = (props: { danhSachNhanVien: NhanVien[] }) => {
   const { danhSachNhanVien } = props;
-  const currentUserId = "MKTT00001";
+  const currentUserId = localStorage.getItem("tenDangNhap");
   const [nhanVienTrongBan, setNhanVienTrongBan] = useState<NhanVien[]>([]);
   const [myInfo, setMyInfo] = useState<NhanVien | null>(null);
 

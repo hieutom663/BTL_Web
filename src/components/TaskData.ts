@@ -27,7 +27,7 @@ export interface NhanVien {
   gioiTinh: string;
   ngayBatDauLamViec: Date;
   maChucVu: string;
-  soDienThoai: string;
+  soLienLac: string;
   chucVu: string;
   maPhong: string;
   tenPhong: string;

@@ -12,7 +12,7 @@ export default function DanhSachNhanVien(props: {
   const formBanDau = {
     maNhanVien: "",
     tenNhanVien: "",
-    soDienThoai: "",
+    soLienLac: "",
     ngaySinh: new Date(),
     gioiTinh: "",
     ngayBatDauLamViec: new Date(),
@@ -231,11 +231,11 @@ export default function DanhSachNhanVien(props: {
                   /> */}
                   <input
                     placeholder="Số điện thoại"
-                    value={duLieuForm.soDienThoai || ""}
+                    value={duLieuForm.soLienLac || ""}
                     onChange={(e) =>
                       setDuLieuForm({
                         ...duLieuForm,
-                        soDienThoai: e.target.value,
+                        soLienLac: e.target.value,
                       })
                     }
                     disabled={cheDoHopThoai === "xem"}

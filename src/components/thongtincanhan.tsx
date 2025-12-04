@@ -2,20 +2,23 @@ import { useState } from "react";
 import Sidebar from "./Sidebar";
 import Navbar from "./Navbar";
 import "./ThongTinCaNhan.css";
+import { ngayThang, NhanVien } from "./TaskData";
 
-const ThongTinCaNhan = () => {
-  const duLieuKhoiTao = {
-    maNV: "NV001",
-    hoTen: "Giáp Văn Hiếu",
-    email: "vana@company.com",
-    soDienThoai: "0901234567",
-    phongBan: "Phòng kĩ thuật (PKT)",
-    chucVu: "Lao công",
-    ngaySinh: "1995-05-15",
-    diaChi: "Số 10, Đường ABC, TP. Hà Nội",
-  };
-
-  const [thongTinCaNhan, setThongTinCaNhan] = useState(duLieuKhoiTao);
+const ThongTinCaNhan = (props: { danhSachNhanVien: NhanVien[] }) => {
+  const { danhSachNhanVien } = props;
+  const maNV = localStorage.getItem("tenDangNhap");
+  const duLieuKhoiTao = danhSachNhanVien.find((nv) => nv.maNhanVien === maNV);
+  const [thongTinCaNhan, setThongTinCaNhan] = useState(
+    duLieuKhoiTao || {
+      maNhanVien: "",
+      tenNhanVien: "",
+      emailNhanVien: "",
+      soLienLac: "",
+      tenPhong: "",
+      chucVu: "",
+      ngaySinh: new Date(),
+    }
+  );
   const [dangChinhSua, setDangChinhSua] = useState(false);
   const [moFormDoiMatKhau, setMoFormDoiMatKhau] = useState(false);
   const [thongTinMatKhau, setThongTinMatKhau] = useState({
@@ -33,7 +36,7 @@ const ThongTinCaNhan = () => {
 
   // --- Hủy chỉnh sửa ---
   const huyChinhSua = () => {
-    setThongTinCaNhan(duLieuKhoiTao);
+    //setThongTinCaNhan(duLieuKhoiTao);
     setDangChinhSua(false);
     setThongBao("Đã hủy thay đổi");
   };
@@ -74,46 +77,46 @@ const ThongTinCaNhan = () => {
             <>
               <div className="luoiThongTin">
                 <label>Mã nhân viên:</label>
-                <input value={thongTinCaNhan.maNV} disabled />
+                <input value={thongTinCaNhan.maNhanVien} disabled />
 
                 <label>Họ và tên:</label>
                 <input
-                  value={thongTinCaNhan.hoTen}
+                  value={thongTinCaNhan.tenNhanVien}
                   disabled={!dangChinhSua}
                   onChange={(e) =>
                     setThongTinCaNhan({
                       ...thongTinCaNhan,
-                      hoTen: e.target.value,
+                      tenNhanVien: e.target.value,
                     })
                   }
                 />
 
                 <label>Email:</label>
                 <input
-                  value={thongTinCaNhan.email}
+                  value={thongTinCaNhan.emailNhanVien}
                   disabled={!dangChinhSua}
                   onChange={(e) =>
                     setThongTinCaNhan({
                       ...thongTinCaNhan,
-                      email: e.target.value,
+                      emailNhanVien: e.target.value,
                     })
                   }
                 />
 
                 <label>Số điện thoại:</label>
                 <input
-                  value={thongTinCaNhan.soDienThoai}
+                  value={thongTinCaNhan.soLienLac}
                   disabled={!dangChinhSua}
                   onChange={(e) =>
                     setThongTinCaNhan({
                       ...thongTinCaNhan,
-                      soDienThoai: e.target.value,
+                      soLienLac: e.target.value,
                     })
                   }
                 />
 
                 <label>Phòng ban:</label>
-                <input value={thongTinCaNhan.phongBan} disabled />
+                <input value={thongTinCaNhan.tenPhong} disabled />
 
                 <label>Chức vụ:</label>
                 <input value={thongTinCaNhan.chucVu} disabled />
@@ -121,12 +124,18 @@ const ThongTinCaNhan = () => {
                 <label>Ngày sinh:</label>
                 <input
                   type="date"
-                  value={thongTinCaNhan.ngaySinh}
+                  value={
+                    new Date(thongTinCaNhan.ngaySinh)
+                      ? new Date(thongTinCaNhan.ngaySinh)
+                          .toISOString()
+                          .split("T")[0]
+                      : ""
+                  }
                   disabled={!dangChinhSua}
                   onChange={(e) =>
                     setThongTinCaNhan({
                       ...thongTinCaNhan,
-                      ngaySinh: e.target.value,
+                      ngaySinh: new Date(e.target.value),
                     })
                   }
                 />

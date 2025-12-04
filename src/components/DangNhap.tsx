@@ -4,29 +4,30 @@ import { useState } from "react";
 //import axios from "axios";
 
 interface ThongTin {
-  username: string;
-  password: string;
+  tenDangNhap: string;
+  matKhau: string;
 }
 
 interface LoiDangNhap {
-  username?: string;
-  password?: string;
+  tenDangNhap?: string;
+  matKhau?: string;
 }
 
 const Login = () => {
   const [thongTinNguoiDungNhap, setThongTinNguoiDungNhap] = useState<ThongTin>({
-    username: "",
-    password: "",
+    tenDangNhap: "",
+    matKhau: "",
   });
   const [loi, setLoi] = useState<LoiDangNhap>({});
   const navigate = useNavigate();
   const xacMinh = () => {
     const temp: LoiDangNhap = {};
-    if (!thongTinNguoiDungNhap.username) {
-      temp.username = "Tên đăng nhập không được bỏ trống!";
+
+    if (!thongTinNguoiDungNhap.tenDangNhap) {
+      temp.tenDangNhap = "Tên đăng nhập không được bỏ trống!";
     }
-    if (!thongTinNguoiDungNhap.password) {
-      temp.password = "Mật khẩu không được bỏ trống!";
+    if (!thongTinNguoiDungNhap.matKhau) {
+      temp.matKhau = "Mật khẩu không được bỏ trống!";
     }
 
     setLoi(temp);
@@ -45,8 +46,6 @@ const Login = () => {
           className="loginForm"
           onSubmit={async (e) => {
             e.preventDefault();
-
-            // Kiểm tra thông tin đầu vào
             if (!xacMinh()) return;
 
             try {
@@ -61,13 +60,13 @@ const Login = () => {
               const data = await response.json();
 
               if (!response.ok) {
-                // Nếu API trả về lỗi
                 alert(data.message || "Đăng nhập thất bại");
                 return;
               }
 
+              localStorage.setItem("tenDangNhap", data.tenDangNhap);
+              localStorage.setItem("role", data.role);
               localStorage.setItem("token", data.token);
-              localStorage.setItem("id", data.token);
 
               alert("Đăng nhập thành công");
               navigate("/");
@@ -81,34 +80,34 @@ const Login = () => {
             <input
               className="input"
               type="text"
-              id="username"
+              id="tenDangNhap"
               placeholder="Tên đăng nhập"
               onChange={(e) => {
                 setThongTinNguoiDungNhap({
                   ...thongTinNguoiDungNhap,
-                  username: e.target.value,
+                  tenDangNhap: e.target.value,
                 });
               }}
             />
-            <span className="messageError" id="usernameError">
-              {loi ? loi.username : ""}
+            <span className="messageError" id="tenDangNhapError">
+              {loi ? loi.tenDangNhap : ""}
             </span>
           </div>
           <div className="formGroup">
             <input
               className="input"
               type="password"
-              id="password"
+              id="matKhau"
               placeholder="Mật khẩu     "
               onChange={(e) => {
                 setThongTinNguoiDungNhap({
                   ...thongTinNguoiDungNhap,
-                  password: e.target.value,
+                  matKhau: e.target.value,
                 });
               }}
             />
-            <span className="messageError" id="passwordError">
-              {loi ? loi.password : ""}
+            <span className="messageError" id="matKhauError">
+              {loi ? loi.matKhau : ""}
             </span>
           </div>
           <div

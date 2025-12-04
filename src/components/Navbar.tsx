@@ -35,6 +35,8 @@ const Navbar = () => {
           <button
             onClick={() => {
               localStorage.removeItem("token");
+              localStorage.removeItem("tenDangNhap");
+              localStorage.removeItem("vaiTro");
               navigate("/login");
             }}
           >

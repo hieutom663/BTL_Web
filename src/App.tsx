@@ -39,7 +39,10 @@ function App() {
           path="/employeelist"
           element={<DanhSachNhanVien danhSachNhanVien={danhSachNhanVien} />}
         ></Route>
-        <Route path="/profile" element={<ThongTinCaNhan />}></Route>
+        <Route
+          path="/profile"
+          element={<ThongTinCaNhan danhSachNhanVien={danhSachNhanVien} />}
+        ></Route>
         <Route
           path="/departments"
           element={<QuanLyPhongBan danhSachPhongBan={danhSachPhongBan} />}
