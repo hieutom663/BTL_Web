@@ -4,6 +4,7 @@ import "./Sidebar.css";
 
 const Sidebar = () => {
   const loginStatus = localStorage.getItem("token");
+  const role = localStorage.getItem("role");
 
   return (
     <div>
@@ -25,6 +26,15 @@ const Sidebar = () => {
               Trang chủ
             </Link>
           </li>
+          {role === "admin" ? (
+            <li>
+              <Link to={"/departments"} style={{ textDecoration: "none" }}>
+                Các phòng, ban
+              </Link>
+            </li>
+          ) : (
+            <></>
+          )}
           <li>
             <Link to={"/employeelist"} style={{ textDecoration: "none" }}>
               Danh sách nhân viên
@@ -41,11 +51,7 @@ const Sidebar = () => {
               Trang cá nhân
             </Link>
           )}
-          <li>
-            <Link to={"/departments"} style={{ textDecoration: "none" }}>
-              Các phòng, ban
-            </Link>
-          </li>
+
           <li>
             <Link to={"/department"} style={{ textDecoration: "none" }}>
               Phòng ban của tôi

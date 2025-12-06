@@ -19,6 +19,23 @@ export interface PhongBan {
   namThanhLap: number;
   trangThai: string;
 }
+export interface ChucVu {
+  maChucVu: string;
+  tenChucVu: string;
+}
+
+export const chucVuMap: Record<string, string> = {
+  "Trưởng phòng": "T",
+  "Nhân viên": "N",
+  "Phó phòng": "P",
+  "Thực tập sinh": "I",
+};
+export const maPhongMap: Record<string, string> = {
+  "Trưởng phòng": "T",
+  "Nhân viên": "N",
+  "Phó phòng": "P",
+  "Thực tập sinh": "I",
+};
 
 export interface NhanVien {
   maNhanVien: string;
@@ -32,7 +49,7 @@ export interface NhanVien {
   maPhong: string;
   tenPhong: string;
   luongCoBan: number;
-  thuTuTheoNgayVaoLam: number;
+  thuTuTheoNgayVaoLam: string;
   emailNhanVien: string;
 }
 

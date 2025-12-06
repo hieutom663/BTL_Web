@@ -1,11 +1,18 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import axios from "axios";
 import Sidebar from "./Sidebar";
 import Navbar from "./Navbar";
 import "./ThongTinCaNhan.css";
-import { ngayThang, NhanVien } from "./TaskData";
+import { NhanVien } from "./TaskData";
 
-const ThongTinCaNhan = (props: { danhSachNhanVien: NhanVien[] }) => {
-  const { danhSachNhanVien } = props;
+const ThongTinCaNhan = () => {
+  const [danhSachNhanVien, setDanhSachNhanVien] = useState<NhanVien[]>([]);
+  useEffect(() => {
+    axios
+      .get("http://localhost:3000/danhsachnhanvien")
+      .then((res) => setDanhSachNhanVien(res.data))
+      .catch((err) => console.log("Lỗi", err));
+  }, []);
   const maNV = localStorage.getItem("tenDangNhap");
   const duLieuKhoiTao = danhSachNhanVien.find((nv) => nv.maNhanVien === maNV);
   const [thongTinCaNhan, setThongTinCaNhan] = useState(
@@ -19,6 +26,13 @@ const ThongTinCaNhan = (props: { danhSachNhanVien: NhanVien[] }) => {
       ngaySinh: new Date(),
     }
   );
+  useEffect(() => {
+    if (danhSachNhanVien.length > 0 && maNV) {
+      const nv = danhSachNhanVien.find((nv) => nv.maNhanVien === maNV);
+      if (nv) setThongTinCaNhan(nv);
+    }
+  }, [danhSachNhanVien, maNV]);
+
   const [dangChinhSua, setDangChinhSua] = useState(false);
   const [moFormDoiMatKhau, setMoFormDoiMatKhau] = useState(false);
   const [thongTinMatKhau, setThongTinMatKhau] = useState({

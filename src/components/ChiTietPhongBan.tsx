@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 import { useParams, Link } from "react-router-dom";
 import { PhongBan, NhanVien } from "./TaskData";
 import Navbar from "./Navbar";
@@ -11,11 +12,19 @@ const ngayThang = (str: Date) => {
   return ketQua;
 };
 
-const ChiTietPhongBan = (props: {
-  danhSachPhongBan: PhongBan[];
-  danhSachNhanVien: NhanVien[];
-}) => {
-  const { danhSachPhongBan, danhSachNhanVien } = props;
+const ChiTietPhongBan = () => {
+  const [danhSachNhanVien, setDanhSachNhanVien] = useState<NhanVien[]>([]);
+  const [danhSachPhongBan, setDanhSachPhongBan] = useState<PhongBan[]>([]);
+  useEffect(() => {
+    axios
+      .get("http://localhost:3000/danhsachnhanvien")
+      .then((res) => setDanhSachNhanVien(res.data))
+      .catch((err) => console.log("Lỗi", err));
+    axios
+      .get("http://localhost:3000/danhsachphongban")
+      .then((res) => setDanhSachPhongBan(res.data))
+      .catch((err) => console.log("Lỗi", err));
+  }, []);
   const { id } = useParams<{ id: string }>();
   const phongBan: PhongBan | undefined = danhSachPhongBan.find(
     (p) => p.maPhong === id

@@ -243,3 +243,9 @@
     width: 90%;
   }
 }
+
+.nhanInput {
+  display: flex;
+  flex-direction: column;
+  font-size: 16px;
+}

@@ -1,22 +1,29 @@
-import { useState } from "react";
+import axios from "axios";
+import { useState, useEffect } from "react";
 import { ThongTinChamCongThang } from "./TaskData";
 import Sidebar from "./Sidebar";
 import Navbar from "./Navbar";
 import TheChamCong from "./TheChamCong";
 
-const BangChamCong = (props: {
-  BangThongTinChamCong: ThongTinChamCongThang[];
-}) => {
+const BangChamCong = () => {
+  const [bangThongTinChamCong, setBangThongTinChamCong] = useState<
+    ThongTinChamCongThang[]
+  >([]);
+  useEffect(() => {
+    axios
+      .get("http://localhost:3000/bangchamcong")
+      .then((res) => setBangThongTinChamCong(res.data))
+      .catch((err) => console.log("Lỗi", err));
+  }, []);
   const [thang, setThang] = useState(new Date().getMonth() + 1);
   const [nam, setNam] = useState(new Date().getFullYear());
   const [ngay, setNgay] = useState(new Date().getDate());
   const [page, setPage] = useState(1);
-  const { BangThongTinChamCong } = props;
   const ngayTrongThang = new Date(nam, thang, 0).getDate();
   const duLieuTrongMotTrang = 23;
   const viTriBatDau = (page - 1) * duLieuTrongMotTrang;
 
-  const duLieuTheoNgay = BangThongTinChamCong.filter((e) => {
+  const duLieuTheoNgay = bangThongTinChamCong.filter((e) => {
     const n = new Date(e.ngayLam);
     return (
       n.getDate() === ngay &&
@@ -79,7 +86,7 @@ const BangChamCong = (props: {
                 <th>Giờ vào làm</th>
                 <th>Giờ tan làm</th>
                 <th>Tổng giờ làm</th>
-                <th>Chi tiết</th>
+                {/* <th>Chi tiết</th> */}
               </tr>
             </thead>
             <tbody>

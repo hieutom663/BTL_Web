@@ -1,11 +1,18 @@
+import axios from "axios";
 import { useEffect, useState } from "react";
 import { NhanVien } from "./TaskData";
 import Sidebar from "./Sidebar";
 import Navbar from "./Navbar";
 import { Link } from "react-router-dom";
 
-const PhongBan = (props: { danhSachNhanVien: NhanVien[] }) => {
-  const { danhSachNhanVien } = props;
+const PhongBan = () => {
+  const [danhSachNhanVien, setDanhSachNhanVien] = useState<NhanVien[]>([]);
+  useEffect(() => {
+    axios
+      .get("http://localhost:3000/danhsachnhanvien")
+      .then((res) => setDanhSachNhanVien(res.data))
+      .catch((err) => console.log("Lỗi", err));
+  }, []);
   const currentUserId = localStorage.getItem("tenDangNhap");
   const [nhanVienTrongBan, setNhanVienTrongBan] = useState<NhanVien[]>([]);
   const [myInfo, setMyInfo] = useState<NhanVien | null>(null);
@@ -18,9 +25,18 @@ const PhongBan = (props: { danhSachNhanVien: NhanVien[] }) => {
       const list = danhSachNhanVien.filter((e) => e.maPhong === me.maPhong);
       setNhanVienTrongBan(list);
     }
-  }, []);
+  }, [danhSachNhanVien, currentUserId]);
 
-  if (!myInfo) return <div>Đang tải thông tin...</div>;
+  if (!myInfo)
+    return (
+      <div>
+        <Navbar />
+        <div style={{ display: "flex " }}>
+          <Sidebar />
+          Đang tải thông tin...
+        </div>
+      </div>
+    );
 
   return (
     <div>
@@ -80,9 +96,10 @@ const PhongBan = (props: { danhSachNhanVien: NhanVien[] }) => {
                       emp.maNhanVien === currentUserId ? "#fff3cd" : "white",
                   }}
                 >
-                  <td>{emp.maPhong}</td>
+                  <td>{emp.maNhanVien}</td>
                   <td>
-                    {emp.tenNhanVien} {emp.maPhong === currentUserId && "(Bạn)"}
+                    {emp.tenNhanVien}{" "}
+                    {emp.maNhanVien === currentUserId && "(Bạn)"}
                   </td>
                   <td>{emp.gioiTinh}</td>
                   <td>{emp.chucVu}</td>
