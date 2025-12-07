@@ -24,6 +24,9 @@ const ThongTinCaNhan = () => {
       tenPhong: "",
       chucVu: "",
       ngaySinh: new Date(),
+      gioiTinh: "",
+      luongCoBan: Number(),
+      ngayBatDauLamViec: "",
     }
   );
   useEffect(() => {
@@ -104,6 +107,31 @@ const ThongTinCaNhan = () => {
                     })
                   }
                 />
+
+                <label>Giới tính:</label>
+                <input
+                  value={thongTinCaNhan.gioiTinh}
+                  disabled={!dangChinhSua}
+                  onChange={(e) =>
+                    setThongTinCaNhan({
+                      ...thongTinCaNhan,
+                      gioiTinh: e.target.value,
+                    })
+                  }
+                />
+
+                <label>Lương cơ bản:</label>
+                <input
+                  value={thongTinCaNhan.luongCoBan}
+                  disabled={!dangChinhSua}
+                  onChange={(e) =>
+                    setThongTinCaNhan({
+                      ...thongTinCaNhan,
+                      luongCoBan: Number(e.target.value),
+                    })
+                  }
+                />
+                
 
                 <label>Email:</label>
                 <input

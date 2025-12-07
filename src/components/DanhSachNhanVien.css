@@ -123,6 +123,8 @@
   color: #0056b3;
 }
 
+/* --- MODAL BOX (HỘP THOẠI HÌNH CHỮ NHẬT) CẬP NHẬT --- */
+
 .modal-overlay {
   position: fixed;
   top: 0;
@@ -138,30 +140,38 @@
 
 .modal-box {
   background-color: #fff;
-  padding: 25px 30px;
-  border-radius: 14px;
-  width: 450px;
-  max-width: 90%;
+  padding: 30px; /* Tăng padding */
+  border-radius: 12px; /* Góc bo tròn */
   box-shadow: 0 8px 25px rgba(0, 0, 0, 0.25);
   position: relative;
+  
+  /* Định hình chữ nhật */
+  width: 90%; 
+  max-width: 750px; /* Tăng max-width để chứa 2 cột */
+  max-height: 90vh; /* Giới hạn chiều cao */
+  overflow-y: auto; /* Cho phép cuộn */
+  
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 15px; /* Tăng khoảng cách giữa tiêu đề và form */
   font-size: 14px;
 }
 
 .modal-box h2 {
   margin-top: 0;
   color: #007bff;
-  font-size: 22px;
+  font-size: 24px;
   font-weight: 700;
   text-align: center;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #eee;
 }
 
+/* Sử dụng CSS Grid để tạo bố cục 2 cột */
 .employee-form {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); /* Chia thành 2 cột bằng nhau */
+  gap: 20px 30px; /* Khoảng cách hàng và cột */
 }
 
 .employee-form input,
@@ -179,23 +189,44 @@
   box-shadow: 0 0 5px rgba(0, 123, 255, 0.4);
 }
 
+/* Định dạng cho mỗi nhóm input */
+.nhanInput {
+  display: flex;
+  flex-direction: column;
+  font-size: 14px; /* Thay đổi font size tại đây */
+}
+
+.nhanInput label {
+    font-weight: 600;
+    margin-bottom: 5px;
+    color: #333;
+}
+
+/* Xử lý các nút bên trong modal */
 .modal-box button {
-  padding: 8px 16px;
+  padding: 10px 20px;
   border-radius: 6px;
   border: none;
   font-weight: 600;
   cursor: pointer;
   transition: 0.2s;
+  font-size: 15px;
 }
 
 .close-btn {
   position: absolute;
-  top: 12px;
-  right: 12px;
+  top: 15px;
+  right: 15px;
   background: #dc3545;
   color: white;
   padding: 5px 10px;
-  font-size: 12px;
+  font-size: 14px;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .close-btn:hover {
@@ -213,7 +244,7 @@
 
 .edit-btn {
   background-color: #ffc107;
-  color: white;
+  color: #333; /* Đổi màu chữ cho dễ đọc trên nền vàng */
 }
 
 .edit-btn:hover {
@@ -240,12 +271,12 @@
   }
 
   .modal-box {
-    width: 90%;
+    /* Trên màn hình nhỏ, form sẽ chuyển thành 1 cột */
+    width: 95%;
+    max-width: none;
   }
-}
-
-.nhanInput {
-  display: flex;
-  flex-direction: column;
-  font-size: 16px;
+  
+  .employee-form {
+    grid-template-columns: 1fr; /* 1 cột trên màn hình nhỏ */
+  }
 }
