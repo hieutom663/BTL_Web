@@ -1,13 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "./DanhSachNhanVien.css";
-import {
-  NhanVien,
-  PhongBan,
-  ngayThang,
-  ChucVu,
-  chucVuMap,
-  sinhId,
-} from "./TaskData";
+import { NhanVien, PhongBan, ngayThang, ChucVu, chucVuMap } from "./TaskData";
 import Sidebar from "./Sidebar";
 import Navbar from "./Navbar";
 import { Link } from "react-router-dom";
@@ -104,6 +97,7 @@ export default function DanhSachNhanVien() {
         } else {
           alert("Thêm nhân viên thành công");
         }
+        window.location.reload();
       } catch {
         alert("Lỗi server");
       }
