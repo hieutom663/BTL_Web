@@ -1,7 +1,6 @@
 import axios from "axios";
 import React, { useState, useEffect } from "react";
 import { PhongBan } from "./TaskData";
-import { useNavigate } from "react-router-dom";
 import Sidebar from "./Sidebar";
 import Navbar from "./Navbar";
 import SuaThongTinPhong from "./SuaThongTinPhong";
@@ -9,7 +8,6 @@ import QuanLyPhongBan from "./QuanLyPhongBan";
 
 const DanhSachPhongBan = () => {
   const [danhSachPhongBan, setDanhSachPhongBan] = useState<PhongBan[]>([]);
-  const navigate = useNavigate();
   const [flag, setFlag] = useState(false);
   const [formSua, setFormSua] = useState(false);
   const [formData, setFormData] = useState<PhongBan>({

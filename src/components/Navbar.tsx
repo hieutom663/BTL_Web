@@ -5,8 +5,12 @@ import "./Navbar.css";
 
 const Navbar = () => {
   const navigate = useNavigate();
-  const [loginStatus, setLoginStatus] = useState(!!localStorage.getItem("token"));
-  const [username, setUsername] = useState(localStorage.getItem("tenDangNhap") || "");
+  const [loginStatus, setLoginStatus] = useState(
+    !!localStorage.getItem("token")
+  );
+  const [username, setUsername] = useState(
+    localStorage.getItem("tenDangNhap") || ""
+  );
   const [showDropdown, setShowDropdown] = useState(false);
 
   const handleLogout = () => {

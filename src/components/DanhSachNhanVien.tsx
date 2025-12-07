@@ -32,7 +32,6 @@ export default function DanhSachNhanVien() {
     "them" | "xem" | "sua" | null
   >(null);
 
-  // Pagination
   const [trangHienTai, setTrangHienTai] = useState(1);
   const soLuongMoiTrang = 10;
   const tongSoTrang = Math.ceil(dsNhanVien.length / soLuongMoiTrang);
@@ -40,7 +39,6 @@ export default function DanhSachNhanVien() {
   const chiSoDau = chiSoCuoi - soLuongMoiTrang;
   const nhanVienHienThi = dsNhanVien.slice(chiSoDau, chiSoCuoi);
 
-  // Load dữ liệu
   useEffect(() => {
     axios
       .get("http://localhost:3000/danhsachnhanvien")
@@ -57,9 +55,6 @@ export default function DanhSachNhanVien() {
     dsPhongBan.map((e) => [e.tenPhong, e.maPhong])
   );
 
-  // ===========================
-  // LƯU NHÂN VIÊN (THÊM / SỬA)
-  // ===========================
   const xuLyLuu = async () => {
     if (!duLieuForm.maNhanVien.trim())
       return alert("Mã nhân viên không được để trống!");
@@ -72,9 +67,6 @@ export default function DanhSachNhanVien() {
       return alert("Lương cơ bản phải lớn hơn 0!");
     if (!duLieuForm.gioiTinh) return alert("Vui lòng chọn giới tính!");
 
-    // ================
-    // THÊM NHÂN VIÊN
-    // ================
     if (cheDoHopThoai === "them") {
       try {
         const response = await fetch("http://localhost:3000/api/themnhanvien", {
@@ -94,9 +86,6 @@ export default function DanhSachNhanVien() {
       }
     }
 
-    // ==================
-    // SỬA NHÂN VIÊN
-    // ==================
     if (cheDoHopThoai === "sua") {
       try {
         const response = await fetch(
@@ -112,13 +101,7 @@ export default function DanhSachNhanVien() {
         if (!response.ok) return alert(data.message || "Lỗi khi cập nhật");
 
         alert("Cập nhật nhân viên thành công");
-
-        // Cập nhật UI ngay
-        setDsNhanVien((ds) =>
-          ds.map((nv) =>
-            nv.maNhanVien === duLieuForm.maNhanVien ? { ...duLieuForm } : nv
-          )
-        );
+        window.location.reload();
 
         setCheDoHopThoai(null);
       } catch {
@@ -186,14 +169,30 @@ export default function DanhSachNhanVien() {
                   <td>
                     <button onClick={() => xuLySua(nv)}>Sửa</button> |{" "}
                     <button
-                      onClick={() => {
+                      onClick={async () => {
                         if (
-                          window.confirm("Bạn có chắc muốn xóa nhân viên này?")
+                          !window.confirm(
+                            `Bạn có chắc muốn xóa nhân viên ${nv.tenNhanVien}?`
+                          )
                         ) {
-                          setDsNhanVien((ds) =>
-                            ds.filter((x) => x.maNhanVien !== nv.maNhanVien)
+                          return;
+                        }
+                        try {
+                          const response = await fetch(
+                            `http://localhost:3000/api/xoanhanvien/${nv.maNhanVien}`,
+                            { method: "DELETE" }
                           );
-                          // TODO: gọi API xóa ở đây
+
+                          if (response.ok) {
+                            alert("Xóa thành công");
+                            setDsNhanVien(
+                              dsNhanVien.filter(
+                                (d) => d.maNhanVien !== nv.maNhanVien
+                              )
+                            );
+                          }
+                        } catch {
+                          alert("Lỗi server");
                         }
                       }}
                     >
@@ -248,26 +247,47 @@ export default function DanhSachNhanVien() {
                 </h2>
 
                 <div className="employee-form">
+                  {cheDoHopThoai === "them" ? (
+                    <div className="nhanInput">
+                      <label>STT: </label>
+                      <input
+                        placeholder="Mã nhân viên"
+                        value={(dsNhanVien.length + 1).toString()}
+                        onSelect={(e) =>
+                          setDuLieuForm({
+                            ...duLieuForm,
+                            thuTuTheoNgayVaoLam: (e.target as HTMLInputElement)
+                              .value,
+                          })
+                        }
+                      />
+                    </div>
+                  ) : (
+                    <></>
+                  )}
                   <div className="nhanInput">
                     <label>Mã nhân viên: </label>
                     <input
-                      value={duLieuForm.maNhanVien}
-                      onChange={(e) =>
+                      placeholder="Mã nhân viên"
+                      value={
+                        duLieuForm.maPhong +
+                        duLieuForm.maChucVu +
+                        duLieuForm.thuTuTheoNgayVaoLam.padStart(5, "0")
+                      }
+                      onSelect={(e) =>
                         setDuLieuForm({
                           ...duLieuForm,
-                          maNhanVien: e.target.value,
+                          maNhanVien: (e.target as HTMLInputElement).value,
                         })
                       }
-                      disabled={cheDoHopThoai !== "them"}
-                      placeholder="Nhập mã nhân viên"
                     />
                   </div>
 
                   <div className="nhanInput">
-                    <label>Họ tên</label>
+                    <label>Họ và tên</label>
                     <input
+                      placeholder="Họ tên"
                       value={duLieuForm.tenNhanVien}
-                      placeholder="Nhập họ và tên"
                       onChange={(e) =>
                         setDuLieuForm({
                           ...duLieuForm,
@@ -277,12 +297,11 @@ export default function DanhSachNhanVien() {
                       disabled={cheDoHopThoai === "xem"}
                     />
                   </div>
-
                   <div className="nhanInput">
                     <label>Email:</label>
                     <input
+                      placeholder="Email"
                       value={duLieuForm.emailNhanVien || ""}
-                      placeholder="Nhập Email"
                       onChange={(e) =>
                         setDuLieuForm({
                           ...duLieuForm,
@@ -292,12 +311,11 @@ export default function DanhSachNhanVien() {
                       disabled={cheDoHopThoai === "xem"}
                     />
                   </div>
-
                   <div className="nhanInput">
-                    <label>SĐT:</label>
+                    <label>Số điện thoại:</label>
                     <input
+                      placeholder="Số điện thoại"
                       value={duLieuForm.soLienLac || ""}
-                      placeholder="Nhập số điện thoại"
                       onChange={(e) =>
                         setDuLieuForm({
                           ...duLieuForm,
@@ -307,7 +325,6 @@ export default function DanhSachNhanVien() {
                       disabled={cheDoHopThoai === "xem"}
                     />
                   </div>
-
                   <div className="nhanInput">
                     <label>Phòng ban:</label>
                     <select
@@ -321,42 +338,55 @@ export default function DanhSachNhanVien() {
                       }
                       disabled={cheDoHopThoai === "xem"}
                     >
-                      <option value="">Chọn phòng ban</option>
+                      <option>Chọn phòng ban</option>
                       {dsPhongBan.map((e) => (
-                        <option key={e.maPhong} value={e.tenPhong}>
-                          {e.tenPhong}
-                        </option>
+                        <option>{e.tenPhong}</option>
                       ))}
                     </select>
                   </div>
-
+                  <div className="nhanInput">
+                    <label>Mã phòng ban:</label>
+                    <input
+                      type="text"
+                      value={duLieuForm.maPhong}
+                      readOnly
+                      disabled={cheDoHopThoai === "xem"}
+                    ></input>
+                  </div>
                   <div className="nhanInput">
                     <label>Chức vụ:</label>
                     <select
                       value={duLieuForm.chucVu}
                       onChange={(e) => {
-                        const cv = e.target.value;
+                        const chucVu = e.target.value;
                         setDuLieuForm({
                           ...duLieuForm,
-                          chucVu: cv,
-                          maChucVu: chucVuMap[cv],
+                          chucVu: e.target.value,
+                          maChucVu: chucVuMap[chucVu],
                         });
                       }}
                       disabled={cheDoHopThoai === "xem"}
                     >
-                      <option value="">Chọn chức vụ</option>
+                      <option>Chọn chức vụ</option>
                       {dsChucVu.map((e) => (
-                        <option key={e.maChucVu} value={e.tenChucVu}>
-                          {e.tenChucVu}
-                        </option>
+                        <option>{e.tenChucVu}</option>
                       ))}
                     </select>
                   </div>
-
+                  <div className="nhanInput">
+                    <label>Mã chức vụ:</label>
+                    <input
+                      type="text"
+                      value={duLieuForm.maChucVu}
+                      readOnly
+                      disabled={cheDoHopThoai === "xem"}
+                    ></input>
+                  </div>
                   <div className="nhanInput">
                     <label>Lương cơ bản:</label>
                     <input
                       type="number"
+                      placeholder="Lương cơ bản"
                       value={duLieuForm.luongCoBan}
                       onChange={(e) =>
                         setDuLieuForm({
@@ -367,17 +397,14 @@ export default function DanhSachNhanVien() {
                       disabled={cheDoHopThoai === "xem"}
                     />
                   </div>
-
                   <div className="nhanInput">
                     <label>Ngày sinh:</label>
                     <input
                       type="date"
                       value={
-                        duLieuForm.ngaySinh
-                          ? new Date(duLieuForm.ngaySinh)
-                              .toISOString()
-                              .split("T")[0]
-                          : ""
+                        new Date(duLieuForm.ngaySinh)
+                          .toISOString()
+                          .split("T")[0]
                       }
                       onChange={(e) =>
                         setDuLieuForm({
@@ -388,17 +415,14 @@ export default function DanhSachNhanVien() {
                       disabled={cheDoHopThoai === "xem"}
                     />
                   </div>
-
                   <div className="nhanInput">
                     <label>Ngày bắt đầu làm:</label>
                     <input
                       type="date"
                       value={
-                        duLieuForm.ngayBatDauLamViec
-                          ? new Date(duLieuForm.ngayBatDauLamViec)
-                              .toISOString()
-                              .split("T")[0]
-                          : ""
+                        new Date(duLieuForm.ngayBatDauLamViec)
+                          .toISOString()
+                          .split("T")[0]
                       }
                       onChange={(e) =>
                         setDuLieuForm({
@@ -420,6 +444,7 @@ export default function DanhSachNhanVien() {
                           gioiTinh: e.target.value,
                         })
                       }
+                      style={{ width: 200 }}
                       disabled={cheDoHopThoai === "xem"}
                     >
                       <option value="">Chọn giới tính</option>
@@ -441,7 +466,11 @@ export default function DanhSachNhanVien() {
 
                   {(cheDoHopThoai === "them" || cheDoHopThoai === "sua") && (
                     <button className="btn-save" onClick={xuLyLuu}>
-                      Lưu
+                      {cheDoHopThoai === "them"
+                        ? "Thêm nhân viên"
+                        : cheDoHopThoai === "sua"
+                        ? "Chỉnh sửa nhân viên"
+                        : "Thông tin chi tiết"}
                     </button>
                   )}
 

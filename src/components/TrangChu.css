@@ -20,12 +20,11 @@
   align-items: flex-start;
 }
 
-
 /* ===== WELCOME CARD ===== */
 .welcome-card {
   background: white;
-  width: 935px;          /* chiều rộng bạn yêu cầu */
-  height: 152px;         /* chiều cao bạn yêu cầu */
+  width: 935px; /* chiều rộng bạn yêu cầu */
+  height: 152px; /* chiều cao bạn yêu cầu */
 
   padding: 18px 22px;
   border-radius: 12px;
@@ -35,20 +34,18 @@
   align-items: center;
   gap: 20px;
 
-  box-sizing: border-box; 
+  box-sizing: border-box;
 }
 
 .welcome-icon {
-  font-size: 48px;      
+  font-size: 48px;
 }
 
 .welcome-text {
-  font-size: 26px;       
+  font-size: 26px;
   font-weight: 600;
   line-height: 1.3;
 }
-
-
 
 /* ========================================================= */
 /* ===== CALENDAR CARD (WIDTH 462px – HEIGHT 352px) ======== */
@@ -56,10 +53,10 @@
 
 .calendar-card {
   background: white;
-  width: 462px;         /* cố định chiều rộng */
-  height: 352px;        /* cố định chiều cao */
+  width: 462px; /* cố định chiều rộng */
+  height: 352px; /* cố định chiều cao */
 
-  padding: 14px 16px;   /* giảm padding để vừa hơn */
+  padding: 14px 16px; /* giảm padding để vừa hơn */
   border-radius: 12px;
   box-shadow: 0 3px 8px rgba(0, 0, 0, 0.12);
 
@@ -109,7 +106,6 @@
   font-weight: 600;
 }
 
-
 /* ===== Calendar grid ===== */
 .calendar-grid {
   display: grid;
@@ -125,12 +121,11 @@
   color: #666;
 }
 
-
 /* ===== Ngày ===== */
 .calendar-day,
 .calendar-today {
   width: 100%;
-  height: 34px;             /* THU NHỎ để vừa 352px */
+  height: 34px; /* THU NHỎ để vừa 352px */
   border-radius: 6px;
   background: #f7f7f7;
   font-size: 13px;
@@ -147,14 +142,12 @@
   background: #e9e9e9;
 }
 
-
 /* ===== Ngày hôm nay ===== */
 .calendar-today {
   background: #007bff !important;
   color: white !important;
   font-weight: bold;
 }
-
 
 /* ===== DOT SỰ KIỆN ===== */
 .event-dot {
@@ -167,7 +160,6 @@
   left: 50%;
   transform: translateX(-50%);
 }
-
 
 /* ===== POPUP GHI CHÚ ===== */
 .note-popup-overlay {
