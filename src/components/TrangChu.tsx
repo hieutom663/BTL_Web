@@ -9,61 +9,61 @@ const TrangChu = () => {
   const [currentMonth, setCurrentMonth] = useState(today.getMonth());
   const [currentYear, setCurrentYear] = useState(today.getFullYear());
 
-  const [notes, setNotes] = useState<Record<string, string>>({});
-  const [selectedDate, setSelectedDate] = useState<string | null>(null);
-  const [noteInput, setNoteInput] = useState("");
+  const [ghiChu, setGhiChu] = useState<Record<string, string>>({});
+  const [ngayChon, setNgayChon] = useState<string | null>(null);
+  const [inputGhiChu, setInputGhiChu] = useState("");
 
-  const weekdays = ["T2", "T3", "T4", "T5", "T6", "T7", "CN"];
+  const thuTrongTuan = ["T2", "T3", "T4", "T5", "T6", "T7", "CN"];
 
-  const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
+  const soNgayTrongThang = new Date(currentYear, currentMonth + 1, 0).getDate();
 
-  let startDay = new Date(currentYear, currentMonth, 1).getDay();
-  if (startDay === 0) startDay = 7;
+  let ngayBatDau = new Date(currentYear, currentMonth, 1).getDay();
+  if (ngayBatDau === 0) ngayBatDau = 7;
 
-  const calendarCells: (string | number)[] = [];
+  const cacOTrongLich: (string | number)[] = [];
 
-  for (let i = 1; i < startDay; i++) calendarCells.push("");
-  for (let i = 1; i <= daysInMonth; i++) calendarCells.push(i);
+  for (let i = 1; i < ngayBatDau; i++) cacOTrongLich.push("");
+  for (let i = 1; i <= soNgayTrongThang; i++) cacOTrongLich.push(i);
 
-  const prevMonth = () => {
+  const thangTruoc = () => {
     if (currentMonth === 0) {
       setCurrentMonth(11);
       setCurrentYear(currentYear - 1);
     } else setCurrentMonth(currentMonth - 1);
   };
 
-  const nextMonth = () => {
+  const thangSau = () => {
     if (currentMonth === 11) {
       setCurrentMonth(0);
       setCurrentYear(currentYear + 1);
     } else setCurrentMonth(currentMonth + 1);
   };
 
-  const makeKey = (y: number, m: number, d: number) => `${y}-${m + 1}-${d}`;
+  const taoKey = (y: number, m: number, d: number) => `${y}-${m + 1}-${d}`;
 
-  const openNotePopup = (day: number) => {
-    const key = makeKey(currentYear, currentMonth, day);
-    setSelectedDate(key);
-    setNoteInput(notes[key] || "");
+  const moPopupGhiChu = (day: number) => {
+    const key = taoKey(currentYear, currentMonth, day);
+    setNgayChon(key);
+    setInputGhiChu(ghiChu[key] || "");
   };
 
-  const saveNote = () => {
-    if (selectedDate) {
-      setNotes({
-        ...notes,
-        [selectedDate]: noteInput,
+  const luuGhiChu = () => {
+    if (ngayChon) {
+      setGhiChu({
+        ...ghiChu,
+        [ngayChon]: inputGhiChu,
       });
     }
-    setSelectedDate(null);
+    setNgayChon(null);
   };
 
-  const deleteNote = () => {
-    if (selectedDate) {
-      const temp = { ...notes };
-      delete temp[selectedDate];
-      setNotes(temp);
+  const xoaGhiChu = () => {
+    if (ngayChon) {
+      const temp = { ...ghiChu };
+      delete temp[ngayChon];
+      setGhiChu(temp);
     }
-    setSelectedDate(null);
+    setNgayChon(null);
   };
 
   return (
@@ -74,22 +74,23 @@ const TrangChu = () => {
         <Sidebar />
 
         <div className="trangchu-content">
+          {/* Thẻ chào mừng */}
           <div className="welcome-card">
             <div className="welcome-icon">✌️</div>
             <div>
               <div className="welcome-text">Xin chào,</div>
-              <div className="welcome-text">mừng bạn quay lại</div>
+              <div className="welcome-text">chào mừng bạn quay lại</div>
             </div>
           </div>
 
+          {/* Thẻ lịch */}
           <div className="calendar-card">
             <div className="calendar-header">
               <div className="calendar-title">Lịch</div>
-              <div className="calendar-viewall">Xem tất cả</div>
             </div>
 
             <div className="calendar-month-row">
-              <button className="arrow-btn" onClick={prevMonth}>
+              <button className="arrow-btn" onClick={thangTruoc}>
                 {"<"}
               </button>
 
@@ -97,19 +98,19 @@ const TrangChu = () => {
                 Tháng {currentMonth + 1}/{currentYear}
               </div>
 
-              <button className="arrow-btn" onClick={nextMonth}>
+              <button className="arrow-btn" onClick={thangSau}>
                 {">"}
               </button>
             </div>
 
             <div className="calendar-grid">
-              {weekdays.map((d) => (
+              {thuTrongTuan.map((d) => (
                 <div key={d} className="calendar-day-header">
                   {d}
                 </div>
               ))}
 
-              {calendarCells.map((day, index) => {
+              {cacOTrongLich.map((day, index) => {
                 const isToday =
                   day === today.getDate() &&
                   currentMonth === today.getMonth() &&
@@ -117,21 +118,20 @@ const TrangChu = () => {
 
                 const key =
                   typeof day === "number"
-                    ? makeKey(currentYear, currentMonth, day)
+                    ? taoKey(currentYear, currentMonth, day)
                     : "";
 
-                const hasNote = typeof day === "number" && notes[key];
+                const coGhiChu = typeof day === "number" && ghiChu[key];
 
                 return (
                   <div
                     key={index}
-                    onClick={() => typeof day === "number" && openNotePopup(day)}
+                    onClick={() => typeof day === "number" && moPopupGhiChu(day)}
                     className={isToday ? "calendar-today" : "calendar-day"}
-                    style={{ position: "relative" }}
+                    style={{ position: "relative", fontWeight: isToday ? "bold" : "normal" }}
                   >
                     {day}
-
-                    {hasNote && <div className="event-dot"></div>}
+                    {coGhiChu && <div className="event-dot"></div>}
                   </div>
                 );
               })}
@@ -140,29 +140,29 @@ const TrangChu = () => {
         </div>
       </div>
 
-      {/* ===== POPUP GHI CHÚ ===== */}
-      {selectedDate && (
+      {/* POPUP GHI CHÚ */}
+      {ngayChon && (
         <div className="note-popup-overlay">
           <div className="note-popup">
-            <h3>Ghi chú ngày {selectedDate}</h3>
+            <h3>Ghi chú ngày {ngayChon}</h3>
 
             <textarea
-              value={noteInput}
-              onChange={(e) => setNoteInput(e.target.value)}
+              value={inputGhiChu}
+              onChange={(e) => setInputGhiChu(e.target.value)}
               placeholder="Nhập ghi chú..."
             ></textarea>
 
             <div className="popup-buttons">
-              <button onClick={saveNote} className="btn-save">
+              <button onClick={luuGhiChu} className="btn-save">
                 Lưu
               </button>
 
-              <button onClick={() => setSelectedDate(null)} className="btn-cancel">
+              <button onClick={() => setNgayChon(null)} className="btn-cancel">
                 Đóng
               </button>
 
-              {notes[selectedDate] && (
-                <button onClick={deleteNote} className="btn-delete">
+              {ghiChu[ngayChon] && (
+                <button onClick={xoaGhiChu} className="btn-delete">
                   Xóa
                 </button>
               )}
