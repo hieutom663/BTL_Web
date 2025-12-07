@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "./DanhSachNhanVien.css";
+// Giữ nguyên import, giả định các interface đã được Việt hóa ở file TaskData
 import { NhanVien, PhongBan, ngayThang, ChucVu, chucVuMap } from "./TaskData";
 import Sidebar from "./Sidebar";
 import Navbar from "./Navbar";
@@ -38,6 +39,8 @@ export default function DanhSachNhanVien() {
   const chiSoCuoi = trangHienTai * soLuongMoiTrang;
   const chiSoDau = chiSoCuoi - soLuongMoiTrang;
   const nhanVienHienThi = dsNhanVien.slice(chiSoDau, chiSoCuoi);
+  
+  // Dữ liệu mock (Giữ nguyên logic fetch data)
   useEffect(() => {
     axios
       .get("http://localhost:3000/danhsachnhanvien")
@@ -58,6 +61,7 @@ export default function DanhSachNhanVien() {
   );
 
   const xuLyLuu = async () => {
+    // 1. Kiểm tra ràng buộc (Giữ nguyên)
     if (!duLieuForm.maNhanVien.trim()) {
       alert("Mã nhân viên không được để trống!");
       return;
@@ -84,7 +88,7 @@ export default function DanhSachNhanVien() {
     }
 
     if (cheDoHopThoai === "them") {
-      // them o day
+      // Logic Thêm (Giữ nguyên)
       try {
         const response = await fetch("http://localhost:3000/api/themnhanvien", {
           method: "POST",
@@ -93,21 +97,43 @@ export default function DanhSachNhanVien() {
         });
         const data = await response.json();
         if (!response.ok) {
-          alert(data.message || "Lỗi");
+          alert(data.message || "Lỗi khi thêm nhân viên");
         } else {
           alert("Thêm nhân viên thành công");
         }
-        window.location.reload();
+        window.location.reload(); // Tải lại trang sau khi thêm
       } catch {
-        alert("Lỗi server");
+        alert("Lỗi server khi thêm nhân viên");
       }
-      //setDsNhanVien([...dsNhanVien, { ...duLieuForm }]);
-    } else if (cheDoHopThoai === "sua" && nhanVienDangSua) {
-      setDsNhanVien(
-        dsNhanVien.map((nv) =>
-          nv.maPhong === nhanVienDangSua.maNhanVien ? { ...duLieuForm } : nv
-        )
-      );
+    } else if (cheDoHopThoai === "sua") {
+      // Logic Sửa (UPDATE)
+      try {
+        const response = await fetch(
+          `http://localhost:3000/api/suanhanvien/${duLieuForm.maNhanVien}`,
+          {
+            method: "PUT", // Sử dụng PUT hoặc PATCH cho chức năng cập nhật
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(duLieuForm),
+          }
+        );
+        const data = await response.json();
+        if (!response.ok) {
+          alert(data.message || "Lỗi khi cập nhật nhân viên");
+        } else {
+          alert("Cập nhật nhân viên thành công");
+          
+          // Cập nhật state (tạm thời không dùng fetch/reload)
+          setDsNhanVien(
+            dsNhanVien.map((nv) =>
+              nv.maNhanVien === duLieuForm.maNhanVien ? { ...duLieuForm } : nv
+            )
+          );
+        }
+        // Giả lập tải lại dữ liệu sau khi lưu thành công trên API
+        // window.location.reload(); 
+      } catch {
+        alert("Lỗi server khi cập nhật nhân viên");
+      }
     }
 
     setCheDoHopThoai(null);
@@ -174,6 +200,7 @@ export default function DanhSachNhanVien() {
                     <button onClick={() => xuLySua(nv)}>Sửa</button> |{" "}
                     <button
                       onClick={() => {
+                        // Logic Xóa (Giữ nguyên)
                         if (
                           window.confirm("Bạn có chắc muốn xóa nhân viên này?")
                         )
@@ -182,6 +209,7 @@ export default function DanhSachNhanVien() {
                               (x) => x.maNhanVien !== nv.maNhanVien
                             )
                           );
+                        // Cần thêm logic gọi API XÓA tại đây
                       }}
                     >
                       Xóa
@@ -237,8 +265,10 @@ export default function DanhSachNhanVien() {
                   <div className="nhanInput">
                     <label>STT: </label>
                     <input
-                      placeholder="Mã nhân viên"
+                      placeholder="Số thứ tự"
                       value={(dsNhanVien.length + 1).toString()}
+                      readOnly // Không cho chỉnh sửa STT
+                      // Giữ nguyên logic onChange cũ nếu bạn muốn cập nhật thuTuTheoNgayVaoLam
                       onSelect={(e) =>
                         setDuLieuForm({
                           ...duLieuForm,
@@ -246,6 +276,7 @@ export default function DanhSachNhanVien() {
                             .value,
                         })
                       }
+                      disabled={cheDoHopThoai === "xem"}
                     />
                   </div>
                   <div className="nhanInput">
@@ -253,16 +284,16 @@ export default function DanhSachNhanVien() {
                     <input
                       placeholder="Mã nhân viên"
                       value={
-                        duLieuForm.maPhong +
-                        duLieuForm.maChucVu +
-                        duLieuForm.thuTuTheoNgayVaoLam.padStart(5, "0")
+                        duLieuForm.maNhanVien // Hiển thị mã hiện tại
                       }
+                      readOnly // Mã NV không nên thay đổi khi Sửa/Xem
                       onSelect={(e) =>
                         setDuLieuForm({
                           ...duLieuForm,
                           maNhanVien: (e.target as HTMLInputElement).value,
                         })
                       }
+                      disabled={cheDoHopThoai === "xem" || cheDoHopThoai === "sua"} // Vô hiệu hóa khi Sửa/Xem
                     />
                   </div>
 
@@ -311,6 +342,7 @@ export default function DanhSachNhanVien() {
                   <div className="nhanInput">
                     <label>Phòng ban:</label>
                     <select
+                      value={duLieuForm.tenPhong} 
                       onChange={(e) =>
                         setDuLieuForm({
                           ...duLieuForm,
@@ -320,8 +352,10 @@ export default function DanhSachNhanVien() {
                       }
                       disabled={cheDoHopThoai === "xem"}
                     >
+                      {}
+                      <option value="">Chọn Phòng ban</option>
                       {dsPhongBan.map((e) => (
-                        <option>{e.tenPhong}</option>
+                        <option key={e.maPhong} value={e.tenPhong}>{e.tenPhong}</option>
                       ))}
                     </select>
                   </div>
@@ -337,18 +371,20 @@ export default function DanhSachNhanVien() {
                   <div className="nhanInput">
                     <label>Chức vụ:</label>
                     <select
+                      value={duLieuForm.chucVu}
                       onChange={(e) => {
                         const chucVu = e.target.value;
                         setDuLieuForm({
                           ...duLieuForm,
                           chucVu: e.target.value,
-                          maChucVu: chucVuMap[chucVu],
+                          maChucVu: chucVuMap[chucVu], 
                         });
                       }}
                       disabled={cheDoHopThoai === "xem"}
                     >
+                      <option value="">Chọn Chức vụ</option>
                       {dsChucVu.map((e) => (
-                        <option>{e.tenChucVu}</option>
+                        <option key={e.maChucVu} value={e.tenChucVu}>{e.tenChucVu}</option>
                       ))}
                     </select>
                   </div>
@@ -381,9 +417,11 @@ export default function DanhSachNhanVien() {
                     <input
                       type="date"
                       value={
-                        new Date(duLieuForm.ngaySinh)
-                          .toISOString()
-                          .split("T")[0]
+                        duLieuForm.ngaySinh 
+                          ? new Date(duLieuForm.ngaySinh)
+                              .toISOString()
+                              .split("T")[0]
+                          : ""
                       }
                       onChange={(e) =>
                         setDuLieuForm({
@@ -399,9 +437,11 @@ export default function DanhSachNhanVien() {
                     <input
                       type="date"
                       value={
-                        new Date(duLieuForm.ngayBatDauLamViec)
-                          .toISOString()
-                          .split("T")[0]
+                        duLieuForm.ngayBatDauLamViec 
+                          ? new Date(duLieuForm.ngayBatDauLamViec)
+                              .toISOString()
+                              .split("T")[0]
+                          : ""
                       }
                       onChange={(e) =>
                         setDuLieuForm({

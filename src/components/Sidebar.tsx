@@ -1,69 +1,78 @@
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
-
 import "./Sidebar.css";
 
 const Sidebar = () => {
   const loginStatus = localStorage.getItem("token");
   const role = localStorage.getItem("role");
-
+  const [activePath, setActivePath] = useState(window.location.pathname); 
+  const handleLinkClick = (path: string) => {
+    setActivePath(path);
+  };
+    
   return (
-    <div>
-      <div style={{ border: "solid black 1px", height: "960px" }}>
-        <ul
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            width: 200,
-            listStyle: "none",
-            gap: 20,
-            justifyContent: "space-between",
-            padding: 8,
-            backgroundColor: "#00DEFF",
-          }}
-        >
-          <li>
-            <Link to={"/"} style={{ textDecoration: "none" }}>
-              Trang chủ
+    <div className="sidebar-container">
+      <ul className="sidebar-menu">
+        <h3 className="menu-group-title">Dashboard</h3>
+        
+        <li className="menu-item">
+          <Link 
+            to={"/"} 
+            
+            className={`menu-link ${activePath === '/' ? 'active-link' : ''}`}
+            onClick={() => handleLinkClick('/')} 
+          >
+            Trang chủ
+          </Link>
+        </li>
+        
+        {}
+        {role === "admin" && (
+          <li className="menu-item">
+            <Link 
+              to={"/departments"} 
+              className={`menu-link ${activePath === '/departments' ? 'active-link' : ''}`}
+              onClick={() => handleLinkClick('/departments')}
+            >
+              Các phòng, ban
             </Link>
           </li>
-          {role === "admin" ? (
-            <li>
-              <Link to={"/departments"} style={{ textDecoration: "none" }}>
-                Các phòng, ban
-              </Link>
-            </li>
-          ) : (
-            <></>
-          )}
-          <li>
-            <Link to={"/employeelist"} style={{ textDecoration: "none" }}>
-              Danh sách nhân viên
-            </Link>
-          </li>
-          {!loginStatus ? (
-            <li>
-              <Link to={"/login"} style={{ textDecoration: "none" }}>
-                Đăng nhập
-              </Link>
-            </li>
-          ) : (
-            <Link to={"/profile"} style={{ textDecoration: "none" }}>
-              Trang cá nhân
-            </Link>
-          )}
+        )}
+        
+        {}
+        <li className="menu-item">
+          <Link 
+            to={"/employeelist"} 
+            className={`menu-link ${activePath === '/employeelist' ? 'active-link' : ''}`}
+            onClick={() => handleLinkClick('/employeelist')}
+          >
+            Danh sách nhân viên
+          </Link>
+        </li>
+        
+        <li className="menu-item">
+          <Link 
+            to={"/department"} 
+            className={`menu-link ${activePath === '/department' ? 'active-link' : ''}`}
+            onClick={() => handleLinkClick('/department')}
+          >
+            Phòng ban của tôi
+          </Link>
+        </li>
+        
+        <li className="menu-item">
+          <Link 
+            to={"/timesheet/"} 
+            className={`menu-link ${activePath === '/timesheet/' ? 'active-link' : ''}`}
+            onClick={() => handleLinkClick('/timesheet/')}
+          >
+            Bảng chấm công
+          </Link>
+        </li>
+      </ul>
+      
+      {}
 
-          <li>
-            <Link to={"/department"} style={{ textDecoration: "none" }}>
-              Phòng ban của tôi
-            </Link>
-          </li>
-          <li>
-            <Link to={"/timesheet/"} style={{ textDecoration: "none" }}>
-              Bảng chấm công
-            </Link>
-          </li>
-        </ul>
-      </div>
     </div>
   );
 };

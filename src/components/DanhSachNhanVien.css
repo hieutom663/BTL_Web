@@ -138,30 +138,35 @@
 
 .modal-box {
   background-color: #fff;
-  padding: 25px 30px;
-  border-radius: 14px;
-  width: 450px;
-  max-width: 90%;
+  padding: 30px;
+  border-radius: 12px;
   box-shadow: 0 8px 25px rgba(0, 0, 0, 0.25);
   position: relative;
+  width: 90%; 
+  max-width: 750px;
+  max-height: 90vh;
+  overflow-y: auto; 
+  
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 15px;
   font-size: 14px;
 }
 
 .modal-box h2 {
   margin-top: 0;
   color: #007bff;
-  font-size: 22px;
+  font-size: 24px;
   font-weight: 700;
   text-align: center;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #eee;
 }
 
 .employee-form {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px 30px; 
 }
 
 .employee-form input,
@@ -179,23 +184,42 @@
   box-shadow: 0 0 5px rgba(0, 123, 255, 0.4);
 }
 
+.nhanInput {
+  display: flex;
+  flex-direction: column;
+  font-size: 14px;
+}
+
+.nhanInput label {
+    font-weight: 600;
+    margin-bottom: 5px;
+    color: #333;
+}
+
 .modal-box button {
-  padding: 8px 16px;
+  padding: 10px 20px;
   border-radius: 6px;
   border: none;
   font-weight: 600;
   cursor: pointer;
   transition: 0.2s;
+  font-size: 15px;
 }
 
 .close-btn {
   position: absolute;
-  top: 12px;
-  right: 12px;
+  top: 15px;
+  right: 15px;
   background: #dc3545;
   color: white;
   padding: 5px 10px;
-  font-size: 12px;
+  font-size: 14px;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .close-btn:hover {
@@ -213,7 +237,7 @@
 
 .edit-btn {
   background-color: #ffc107;
-  color: white;
+  color: #333;
 }
 
 .edit-btn:hover {
@@ -240,12 +264,12 @@
   }
 
   .modal-box {
-    width: 90%;
+  
+    width: 95%;
+    max-width: none;
   }
-}
-
-.nhanInput {
-  display: flex;
-  flex-direction: column;
-  font-size: 16px;
+  
+  .employee-form {
+    grid-template-columns: 1fr;
+  }
 }
