@@ -1,45 +1,79 @@
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import "./Sidebar.css";
 
-const Navbar = () => {
+const Sidebar = () => {
+  const loginStatus = localStorage.getItem("token");
+  const role = localStorage.getItem("role");
+  const [activePath, setActivePath] = useState(window.location.pathname); 
+  const handleLinkClick = (path: string) => {
+    setActivePath(path);
+  };
+    
   return (
-    <div>
-      <div style={{ border: "solid black 1px", height: "960px" }}>
-        <ul
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            width: 200,
-            listStyle: "none",
-            gap: 20,
-            justifyContent: "space-between",
-            padding: 8,
-            backgroundColor: "#00DEFF",
-          }}
-        >
-          <li>
-            <Link to={"/"} style={{ textDecoration: "none" }}>
-              Trang chu
-            </Link>
-          </li>
-          <li>
-            <Link to={"/login"} style={{ textDecoration: "none" }}>
-              DangNhap
-            </Link>
-          </li>
-          <li>
-            <Link to={"/department"} style={{ textDecoration: "none" }}>
-              Phòng, ban của bạn
-            </Link>
-          </li>
-          <li>
-            <Link to={"/departments"} style={{ textDecoration: "none" }}>
+    <div className="sidebar-container">
+      <ul className="sidebar-menu">
+        <h3 className="menu-group-title">Dashboard</h3>
+        
+        <li className="menu-item">
+          <Link 
+            to={"/"} 
+            
+            className={`menu-link ${activePath === '/' ? 'active-link' : ''}`}
+            onClick={() => handleLinkClick('/')} 
+          >
+            Trang chủ
+          </Link>
+        </li>
+        
+        {}
+        {role === "admin" && (
+          <li className="menu-item">
+            <Link 
+              to={"/departments"} 
+              className={`menu-link ${activePath === '/departments' ? 'active-link' : ''}`}
+              onClick={() => handleLinkClick('/departments')}
+            >
               Các phòng, ban
             </Link>
           </li>
-        </ul>
-      </div>
+        )}
+        
+        {}
+        <li className="menu-item">
+          <Link 
+            to={"/employeelist"} 
+            className={`menu-link ${activePath === '/employeelist' ? 'active-link' : ''}`}
+            onClick={() => handleLinkClick('/employeelist')}
+          >
+            Danh sách nhân viên
+          </Link>
+        </li>
+        
+        <li className="menu-item">
+          <Link 
+            to={"/department"} 
+            className={`menu-link ${activePath === '/department' ? 'active-link' : ''}`}
+            onClick={() => handleLinkClick('/department')}
+          >
+            Phòng ban của tôi
+          </Link>
+        </li>
+        
+        <li className="menu-item">
+          <Link 
+            to={"/timesheet/"} 
+            className={`menu-link ${activePath === '/timesheet/' ? 'active-link' : ''}`}
+            onClick={() => handleLinkClick('/timesheet/')}
+          >
+            Bảng chấm công
+          </Link>
+        </li>
+      </ul>
+      
+      {}
+
     </div>
   );
 };
-export default Navbar;
+export default Sidebar;
