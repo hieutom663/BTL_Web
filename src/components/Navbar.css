@@ -1,13 +1,117 @@
+/* Reset cơ bản */
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
-.tb {
-  border: 1px solid black;
+/* Navbar chính */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 20px;
+  height: 60px;
+  background-color: #ffffff;
+  border-bottom: 1px solid #ddd;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  font-family: "Segoe UI", sans-serif;
+  position: relative;
+  z-index: 100;
 }
 
-.ttcn {
-  border: 1px solid black;
+/* Logo */
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.logo img {
+  width: 50px;
+  height: 50px;
+  border-radius: 6px;
+}
+
+.logo h2 a {
+  text-decoration: none;
+  color: #333;
+  font-size: 20px;
+  font-weight: 600;
+}
+
+/* Container profile */
+.profile-container {
+  position: relative;
+}
+
+/* Nút username */
+.profile-button {
+  padding: 8px 12px;
+  background-color: #ffffff;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.2s ease;
+  width: 200px;
+}
+
+.profile-button:hover {
+  background-color: blue;
+}
+
+/* Dropdown menu */
+.dropdown-menu {
+  position: absolute;
+  top: 110%;
+  right: 0;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  min-width: 180px;
+  overflow: hidden;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  opacity: 0;
+  transform: translateY(-10px);
+  transition: all 0.2s ease;
+  pointer-events: none;
+  z-index: 1000;
+}
+
+/* Khi showDropdown = true */
+.dropdown-menu.show {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+/* Item trong dropdown */
+.dropdown-item {
+  width: 100%;
+  padding: 10px 15px;
+  text-align: left;
+  background-color: #fff;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background 0.2s ease;
+}
+
+.dropdown-item:hover {
+  background-color: blue;
+}
+
+/* Nút đăng nhập (nếu chưa login) */
+.profile-container > button {
+  padding: 8px 12px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  background-color: #fff;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.profile-container > button:hover {
+  background-color: #f0f0f0;
 }
