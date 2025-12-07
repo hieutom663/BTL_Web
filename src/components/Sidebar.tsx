@@ -1,7 +1,11 @@
 import { Link } from "react-router-dom";
+
 import "./Sidebar.css";
 
-const Navbar = () => {
+const Sidebar = () => {
+  const loginStatus = localStorage.getItem("token");
+  const role = localStorage.getItem("role");
+
   return (
     <div>
       <div style={{ border: "solid black 1px", height: "960px" }}>
@@ -22,19 +26,40 @@ const Navbar = () => {
               Trang chủ
             </Link>
           </li>
+          {role === "admin" ? (
+            <li>
+              <Link to={"/departments"} style={{ textDecoration: "none" }}>
+                Các phòng, ban
+              </Link>
+            </li>
+          ) : (
+            <></>
+          )}
           <li>
-            <Link to={"/profile"} style={{ textDecoration: "none" }}>
-              Thông tin cá nhân
+            <Link to={"/employeelist"} style={{ textDecoration: "none" }}>
+              Danh sách nhân viên
             </Link>
           </li>
+          {!loginStatus ? (
+            <li>
+              <Link to={"/login"} style={{ textDecoration: "none" }}>
+                Đăng nhập
+              </Link>
+            </li>
+          ) : (
+            <Link to={"/profile"} style={{ textDecoration: "none" }}>
+              Trang cá nhân
+            </Link>
+          )}
+
           <li>
             <Link to={"/department"} style={{ textDecoration: "none" }}>
-              Phòng, ban của bạn
+              Phòng ban của tôi
             </Link>
           </li>
           <li>
-            <Link to={"/departments"} style={{ textDecoration: "none" }}>
-              Các phòng, ban
+            <Link to={"/timesheet/"} style={{ textDecoration: "none" }}>
+              Bảng chấm công
             </Link>
           </li>
         </ul>
@@ -42,4 +67,4 @@ const Navbar = () => {
     </div>
   );
 };
-export default Navbar;
+export default Sidebar;
