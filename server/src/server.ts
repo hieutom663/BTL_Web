@@ -33,11 +33,11 @@ app.post("/api/login", async (req, res) => {
     const user = users[0];
 
     if (!user) {
-      return res.status(400).json({ message: "Tài khoản không tồn tại" });
+      return res.json({ message: "Tài khoản không tồn tại" });
     }
 
     if (matKhau !== user.matKhau) {
-      return res.status(400).json({ message: "Mật khẩu nhập vào không đúng" });
+      return res.json({ message: "Mật khẩu nhập vào không đúng" });
     }
 
     const token = jwt.sign(
@@ -54,7 +54,7 @@ app.post("/api/login", async (req, res) => {
     });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: "Lỗi server" });
+    res.json({ message: "Lỗi server" });
   }
 });
 
@@ -70,7 +70,7 @@ app.post("/api/themphongban", async (req, res) => {
     "INSERT INTO phongban (maPhong, tenPhong, namThanhLap, trangThai) VALUES (?, ?, ?, ?)",
     [maPhong, tenPhong, namThanhLap, trangThai]
   );
-  return res.status(201).json({ message: "Thêm thành công", data: req.body });
+  return res.json({ message: "Thêm thành công", data: req.body });
 });
 
 //xoa phong ban
@@ -93,12 +93,77 @@ app.put("/api/suaphongban/:id", async (req, res) => {
     return res.json({ message: "Sửa thành công" });
   } catch (error) {
     console.error(error);
-    return res.status(500).json({ message: "Lỗi server" });
+    return res.json({ message: "Lỗi server" });
   }
 });
 
 // Them nhan vien
 app.post("/api/themnhanvien", async (req, res) => {
+  const conn = await pool.getConnection();
+  try {
+    const {
+      maNhanVien,
+      tenNhanVien,
+      emailNhanVien,
+      soLienLac,
+      tenPhong,
+      chucVu,
+      gioiTinh,
+      ngaySinh,
+      ngayBatDauLamViec,
+      luongCoBan,
+      maPhong,
+      maChucVu,
+      thuTuTheoNgayVaoLam,
+    } = req.body;
+
+    await conn.beginTransaction();
+
+    // thêm nhân viên
+    await conn.execute(
+      `INSERT INTO nhanvien (maNhanVien, tenNhanVien, gioiTinh, ngaySinh, soLienLac, ngayBatDauLamViec, trangThai, luongCoBan, maPhong, maChucVu, thuTuTheoNgayVaoLam, tenPhong, chucVu, emailNhanVien)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+      [
+        maNhanVien,
+        tenNhanVien,
+        gioiTinh,
+        dinhDang(ngaySinh),
+        soLienLac,
+        dinhDang(ngayBatDauLamViec),
+        "Hiện",
+        Number(luongCoBan),
+        maPhong,
+        maChucVu,
+        thuTuTheoNgayVaoLam,
+        tenPhong,
+        chucVu,
+        emailNhanVien,
+      ]
+    );
+
+    // thêm tài khoản
+    await conn.execute(
+      `INSERT INTO taikhoan (maNhanVien, tenDangNhap, matKhau, maPhong, vaiTro)
+       VALUES (?, ?, ?, ?, ?)`,
+      [maNhanVien, maNhanVien, "123456", maPhong, "user"]
+    );
+
+    await conn.commit();
+    res.json({
+      message: "Thêm nhân viên + tài khoản thành công",
+    });
+  } catch (err) {
+    await conn.rollback();
+    console.log(err);
+    res.json({ message: "Lỗi khi thêm nhân viên/tài khoản" });
+  } finally {
+    conn.release();
+  }
+});
+
+// Sua nhan vien
+app.put("/api/suanhanvien/:id", async (req, res) => {
+  const { id } = req.params;
   const {
     maNhanVien,
     tenNhanVien,
@@ -115,11 +180,10 @@ app.post("/api/themnhanvien", async (req, res) => {
     thuTuTheoNgayVaoLam,
   } = req.body;
   try {
-    console.log("req.body:", req.body);
     const safe = (val: any) => (val === undefined ? null : val);
 
     await pool.execute(
-      "INSERT INTO nhanvien (maNhanVien,tenNhanVien,gioiTinh,ngaySinh,soLienLac,ngayBatDauLamViec,trangThai,luongCoBan,maPhong,maChucVu,thuTuTheoNgayVaoLam,tenPhong,chucVu,emailNhanVien) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
+      "UPDATE nhanvien SET maNhanVien = ?, tenNhanVien = ?, gioiTinh = ?, ngaySinh = ?,soLienLac = ?,ngayBatDauLamViec = ?,trangThai = ?,luongCoBan = ?,maPhong = ?,maChucVu = ?, thuTuTheoNgayVaoLam = ?, tenPhong = ?, chucVu = ?,emailNhanVien = ? WHERE maNhanVien = ?",
       [
         safe(maNhanVien),
         safe(tenNhanVien),
@@ -135,12 +199,79 @@ app.post("/api/themnhanvien", async (req, res) => {
         safe(tenPhong),
         safe(chucVu),
         safe(emailNhanVien),
+        id,
       ]
     );
-    return res.status(201).json({ message: "Thêm thành công", data: req.body });
+    return res.json({ message: "Sửa thành công", data: req.body });
   } catch (err) {
     console.error("SQL Error:", err);
-    return res.status(200).json({ message: "Lỗi SQL" });
+    return res.json({ message: "Lỗi SQL" });
+  }
+});
+
+//xoa nhan vien
+app.delete("/api/xoanhanvien/:id", async (req, res) => {
+  const { id } = req.params;
+  try {
+    await pool.execute("DELETE FROM nhanvien WHERE maNhanVien = ?", [id]);
+    res.json({ message: "Xóa nhân viên thành công" });
+  } catch (error) {
+    console.error(error);
+    res.json({ message: "Lỗi server khi xóa nhân viên" });
+  }
+});
+
+//them gioi cham cong den
+app.post("/api/chamcongden", async (req, res) => {
+  try {
+    const {
+      maNhanVien,
+      tenNhanVien,
+      ngayLam,
+      gioVaoLam,
+      gioTanLam,
+      //tongGioLam,
+    } = req.body;
+    console.log(req.body);
+    await pool.execute(
+      "INSERT INTO bangchamcong (maNhanVien, tenNhanVien, ngayLam, gioVaoLam, gioTanLam) VALUES (?,?,?,?,?)",
+      [maNhanVien, tenNhanVien, dinhDang(ngayLam), gioVaoLam, gioTanLam]
+    );
+    res.json({ massege: "Xin cảm ơn!" });
+  } catch (err) {
+    console.log(err);
+    res.json({ message: "Lỗi server" });
+  }
+});
+
+//cham cong ve
+app.put("/api/chamcongve", async (req, res) => {
+  try {
+    const { gioTanLam, ngayLam } = req.body;
+    await pool.execute(
+      "UPDATE bangchamcong SET gioTanLam = ? WHERE ngayLam = ?",
+      [gioTanLam, dinhDang(ngayLam)]
+    );
+    res.json({ message: "Xin cảm ơn" });
+  } catch (err) {
+    console.log(err);
+    res.json({ message: "Lỗi server" });
+  }
+});
+
+//Doi mat khau
+app.put("/api/doimatkhau/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { hienTai, moi, xacNhan } = req.body;
+    await pool.execute("UPDATE taikhoan SET matKhau = ? WHERE maNhanVien = ?", [
+      moi,
+      id,
+    ]);
+    res.json({ massege: "Đổi mật khẩu thành công" });
+  } catch (err) {
+    console.log(err);
+    res.json({ massage: "Lỗi" });
   }
 });
 
@@ -153,7 +284,7 @@ app.get("/danhsachnhanvien", async (req, res) => {
     res.json(rows);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: "Lỗi server" });
+    res.json({ message: "Lỗi server" });
   }
 });
 
@@ -164,7 +295,7 @@ app.get("/bangchamcong", async (req, res) => {
     res.json(rows);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: "Lỗi server" });
+    res.json({ message: "Lỗi server" });
   }
 });
 
@@ -175,7 +306,7 @@ app.get("/danhsachphongban", async (req, res) => {
     res.json(rows);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: "Lỗi server" });
+    res.json({ message: "Lỗi server" });
   }
 });
 
@@ -186,7 +317,7 @@ app.get("/chucvu", async (req, res) => {
     res.json(rows);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: "Lỗi server" });
+    res.json({ message: "Lỗi server" });
   }
 });
 
@@ -197,7 +328,7 @@ app.get("/taikhoan", async (req, res) => {
     res.json(rows);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: "Lỗi server" });
+    res.json({ message: "Lỗi server" });
   }
 });
 app.listen(port, () => {
