@@ -67,9 +67,9 @@ const Login = () => {
               localStorage.setItem("tenDangNhap", data.tenDangNhap);
               localStorage.setItem("role", data.role);
               localStorage.setItem("token", data.token);
-
               alert("Đăng nhập thành công");
               navigate("/");
+              window.location.reload();
             } catch (error) {
               console.error("Lỗi kết nối API:", error);
               alert("Lỗi server, vui lòng thử lại");

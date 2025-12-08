@@ -48,7 +48,11 @@ const PhongBan = () => {
             padding: "20px",
             fontFamily: "sans-serif",
             border: "solid black 1px",
+            borderRadius: 8,
             width: 960,
+            margin: "0 auto",
+            marginTop: 8,
+            maxHeight: 480,
           }}
         >
           <h2 style={{ color: "#0056b3" }}>Phòng ban của bạn</h2>
@@ -109,7 +113,7 @@ const PhongBan = () => {
           </table>
 
           <br />
-          <Link to="/">Quay về trang chủ</Link>
+          <Link to="/departments">Quay về</Link>
         </div>
       </div>
     </div>

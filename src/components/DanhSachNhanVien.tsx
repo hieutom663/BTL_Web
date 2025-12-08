@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react";
 import "./DanhSachNhanVien.css";
-import { NhanVien, PhongBan, ngayThang, ChucVu, chucVuMap } from "./TaskData";
+import { NhanVien, PhongBan, ChucVu } from "./TaskData";
 import Sidebar from "./Sidebar";
 import Navbar from "./Navbar";
 import { Link } from "react-router-dom";
 import axios from "axios";
+import TheNhanVien from "./TheNhanVien";
+import FormQuanLyNhanVien from "./FormQuanLyNhanVien";
 
 export default function DanhSachNhanVien() {
   const formBanDau = {
@@ -51,10 +53,6 @@ export default function DanhSachNhanVien() {
       .then((res) => setDsChucVu(res.data));
   }, []);
 
-  const maPhongMap = Object.fromEntries(
-    dsPhongBan.map((e) => [e.tenPhong, e.maPhong])
-  );
-
   const xuLyLuu = async () => {
     if (!duLieuForm.maNhanVien.trim())
       return alert("Mã nhân viên không được để trống!");
@@ -80,6 +78,7 @@ export default function DanhSachNhanVien() {
           return alert(data.message || "Lỗi khi thêm nhân viên");
 
         alert("Thêm nhân viên thành công");
+        setCheDoHopThoai(null);
         window.location.reload();
       } catch {
         alert("Lỗi server khi thêm nhân viên");
@@ -101,14 +100,12 @@ export default function DanhSachNhanVien() {
         if (!response.ok) return alert(data.message || "Lỗi khi cập nhật");
 
         alert("Cập nhật nhân viên thành công");
-        window.location.reload();
-
         setCheDoHopThoai(null);
+        window.location.reload();
       } catch {
         alert("Lỗi server khi cập nhật nhân viên");
       }
     }
-
     setDuLieuForm({ ...formBanDau });
   };
 
@@ -140,71 +137,13 @@ export default function DanhSachNhanVien() {
             Thêm nhân viên
           </button>
 
-          <table className="employee-table" border={1} cellPadding={10}>
-            <thead>
-              <tr>
-                <th>STT</th>
-                <th>Mã NV</th>
-                <th>Họ Tên</th>
-                <th>Phòng ban</th>
-                <th>Chức vụ</th>
-                <th>Lương cơ bản</th>
-                <th>Ngày bắt đầu</th>
-                <th>Giới tính</th>
-                <th>Hành động</th>
-              </tr>
-            </thead>
-
-            <tbody>
-              {nhanVienHienThi.map((nv, index) => (
-                <tr key={nv.maNhanVien}>
-                  <td>{chiSoDau + index + 1}</td>
-                  <td>{nv.maNhanVien}</td>
-                  <td>{nv.tenNhanVien}</td>
-                  <td>{nv.tenPhong}</td>
-                  <td>{nv.chucVu}</td>
-                  <td>{nv.luongCoBan.toLocaleString()}₫</td>
-                  <td>{ngayThang(nv.ngayBatDauLamViec)}</td>
-                  <td>{nv.gioiTinh}</td>
-                  <td>
-                    <button onClick={() => xuLySua(nv)}>Sửa</button> |{" "}
-                    <button
-                      onClick={async () => {
-                        if (
-                          !window.confirm(
-                            `Bạn có chắc muốn xóa nhân viên ${nv.tenNhanVien}?`
-                          )
-                        ) {
-                          return;
-                        }
-                        try {
-                          const response = await fetch(
-                            `http://localhost:3000/api/xoanhanvien/${nv.maNhanVien}`,
-                            { method: "DELETE" }
-                          );
-
-                          if (response.ok) {
-                            alert("Xóa thành công");
-                            setDsNhanVien(
-                              dsNhanVien.filter(
-                                (d) => d.maNhanVien !== nv.maNhanVien
-                              )
-                            );
-                          }
-                        } catch {
-                          alert("Lỗi server");
-                        }
-                      }}
-                    >
-                      Xóa
-                    </button>{" "}
-                    |{" "}
-                    <button onClick={() => xuLyXemChiTiet(nv)}>Chi tiết</button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+          <TheNhanVien
+            dsNhanVien={dsNhanVien}
+            setDsNhanVien={setDsNhanVien}
+            nhanVienHienThi={nhanVienHienThi}
+            xuLySua={xuLySua}
+            xuLyXem={xuLyXemChiTiet}
+          />
 
           <div className="pagination">
             <button
@@ -246,213 +185,14 @@ export default function DanhSachNhanVien() {
                     : "Thông tin chi tiết"}
                 </h2>
 
-                <div className="employee-form">
-                  {cheDoHopThoai === "them" ? (
-                    <div className="nhanInput">
-                      <label>STT: </label>
-                      <input
-                        placeholder="Mã nhân viên"
-                        value={(dsNhanVien.length + 1).toString()}
-                        onSelect={(e) =>
-                          setDuLieuForm({
-                            ...duLieuForm,
-                            thuTuTheoNgayVaoLam: (e.target as HTMLInputElement)
-                              .value,
-                          })
-                        }
-                      />
-                    </div>
-                  ) : (
-                    <></>
-                  )}
-                  <div className="nhanInput">
-                    <label>Mã nhân viên: </label>
-                    <input
-                      placeholder="Mã nhân viên"
-                      value={
-                        duLieuForm.maPhong +
-                        duLieuForm.maChucVu +
-                        duLieuForm.thuTuTheoNgayVaoLam.padStart(5, "0")
-                      }
-                      onSelect={(e) =>
-                        setDuLieuForm({
-                          ...duLieuForm,
-                          maNhanVien: (e.target as HTMLInputElement).value,
-                        })
-                      }
-                    />
-                  </div>
-
-                  <div className="nhanInput">
-                    <label>Họ và tên</label>
-                    <input
-                      placeholder="Họ tên"
-                      value={duLieuForm.tenNhanVien}
-                      onChange={(e) =>
-                        setDuLieuForm({
-                          ...duLieuForm,
-                          tenNhanVien: e.target.value,
-                        })
-                      }
-                      disabled={cheDoHopThoai === "xem"}
-                    />
-                  </div>
-                  <div className="nhanInput">
-                    <label>Email:</label>
-                    <input
-                      placeholder="Email"
-                      value={duLieuForm.emailNhanVien || ""}
-                      onChange={(e) =>
-                        setDuLieuForm({
-                          ...duLieuForm,
-                          emailNhanVien: e.target.value,
-                        })
-                      }
-                      disabled={cheDoHopThoai === "xem"}
-                    />
-                  </div>
-                  <div className="nhanInput">
-                    <label>Số điện thoại:</label>
-                    <input
-                      placeholder="Số điện thoại"
-                      value={duLieuForm.soLienLac || ""}
-                      onChange={(e) =>
-                        setDuLieuForm({
-                          ...duLieuForm,
-                          soLienLac: e.target.value,
-                        })
-                      }
-                      disabled={cheDoHopThoai === "xem"}
-                    />
-                  </div>
-                  <div className="nhanInput">
-                    <label>Phòng ban:</label>
-                    <select
-                      value={duLieuForm.tenPhong}
-                      onChange={(e) =>
-                        setDuLieuForm({
-                          ...duLieuForm,
-                          tenPhong: e.target.value,
-                          maPhong: maPhongMap[e.target.value],
-                        })
-                      }
-                      disabled={cheDoHopThoai === "xem"}
-                    >
-                      <option>Chọn phòng ban</option>
-                      {dsPhongBan.map((e) => (
-                        <option>{e.tenPhong}</option>
-                      ))}
-                    </select>
-                  </div>
-                  <div className="nhanInput">
-                    <label>Mã phòng ban:</label>
-                    <input
-                      type="text"
-                      value={duLieuForm.maPhong}
-                      readOnly
-                      disabled={cheDoHopThoai === "xem"}
-                    ></input>
-                  </div>
-                  <div className="nhanInput">
-                    <label>Chức vụ:</label>
-                    <select
-                      value={duLieuForm.chucVu}
-                      onChange={(e) => {
-                        const chucVu = e.target.value;
-                        setDuLieuForm({
-                          ...duLieuForm,
-                          chucVu: e.target.value,
-                          maChucVu: chucVuMap[chucVu],
-                        });
-                      }}
-                      disabled={cheDoHopThoai === "xem"}
-                    >
-                      <option>Chọn chức vụ</option>
-                      {dsChucVu.map((e) => (
-                        <option>{e.tenChucVu}</option>
-                      ))}
-                    </select>
-                  </div>
-                  <div className="nhanInput">
-                    <label>Mã chức vụ:</label>
-                    <input
-                      type="text"
-                      value={duLieuForm.maChucVu}
-                      readOnly
-                      disabled={cheDoHopThoai === "xem"}
-                    ></input>
-                  </div>
-                  <div className="nhanInput">
-                    <label>Lương cơ bản:</label>
-                    <input
-                      type="number"
-                      placeholder="Lương cơ bản"
-                      value={duLieuForm.luongCoBan}
-                      onChange={(e) =>
-                        setDuLieuForm({
-                          ...duLieuForm,
-                          luongCoBan: Number(e.target.value),
-                        })
-                      }
-                      disabled={cheDoHopThoai === "xem"}
-                    />
-                  </div>
-                  <div className="nhanInput">
-                    <label>Ngày sinh:</label>
-                    <input
-                      type="date"
-                      value={
-                        new Date(duLieuForm.ngaySinh)
-                          .toISOString()
-                          .split("T")[0]
-                      }
-                      onChange={(e) =>
-                        setDuLieuForm({
-                          ...duLieuForm,
-                          ngaySinh: new Date(e.target.value),
-                        })
-                      }
-                      disabled={cheDoHopThoai === "xem"}
-                    />
-                  </div>
-                  <div className="nhanInput">
-                    <label>Ngày bắt đầu làm:</label>
-                    <input
-                      type="date"
-                      value={
-                        new Date(duLieuForm.ngayBatDauLamViec)
-                          .toISOString()
-                          .split("T")[0]
-                      }
-                      onChange={(e) =>
-                        setDuLieuForm({
-                          ...duLieuForm,
-                          ngayBatDauLamViec: new Date(e.target.value),
-                        })
-                      }
-                      disabled={cheDoHopThoai === "xem"}
-                    />
-                  </div>
-
-                  <div className="nhanInput">
-                    <label>Giới tính:</label>
-                    <select
-                      value={duLieuForm.gioiTinh}
-                      onChange={(e) =>
-                        setDuLieuForm({
-                          ...duLieuForm,
-                          gioiTinh: e.target.value,
-                        })
-                      }
-                      style={{ width: 200 }}
-                      disabled={cheDoHopThoai === "xem"}
-                    >
-                      <option value="">Chọn giới tính</option>
-                      <option value="Nam">Nam</option>
-                      <option value="Nữ">Nữ</option>
-                    </select>
-                  </div>
-                </div>
+                <FormQuanLyNhanVien
+                  cheDoHopThoai={cheDoHopThoai}
+                  dsChucVu={dsChucVu}
+                  dsPhongBan={dsPhongBan}
+                  dsNhanVien={dsNhanVien}
+                  duLieuForm={duLieuForm}
+                  setDuLieuForm={setDuLieuForm}
+                />
 
                 <div className="action-row">
                   {cheDoHopThoai === "xem" && (

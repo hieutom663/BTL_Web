@@ -1,38 +1,73 @@
-import { NhanVien, ngayThang, sinhId } from "./TaskData";
+import { ngayThang, NhanVien } from "./TaskData";
 
-const TheNhanVien = (props: {
-  nhanVien: NhanVien;
-  danhSachNhanVien: NhanVien[];
-  stt: number;
-}) => {
-  const { nhanVien, stt } = props;
-  const sinhId = () => {
-    const id1 = nhanVien.maPhong.substring(0, 4);
-    const id2 = nhanVien.maChucVu.substring(0, 4);
-    return id1 + id2 + String(stt).padStart(4, "0");
+function TheNhanVien(props: {
+  dsNhanVien: NhanVien[];
+  setDsNhanVien: any;
+  nhanVienHienThi: NhanVien[];
+
+  xuLySua: any;
+  xuLyXem: any;
+}) {
+  const {
+    dsNhanVien,
+    setDsNhanVien,
+    nhanVienHienThi,
+
+    xuLySua,
+    xuLyXem,
+  } = props;
+  const xuLyXoa = async (nv: NhanVien) => {
+    if (!window.confirm(`Bạn có chắc muốn xóa nhân viên ${nv.tenNhanVien}?`)) {
+      return;
+    }
+    try {
+      const response = await fetch(
+        `http://localhost:3000/api/xoanhanvien/${nv.maNhanVien}`,
+        { method: "DELETE" }
+      );
+
+      if (response.ok) {
+        alert("Xóa thành công");
+        setDsNhanVien(dsNhanVien.filter((d) => d.maNhanVien !== nv.maNhanVien));
+      }
+    } catch {
+      alert("Lỗi server");
+    }
   };
   return (
-    <tr>
-      <td style={{ padding: "8px 12px" }}>{stt}</td>
-      <td style={{ padding: "8px 12px" }}>{sinhId()}</td>
-      <td style={{ padding: "8px 12px" }}>{nhanVien.tenNhanVien}</td>
-      <td style={{ padding: "8px 12px" }}>{ngayThang(nhanVien.ngaySinh)}</td>
-      <td style={{ padding: "8px 12px" }}>{nhanVien.gioiTinh}</td>
-      <td style={{ padding: "8px 12px" }}>
-        {ngayThang(nhanVien.ngayBatDauLamViec)}
-      </td>
-      <td style={{ padding: "8px 12px" }}>{nhanVien.chucVu}</td>
-      <td style={{ padding: "8px 12px" }}>{nhanVien.tenPhong}</td>
-      <td style={{ padding: "8px 12px" }}>{nhanVien.luongCoBan} VND</td>
-      <td style={{ padding: "8px 12px" }} align="center">
-        <button style={{ color: "black" }}>Xem chi tiết</button> |{" "}
-        <button style={{ backgroundColor: "yellow", color: "black" }}>
-          Sửa
-        </button>{" "}
-        |{" "}
-        <button style={{ backgroundColor: "red", color: "black" }}>Xóa</button>
-      </td>
-    </tr>
+    <table className="employee-table" border={1} cellPadding={10}>
+      <thead>
+        <tr>
+          {/* <th>STT</th> */}
+          <th>Mã NV</th>
+          <th>Họ Tên</th>
+          <th>Phòng ban</th>
+          <th>Chức vụ</th>
+          <th>Lương cơ bản</th>
+          <th>Ngày bắt đầu</th>
+          <th>Giới tính</th>
+          <th>Hành động</th>
+        </tr>
+      </thead>
+      <tbody>
+        {nhanVienHienThi.map((nv, index) => (
+          <tr key={nv.maNhanVien}>
+            <td>{nv.maNhanVien}</td>
+            <td>{nv.tenNhanVien}</td>
+            <td>{nv.tenPhong}</td>
+            <td>{nv.chucVu}</td>
+            <td>{nv.luongCoBan.toLocaleString()}₫</td>
+            <td>{ngayThang(nv.ngayBatDauLamViec)}</td>
+            <td>{nv.gioiTinh}</td>
+            <td>
+              <button onClick={() => xuLySua(nv)}>Sửa</button> |{" "}
+              <button onClick={() => xuLyXoa(nv)}>Xóa</button> |{" "}
+              <button onClick={() => xuLyXem(nv)}>Chi tiết</button>
+            </td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
   );
-};
+}
 export default TheNhanVien;
