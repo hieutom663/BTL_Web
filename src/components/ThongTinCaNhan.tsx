@@ -3,18 +3,23 @@ import axios from "axios";
 import Sidebar from "./Sidebar";
 import Navbar from "./Navbar";
 import "./ThongTinCaNhan.css";
-import { NhanVien } from "./TaskData";
+import { maNv, NhanVien, TaiKhoan } from "./TaskData";
 
 const ThongTinCaNhan = () => {
   const [danhSachNhanVien, setDanhSachNhanVien] = useState<NhanVien[]>([]);
+  const [danhSachTaiKhoan, setDanhSachTaiKhoan] = useState<TaiKhoan[]>([]);
   useEffect(() => {
     axios
       .get("http://localhost:3000/danhsachnhanvien")
       .then((res) => setDanhSachNhanVien(res.data))
       .catch((err) => console.log("Lỗi", err));
+    axios
+      .get("http://localhost:3000/taikhoan")
+      .then((res) => setDanhSachTaiKhoan(res.data))
+      .catch((err) => console.log("Lỗi", err));
   }, []);
-  const maNV = localStorage.getItem("tenDangNhap");
-  const duLieuKhoiTao = danhSachNhanVien.find((nv) => nv.maNhanVien === maNV);
+  const duLieuKhoiTao = danhSachNhanVien.find((nv) => nv.maNhanVien === maNv);
+  const thongTinTaiKhoan = danhSachTaiKhoan.find((e) => e.maNhanVien === maNv);
   const [thongTinCaNhan, setThongTinCaNhan] = useState(
     duLieuKhoiTao || {
       maNhanVien: "",
@@ -30,11 +35,11 @@ const ThongTinCaNhan = () => {
     }
   );
   useEffect(() => {
-    if (danhSachNhanVien.length > 0 && maNV) {
-      const nv = danhSachNhanVien.find((nv) => nv.maNhanVien === maNV);
+    if (danhSachNhanVien.length > 0 && maNv) {
+      const nv = danhSachNhanVien.find((nv) => nv.maNhanVien === maNv);
       if (nv) setThongTinCaNhan(nv);
     }
-  }, [danhSachNhanVien, maNV]);
+  }, [danhSachNhanVien]);
 
   const [dangChinhSua, setDangChinhSua] = useState(false);
   const [moFormDoiMatKhau, setMoFormDoiMatKhau] = useState(false);
@@ -59,7 +64,7 @@ const ThongTinCaNhan = () => {
   };
 
   // --- Đổi mật khẩu ---
-  const luuMatKhau = () => {
+  const luuMatKhau = async () => {
     if (
       !thongTinMatKhau.hienTai ||
       !thongTinMatKhau.moi ||
@@ -76,9 +81,29 @@ const ThongTinCaNhan = () => {
       setThongBao("Mật khẩu mới phải ít nhất 6 ký tự!");
       return;
     }
+    if (thongTinMatKhau.hienTai !== thongTinTaiKhoan?.matKhau) {
+      setThongBao("Mật khẩu hiện tại không đúng!");
+      alert(thongTinTaiKhoan?.matKhau);
+    }
+    try {
+      const response = await fetch(
+        `http://localhost:3000/api/doimatkhau/${maNv}`,
+        {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(thongTinMatKhau),
+        }
+      );
+      const data = await response.json();
+      if (!response.ok) {
+        alert(data.message || "Lỗi");
+      }
     setThongBao("Đổi mật khẩu thành công!");
     setMoFormDoiMatKhau(false);
     setThongTinMatKhau({ hienTai: "", moi: "", xacNhan: "" });
+    } catch {
+      alert("Lỗi khi đổi mật khẩu");
+    }
   };
 
   return (
@@ -131,7 +156,6 @@ const ThongTinCaNhan = () => {
                     })
                   }
                 />
-                
 
                 <label>Email:</label>
                 <input
