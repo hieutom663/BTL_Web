@@ -39,7 +39,7 @@ const ThongTinCaNhan = () => {
       const nv = danhSachNhanVien.find((nv) => nv.maNhanVien === maNv);
       if (nv) setThongTinCaNhan(nv);
     }
-  }, [danhSachNhanVien, maNv]);
+  }, [danhSachNhanVien]);
 
   const [dangChinhSua, setDangChinhSua] = useState(false);
   const [moFormDoiMatKhau, setMoFormDoiMatKhau] = useState(false);
