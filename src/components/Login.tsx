@@ -1,136 +1,63 @@
-import "./Login.css";
-import { Link, useNavigate } from "react-router-dom";
-import { useState } from "react";
-//import axios from "axios";
+// DangNhap.tsx
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
-interface ThongTin {
-  username: string;
-  password: string;
+interface TaiKhoan {
+  tenDangNhap: string;
+  matKhau: string;
+  role: "admin" | "user";
 }
 
-interface LoiDangNhap {
-  username?: string;
-  password?: string;
-}
+const danhSachTaiKhoan: TaiKhoan[] = [
+  { tenDangNhap: "admin", matKhau: "123", role: "admin" },
+  { tenDangNhap: "user", matKhau: "123", role: "user" },
+];
 
-const Login = () => {
-  const [thongTinNguoiDungNhap, setThongTinNguoiDungNhap] = useState<ThongTin>({
-    username: "",
-    password: "",
-  });
-  const [loi, setLoi] = useState<LoiDangNhap>({});
+const DangNhap: React.FC = () => {
   const navigate = useNavigate();
-  const xacMinh = () => {
-    const temp: LoiDangNhap = {};
-    if (!thongTinNguoiDungNhap.username) {
-      temp.username = "Tên đăng nhập không được bỏ trống!";
-    }
-    if (!thongTinNguoiDungNhap.password) {
-      temp.password = "Mật khẩu không được bỏ trống!";
-    }
+  const [tenDangNhap, setTenDangNhap] = useState("");
+  const [matKhau, setMatKhau] = useState("");
+  const [loi, setLoi] = useState("");
 
-    setLoi(temp);
+  const handleLogin = () => {
+    const tk = danhSachTaiKhoan.find(
+      (t) => t.tenDangNhap === tenDangNhap && t.matKhau === matKhau
+    );
 
-    return Object.keys(temp).length === 0;
+    if (tk) {
+      navigate("/payroll-salary", { state: { role: tk.role, tenDangNhap: tk.tenDangNhap } });
+    } else {
+      setLoi("Tên đăng nhập hoặc mật khẩu không đúng!");
+    }
   };
+
   return (
-    <div className="bg">
-      <div className="loginContainer">
-        <div className="loginHeader">
-          <h1>Chào mừng trở lại</h1>
-          <p>Đăng nhập vào tài khoản của bạn</p>
-        </div>
-
-        <form
-          className="loginForm"
-          onSubmit={async (e) => {
-            e.preventDefault();
-
-            // Kiểm tra thông tin đầu vào
-            if (!xacMinh()) return;
-
-            try {
-              const response = await fetch("http://localhost:3000/api/login", {
-                method: "POST",
-                headers: {
-                  "Content-Type": "application/json",
-                },
-                body: JSON.stringify(thongTinNguoiDungNhap),
-              });
-
-              const data = await response.json();
-
-              if (!response.ok) {
-                // Nếu API trả về lỗi
-                alert(data.message || "Đăng nhập thất bại");
-                return;
-              }
-
-              localStorage.setItem("token", data.token);
-
-              alert("Đăng nhập thành công");
-              navigate("/");
-            } catch (error) {
-              console.error("Lỗi kết nối API:", error);
-              alert("Lỗi server, vui lòng thử lại");
-            }
-          }}
-        >
-          <div className="formGroup">
-            <input
-              className="input"
-              type="text"
-              id="username"
-              placeholder="Tên đăng nhập"
-              onChange={(e) => {
-                setThongTinNguoiDungNhap({
-                  ...thongTinNguoiDungNhap,
-                  username: e.target.value,
-                });
-              }}
-            />
-            <span className="messageError" id="usernameError">
-              {loi ? loi.username : ""}
-            </span>
-          </div>
-          <div className="formGroup">
-            <input
-              className="input"
-              type="password"
-              id="password"
-              placeholder="Mật khẩu     "
-              onChange={(e) => {
-                setThongTinNguoiDungNhap({
-                  ...thongTinNguoiDungNhap,
-                  password: e.target.value,
-                });
-              }}
-            />
-            <span className="messageError" id="passwordError">
-              {loi ? loi.password : ""}
-            </span>
-          </div>
-          <div className="optional">
-            <div className="checkingBox">
-              <input type="checkbox" id="remeber" />
-              <span>Ghi nhớ đăng nhập </span>
-            </div>
-            <div>
-              <Link to={"/reset"}>Quên mật khẩu</Link>
-            </div>
-          </div>
-          <div
-            style={{
-              padding: 20,
-            }}
-          >
-            <button type="submit" className="submitButton" onClick={() => {}}>
-              Đăng nhập
-            </button>
-          </div>
-        </form>
+    <div style={{ maxWidth: 400, margin: "50px auto", padding: 20, border: "1px solid #ccc", borderRadius: 10 }}>
+      <h2>Đăng nhập</h2>
+      <div>
+        <label>Tên đăng nhập:</label>
+        <input
+          type="text"
+          value={tenDangNhap}
+          onChange={(e) => setTenDangNhap(e.target.value)}
+          style={{ width: "100%", marginBottom: 10 }}
+        />
       </div>
+      <div>
+        <label>Mật khẩu:</label>
+        <input
+          type="password"
+          value={matKhau}
+          onChange={(e) => setMatKhau(e.target.value)}
+          style={{ width: "100%", marginBottom: 10 }}
+        />
+      </div>
+      {loi && <p style={{ color: "red" }}>{loi}</p>}
+      <button onClick={handleLogin} style={{ padding: "8px 12px" }}>
+        Đăng nhập
+      </button>
     </div>
   );
 };
-export default Login;
+
+export default DangNhap;

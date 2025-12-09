@@ -3,68 +3,71 @@ import "./TinhLuong.css";
 import { danhSachNhanVien } from "./TaskData";
 import Sidebar from "./Sidebar";
 import Navbar from "./Navbar";
-import { Link } from "react-router-dom";
 
 interface DongLuong {
   id: string;
   ten: string;
-  month: string;
+  thang: string;
   luongCoBan: number;
   tongGioLam: number;
   gioTangCa: number;
   tongLuong: number;
-  status: "pending" | "approved" | "paid";
+  trangThai: "dangCho" | "daDuyet" | "daTra";
 }
 
-const TinhLuong: React.FC = () => {
+function TinhLuong() {
   const [duLieuLuong, setDuLieuLuong] = useState<DongLuong[]>([]);
-  const [thang, setThang] = useState("2025-01");
+  const [thangChon, setThangChon] = useState("2025-01");
   const [dangTai, setDangTai] = useState(false);
+
+  const vaiTro = localStorage.getItem("role") || "user";
+  const tenDangNhap = localStorage.getItem("tenDangNhap") || "";
 
   const taiBangLuongTheoThang = () => {
     setDangTai(true);
 
     setTimeout(() => {
-      const rows: DongLuong[] = danhSachNhanVien.map((nv) => {
-        const tongGio = nv.tongGioLam ?? 40;
-        const gioOT = tongGio > 40 ? tongGio - 40 : 0;
+      const danhSach: DongLuong[] = danhSachNhanVien
+        .filter((nv) => vaiTro === "admin" || nv.id === tenDangNhap)
+        .map((nv) => {
+          const tongGio = nv.tongGioLam ?? 40;
+          const gioOT = tongGio > 40 ? tongGio - 40 : 0;
+          const luongOT = (nv.luongCoBan / 40) * gioOT * 1.5;
+          const tongLuong = nv.luongCoBan + luongOT;
 
-        const luongOT = (nv.luongCoBan / 40) * gioOT * 1.5;
-        const tongLuong = nv.luongCoBan + luongOT;
+          return {
+            id: nv.id,
+            ten: nv.ten,
+            thang: thangChon,
+            luongCoBan: nv.luongCoBan,
+            tongGioLam: tongGio,
+            gioTangCa: gioOT,
+            tongLuong,
+            trangThai: "dangCho",
+          };
+        });
 
-        return {
-          id: nv.id,
-          ten: nv.ten,
-          month: thang,
-          luongCoBan: nv.luongCoBan,
-          tongGioLam: tongGio,
-          gioTangCa: gioOT,
-          tongLuong,
-          status: "pending",
-        };
-      });
-
-      setDuLieuLuong(rows);
+      setDuLieuLuong(danhSach);
       setDangTai(false);
     }, 400);
   };
 
   const duyetTatCa = () => {
     setDuLieuLuong((prev) =>
-      prev.map((dong) => ({ ...dong, status: "approved" }))
+      prev.map((dong) => ({ ...dong, trangThai: "daDuyet" }))
     );
   };
 
   const danhDauDaTra = () => {
     setDuLieuLuong((prev) =>
-      prev.map((dong) => ({ ...dong, status: "paid" }))
+      prev.map((dong) => ({ ...dong, trangThai: "daTra" }))
     );
   };
 
   const duyetMotNguoi = (id: string) => {
     setDuLieuLuong((prev) =>
       prev.map((dong) =>
-        dong.id === id ? { ...dong, status: "approved" } : dong
+        dong.id === id ? { ...dong, trangThai: "daDuyet" } : dong
       )
     );
   };
@@ -72,18 +75,18 @@ const TinhLuong: React.FC = () => {
   const danhDauDaTraMotNguoi = (id: string) => {
     setDuLieuLuong((prev) =>
       prev.map((dong) =>
-        dong.id === id ? { ...dong, status: "paid" } : dong
+        dong.id === id ? { ...dong, trangThai: "daTra" } : dong
       )
     );
   };
 
   useEffect(() => {
     taiBangLuongTheoThang();
-  }, [thang]);
+  }, [thangChon]);
 
-  const hienTrangThai = (tt: DongLuong["status"]) => {
-    if (tt === "pending") return "Đang chờ";
-    if (tt === "approved") return "Đã duyệt";
+  const hienThiTrangThai = (tt: DongLuong["trangThai"]) => {
+    if (tt === "dangCho") return "Đang chờ";
+    if (tt === "daDuyet") return "Đã duyệt";
     return "Đã trả";
   };
 
@@ -95,7 +98,6 @@ const TinhLuong: React.FC = () => {
         <Sidebar />
 
         <div className="content">
-
           <div className="payroll-container">
             <h1 className="title">Tính lương nhân viên</h1>
 
@@ -104,8 +106,9 @@ const TinhLuong: React.FC = () => {
                 <label>Chọn tháng:</label>
                 <input
                   type="month"
-                  value={thang}
-                  onChange={(e) => setThang(e.target.value)}
+                  value={thangChon}
+                  onChange={(e) => setThangChon(e.target.value)}
+                  className="month-input"
                 />
               </div>
             </div>
@@ -134,9 +137,9 @@ const TinhLuong: React.FC = () => {
                       <td>{dong.gioTangCa}</td>
                       <td>{dong.luongCoBan.toLocaleString()}đ</td>
                       <td>{dong.tongLuong.toLocaleString()}đ</td>
-                      <td>{hienTrangThai(dong.status)}</td>
+                      <td>{hienThiTrangThai(dong.trangThai)}</td>
                       <td>
-                        {dong.status !== "approved" && (
+                        {vaiTro === "admin" && dong.trangThai !== "daDuyet" && (
                           <button
                             className="btn-small"
                             onClick={() => duyetMotNguoi(dong.id)}
@@ -145,7 +148,7 @@ const TinhLuong: React.FC = () => {
                           </button>
                         )}
 
-                        {dong.status !== "paid" && (
+                        {vaiTro === "admin" && dong.trangThai !== "daTra" && (
                           <button
                             className="btn-small primary"
                             onClick={() => danhDauDaTraMotNguoi(dong.id)}
@@ -160,21 +163,22 @@ const TinhLuong: React.FC = () => {
               </table>
             )}
 
-            <div className="batch-actions">
-              <button className="btn" onClick={duyetTatCa}>
-                Duyệt tất cả
-              </button>
+            {vaiTro === "admin" && (
+              <div className="batch-actions">
+                <button className="btn" onClick={duyetTatCa}>
+                  Duyệt tất cả
+                </button>
 
-              <button className="btn primary" onClick={danhDauDaTra}>
-                Đánh dấu đã trả lương
-              </button>
-            </div>
-
+                <button className="btn primary" onClick={danhDauDaTra}>
+                  Đánh dấu đã trả lương
+                </button>
+              </div>
+            )}
           </div>
         </div>
       </div>
     </div>
   );
-};
+}
 
 export default TinhLuong;
