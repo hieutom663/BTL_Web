@@ -33,11 +33,11 @@ app.post("/api/login", async (req, res) => {
     const user = users[0];
 
     if (!user) {
-      return res.json({ message: "Tài khoản không tồn tại" });
+      res.json({ message: "Tài khoản không tồn tại" });
     }
 
     if (matKhau !== user.matKhau) {
-      return res.json({ message: "Mật khẩu nhập vào không đúng" });
+      res.json({ message: "Mật khẩu nhập vào không đúng" });
     }
 
     const token = jwt.sign(
