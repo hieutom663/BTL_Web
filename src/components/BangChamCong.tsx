@@ -11,6 +11,7 @@ import Sidebar from "./Sidebar";
 import Navbar from "./Navbar";
 import TheChamCong from "./TheChamCong";
 import BangChamCongNv from "./BangChamCongNv";
+import "./BangChamCong.css";
 
 const BangChamCong = () => {
   const [bangThongTinChamCong, setBangThongTinChamCong] = useState<
@@ -18,6 +19,7 @@ const BangChamCong = () => {
   >([]);
   const [thongTinNhanVien, setThongTinNhanVien] =
     useState<NhanVien>(duLieuNhanVien);
+
   useEffect(() => {
     axios
       .get("http://localhost:3000/bangchamcong")
@@ -31,6 +33,7 @@ const BangChamCong = () => {
       )
       .catch((err) => console.log("Lỗi", err));
   }, []);
+
   const [thang, setThang] = useState(new Date().getMonth() + 1);
   const [nam, setNam] = useState(new Date().getFullYear());
   const [ngay, setNgay] = useState(new Date().getDate());
@@ -55,23 +58,26 @@ const BangChamCong = () => {
     viTriBatDau,
     viTriBatDau + duLieuTrongMotTrang
   );
+
   return (
     <div>
       <Navbar />
-      <div style={{ display: "flex ", gap: 8 }}>
+      <div className="bcc-layout">
         <Sidebar />
+
         {role === "admin" ? (
-          <div style={{ height: 500, width: "85vw" }}>
-            <h2 style={{ justifySelf: "center" }}>Bảng chấm công:</h2>
-            <hr></hr>
-            <div className="ngayThangNam" style={{ margin: 8 }}>
+          <div className="bcc-admin-container">
+            <h2 className="bcc-title">Bảng chấm công:</h2>
+            <hr />
+
+            <div className="bcc-filter">
               <label>Ngày:</label>
               <select
                 value={ngay}
                 onChange={(e) => setNgay(Number(e.target.value))}
               >
-                {[...Array(ngayTrongThang)].map((e, n) => (
-                  <option>{n + 1}</option>
+                {[...Array(ngayTrongThang)].map((_, n) => (
+                  <option key={n}>{n + 1}</option>
                 ))}
               </select>
 
@@ -80,8 +86,8 @@ const BangChamCong = () => {
                 value={thang}
                 onChange={(e) => setThang(Number(e.target.value))}
               >
-                {[...Array(12)].map((e, t) => (
-                  <option>{t + 1}</option>
+                {[...Array(12)].map((_, t) => (
+                  <option key={t}>{t + 1}</option>
                 ))}
               </select>
 
@@ -90,38 +96,38 @@ const BangChamCong = () => {
                 value={nam}
                 onChange={(e) => setNam(Number(e.target.value))}
               >
-                {[nam].map((n) => (
-                  <option>{n}</option>
-                ))}
+                <option>{nam}</option>
               </select>
             </div>
-            <hr></hr>
-            <table border={1} cellPadding={10}>
-              <thead>
-                <tr>
-                  <th>Mã nhân viên</th>
-                  <th>Tên nhân viên</th>
-                  <th>Ngày</th>
-                  <th>Giờ vào làm</th>
-                  <th>Giờ tan làm</th>
-                  <th>Tổng giờ làm</th>
-                </tr>
-              </thead>
-              <tbody>
-                {duLieuTamThoi.map((e) => (
-                  <TheChamCong thongTinChamCong={e} />
-                ))}
-              </tbody>
-            </table>
-            <div
-              style={{
-                display: "flex",
-                border: "1px solid black",
-                justifyContent: "center",
-                marginTop: 8,
-              }}
-            >
-              {[...Array(Math.ceil(duLieuTamThoi.length / 20))].map((e, i) => {
+
+            <hr />
+
+            <div>
+              <table border={1} cellPadding={10} className="bcc-table">
+                <thead>
+                  <tr>
+                    <th>Mã nhân viên</th>
+                    <th>Tên nhân viên</th>
+                    <th>Ngày</th>
+                    <th>Giờ vào làm</th>
+                    <th>Giờ tan làm</th>
+                    <th>Tổng giờ làm</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {duLieuTamThoi.map((e) => (
+                    <TheChamCong key={e.maNhanVien} thongTinChamCong={e} />
+                  ))}
+                </tbody>
+              </table>
+            </div>
+
+            <div className="bcc-pagination">
+              {[
+                ...Array(
+                  Math.ceil(duLieuTheoNgay.length / duLieuTrongMotTrang)
+                ),
+              ].map((_, i) => {
                 const currentPage = i + 1;
                 const isActive = currentPage === page;
                 return (
@@ -129,7 +135,6 @@ const BangChamCong = () => {
                     key={currentPage}
                     className={`page-btn ${isActive ? "active" : ""}`}
                     onClick={() => setPage(currentPage)}
-                    aria-current={isActive ? "page" : undefined}
                   >
                     {currentPage}
                   </button>

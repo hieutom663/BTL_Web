@@ -3,6 +3,7 @@ import Navbar from "./Navbar";
 import Sidebar from "./Sidebar";
 import { useEffect, useState } from "react";
 import { DongLuong, NhanVien, tinhLuong } from "./TaskData";
+import "./BangChamCong.css";
 
 const BangThongKe = () => {
   const [danhSachNhanVien, setDanhSachNhanVien] = useState<NhanVien[]>([]);
@@ -12,21 +13,15 @@ const BangThongKe = () => {
   useEffect(() => {
     axios
       .get("http://localhost:3000/bangluongthang")
-      .then((res) => {
-        setBangLuongThang(res.data);
-      })
-      .catch((err) => {
-        console.log("Lỗi", err);
-      });
+      .then((res) => setBangLuongThang(res.data))
+      .catch((err) => console.log("Lỗi", err));
+
     axios
       .get("http://localhost:3000/danhsachnhanvien")
-      .then((res) => {
-        setDanhSachNhanVien(res.data);
-      })
-      .catch((err) => {
-        console.log("Lỗi", err);
-      });
-  });
+      .then((res) => setDanhSachNhanVien(res.data))
+      .catch((err) => console.log("Lỗi", err));
+  }, []);
+
   const tongLuongTheoNam = danhSachNhanVien.map((nv) => {
     const cacThang = bangLuongThang.filter(
       (e) => e.maNhanVien === nv.maNhanVien && e.nam === nam
@@ -36,31 +31,32 @@ const BangThongKe = () => {
       return sum + tinhLuong(dong);
     }, 0);
 
-    return {
-      ...nv,
-      tongLuong,
-    };
+    return { ...nv, tongLuong };
   });
+
   return (
     <div>
       <Navbar />
-      <div style={{ display: "flex ", gap: 8 }}>
+
+      <div className="layout">
         <Sidebar />
-        <div>
-          <h2>Bảng thống kê năm</h2>
-          Năm:
-          <select
-            value={nam}
-            onChange={(e) => {
-              setNam(Number(e.target.value));
-            }}
-          >
-            {[nam].map((n) => (
-              <option>{n}</option>
-            ))}
-          </select>
+
+        <div className="bcc-admin-container">
+          <h2 className="bcc-title">Bảng thống kê năm</h2>
+
+          <div className="bcc-filter">
+            <label>Năm:</label>
+            <select
+              value={nam}
+              onChange={(e) => setNam(Number(e.target.value))}
+            >
+              <option>{nam}</option>
+            </select>
+          </div>
+
           <hr />
-          <table border={1} cellPadding={10}>
+
+          <table className="bcc-table" border={1} cellPadding={10}>
             <thead>
               <tr>
                 <th>Mã nhân viên</th>
@@ -71,15 +67,16 @@ const BangThongKe = () => {
                 <th>Lương thực nhận</th>
               </tr>
             </thead>
+
             <tbody>
               {tongLuongTheoNam.map((e) => (
-                <tr>
-                  <th>{e.maNhanVien}</th>
-                  <th>{e.tenNhanVien}</th>
-                  <th>{e.tenPhong}</th>
-                  <th>{e.chucVu}</th>
-                  <th>{Math.round(e.luongCoBan)}</th>
-                  <th>{e.tongLuong}</th>
+                <tr key={e.maNhanVien}>
+                  <td>{e.maNhanVien}</td>
+                  <td>{e.tenNhanVien}</td>
+                  <td>{e.tenPhong}</td>
+                  <td>{e.chucVu}</td>
+                  <td>{Math.round(e.luongCoBan)} VND</td>
+                  <td>{e.tongLuong} VND</td>
                 </tr>
               ))}
             </tbody>
@@ -89,4 +86,5 @@ const BangThongKe = () => {
     </div>
   );
 };
+
 export default BangThongKe;

@@ -1,6 +1,7 @@
 import { NhanVien, ThongTinChamCongThang, maNv } from "./TaskData";
 import { useState } from "react";
 import TheChamCong from "./TheChamCong";
+import "./BangChamCong.css";
 
 const BangChamCongNv = (props: {
   thongTinNhanVien: NhanVien;
@@ -21,7 +22,9 @@ const BangChamCongNv = (props: {
   const bangThongTinNv = bangThongTinChamCong.filter(
     (nv) => nv.maNhanVien === maNv
   );
+
   const trangThai = localStorage.getItem("status");
+
   const getThoiGian = () => {
     const now = new Date();
     const gio = String(now.getHours()).padStart(2, "0");
@@ -29,16 +32,20 @@ const BangChamCongNv = (props: {
     const giay = String(now.getSeconds()).padStart(2, "0");
     return `${gio}:${phut}:${giay}`;
   };
+
   const [page, setPage] = useState(1);
   const duLieuTrongMotTrang = 23;
   const viTriBatDau = (page - 1) * duLieuTrongMotTrang;
+
   const duLieuTamThoi = bangThongTinNv.slice(
     viTriBatDau,
     viTriBatDau + duLieuTrongMotTrang
   );
+
   return (
-    <div style={{ width: "85vw" }}>
-      <h2>Bảng chấm công tháng: {thang}</h2>
+    <div className="bcc-admin-container">
+      <h2 className="bcc-title">Bảng chấm công tháng: {thang}</h2>
+
       {trangThai === null ? (
         <button
           className="checkIn"
@@ -67,6 +74,7 @@ const BangChamCongNv = (props: {
             } catch {
               alert("Lỗi server khi cập nhật nhân viên");
             }
+
             setThoiGianDen(getThoiGian());
           }}
         >
@@ -77,6 +85,7 @@ const BangChamCongNv = (props: {
           className="checkOut"
           onClick={async () => {
             localStorage.removeItem("status");
+
             try {
               const response = await fetch(
                 "http://localhost:3000/api/chamcongve",
@@ -95,6 +104,7 @@ const BangChamCongNv = (props: {
             } catch {
               alert("Lỗi server");
             }
+
             alert("Xin cảm ơn!");
             setThoiGianVe(getThoiGian());
           }}
@@ -103,8 +113,9 @@ const BangChamCongNv = (props: {
         </button>
       )}
 
-      <hr></hr>
-      <table border={1} cellPadding={10}>
+      <hr />
+
+      <table className="bcc-table" border={1} cellPadding={10}>
         <thead>
           <tr>
             <th>Mã nhân viên</th>
@@ -115,27 +126,34 @@ const BangChamCongNv = (props: {
             <th>Tổng giờ làm</th>
           </tr>
         </thead>
+
         <tbody>
           {duLieuTamThoi.map((e) => (
-            <TheChamCong thongTinChamCong={e} />
+            <TheChamCong key={e.maNhanVien} thongTinChamCong={e} />
           ))}
         </tbody>
       </table>
-      {[...Array(Math.ceil(bangThongTinNv.length / 23))].map((e, i) => {
-        const currentPage = i + 1;
-        const isActive = currentPage === page;
-        return (
-          <button
-            key={currentPage}
-            className={`page-btn ${isActive ? "active" : ""}`}
-            onClick={() => setPage(currentPage)}
-            aria-current={isActive ? "page" : undefined}
-          >
-            {currentPage}
-          </button>
-        );
-      })}
+
+      <div className="bcc-pagination">
+        {[...Array(Math.ceil(bangThongTinNv.length / duLieuTrongMotTrang))].map(
+          (_, i) => {
+            const currentPage = i + 1;
+            const isActive = currentPage === page;
+
+            return (
+              <button
+                key={currentPage}
+                className={`page-btn ${isActive ? "active" : ""}`}
+                onClick={() => setPage(currentPage)}
+              >
+                {currentPage}
+              </button>
+            );
+          }
+        )}
+      </div>
     </div>
   );
 };
+
 export default BangChamCongNv;

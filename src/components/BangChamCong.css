@@ -1,0 +1,48 @@
+.bcc-layout {
+  display: flex;
+  gap: 8px;
+}
+
+.bcc-admin-container {
+  height: 500px;
+  width: 84vw;
+  margin-left: 8px;
+}
+
+.bcc-title {
+  justify-self: center;
+}
+
+.bcc-filter {
+  margin: 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.bcc-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 8px;
+  text-align: center;
+}
+
+.bcc-pagination {
+  display: flex;
+  border: 1px solid black;
+  justify-content: center;
+  margin-top: 8px;
+}
+
+.page-btn {
+  padding: 6px 12px;
+  cursor: pointer;
+  border: none;
+  background-color: white;
+}
+
+.page-btn.active {
+  background-color: #0056b3;
+  color: white;
+  font-weight: bold;
+}

@@ -17,7 +17,7 @@
   flex-direction: column;
   z-index: 100;
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-  font-size: 14px;
+  font-size: 20px;
 }
 
 .sidebar-header {
@@ -35,7 +35,7 @@
 }
 
 .menu-group-title {
-  font-size: 13px;
+  font-size: 20px;
   color: #999;
   margin-top: 15px;
   margin-bottom: 5px;
@@ -52,26 +52,25 @@
   padding: 10px 15px;
   text-decoration: none;
   color: #555;
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 500;
   transition: background-color 0.3s, color 0.3s;
   border-radius: 6px;
 }
 
 .menu-link:hover {
-  background-color: #e5f7fc; /* Nền sáng hơn khi hover */
-  color: #007bff; /* Màu chữ xanh dương khi hover */
+  background-color: #e5f7fc;
+  color: #007bff;
 }
 
 .menu-link.active-link {
-  background-color: #71daf5; /* Nền xanh mạnh hơn khi Active */
+  background-color: #71daf5;
   color: #333;
   font-weight: 600;
 }
 
 .menu-link.active-link:hover {
-  background-color: #71daf5; /* Giữ nguyên màu nền active */
-  color: #333;
+  background-color: #71daf5;
 }
 
 .sidebar-footer {
