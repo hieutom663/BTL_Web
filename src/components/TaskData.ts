@@ -81,12 +81,13 @@ export interface TaiKhoan {
 }
 
 export interface DongLuong {
-  id: string;
-  ten: string;
-  thang: string;
-  luongCoBan: number;
+  maBangLuong: number;
+  maNhanVien: string;
+  thang: number;
+  nam: number;
   tongGioLam: number;
-  gioTangCa: number;
-  tongLuong: number;
-  trangThai: "dangCho" | "daDuyet" | "daTra";
+  tongGioTangCa: number;
+  luongCoBan: number;
+  luongTangCa: number;
+  tongLuongNhan: number;
 }

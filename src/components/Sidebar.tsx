@@ -3,7 +3,6 @@ import { Link } from "react-router-dom";
 import "./Sidebar.css";
 
 const Sidebar = () => {
-  const loginStatus = localStorage.getItem("token");
   const role = localStorage.getItem("role");
   const [activePath, setActivePath] = useState(window.location.pathname);
   const handleLinkClick = (path: string) => {
@@ -74,6 +73,17 @@ const Sidebar = () => {
             onClick={() => handleLinkClick("/timesheet/")}
           >
             Bảng chấm công
+          </Link>
+        </li>
+        <li className="menu-item">
+          <Link
+            to={"/salarysheet/"}
+            className={`menu-link ${
+              activePath === "/salarysheet/" ? "active-link" : ""
+            }`}
+            onClick={() => handleLinkClick("/salarysheet/")}
+          >
+            Bảng lương
           </Link>
         </li>
       </ul>

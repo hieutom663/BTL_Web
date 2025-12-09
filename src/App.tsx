@@ -10,6 +10,7 @@ import BangChamCong from "./components/BangChamCong";
 import ChiTietPhongBan from "./components/ChiTietPhongBan";
 import PhongBan from "./components/PhongBan";
 import DanhSachNhanVien from "./components/DanhSachNhanVien";
+import BangLuongNhanVien from "./components/BangLuongNhanVien";
 function App() {
   return (
     <BrowserRouter>
@@ -22,6 +23,7 @@ function App() {
         <Route path="/departments/:id" element={<ChiTietPhongBan />}></Route>
         <Route path="/timesheet/" element={<BangChamCong />}></Route>
         <Route path="/" element={<Trangchu />}></Route>
+        <Route path="/salarysheet" element={<BangLuongNhanVien />}></Route>
       </Routes>
     </BrowserRouter>
   );
