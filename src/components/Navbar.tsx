@@ -4,35 +4,33 @@ import { useState, useEffect } from "react";
 import "./Navbar.css";
 
 const Navbar = () => {
-  const navigate = useNavigate();
-  const [loginStatus, setLoginStatus] = useState(
-    !!localStorage.getItem("token")
-  );
-  const [username, setUsername] = useState(
+  const dieuHuong = useNavigate();
+  const [dangNhap, setDangNhap] = useState(!!localStorage.getItem("token"));
+  const [tenNguoiDung, setTenNguoiDung] = useState(
     localStorage.getItem("tenDangNhap") || ""
   );
-  const [showDropdown, setShowDropdown] = useState(false);
+  const [hienMenuXuong, setHienMenuXuong] = useState(false);
 
-  const handleLogout = () => {
+  const xuLyDangXuat = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("tenDangNhap");
     localStorage.removeItem("role");
-    setLoginStatus(false);
-    setUsername("");
-    setShowDropdown(false);
-    navigate("/login");
+    setDangNhap(false);
+    setTenNguoiDung("");
+    setHienMenuXuong(false);
+    dieuHuong("/login");
   };
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      setLoginStatus(!!localStorage.getItem("token"));
-      setUsername(localStorage.getItem("tenDangNhap") || "");
+    const capNhatTrangThai = setInterval(() => {
+      setDangNhap(!!localStorage.getItem("token"));
+      setTenNguoiDung(localStorage.getItem("tenDangNhap") || "");
     }, 200);
-    return () => clearInterval(interval);
+    return () => clearInterval(capNhatTrangThai);
   }, []);
 
   return (
-    <div className="navbar">
+    <div className="thanh-dieu-huong">
       <div className="logo">
         <img src={logo} alt="Logo" />
         <h2>
@@ -40,33 +38,33 @@ const Navbar = () => {
         </h2>
       </div>
 
-      <div className="profile-container">
-        {loginStatus ? (
-          <div className="profile-dropdown">
+      <div className="khung-ho-so">
+        {dangNhap ? (
+          <div className="menu-ho-so">
             <button
-              className="profile-button"
-              onClick={() => setShowDropdown(!showDropdown)}
+              className="nut-ho-so"
+              onClick={() => setHienMenuXuong(!hienMenuXuong)}
             >
-              {username || "User"}
+              {tenNguoiDung || "Người dùng"}
             </button>
 
-            <div className={`dropdown-menu ${showDropdown ? "show" : ""}`}>
+            <div className={`menu-xuong ${hienMenuXuong ? "hien" : ""}`}>
               <button
-                className="dropdown-item"
+                className="item-menu"
                 onClick={() => {
-                  navigate("/profile");
-                  setShowDropdown(false);
+                  dieuHuong("/profile");
+                  setHienMenuXuong(false);
                 }}
               >
                 Thông tin cá nhân
               </button>
-              <button className="dropdown-item" onClick={handleLogout}>
+              <button className="item-menu" onClick={xuLyDangXuat}>
                 Đăng xuất
               </button>
             </div>
           </div>
         ) : (
-          <button onClick={() => navigate("/login")}>Đăng nhập</button>
+          <button onClick={() => dieuHuong("/login")}>Đăng nhập</button>
         )}
       </div>
     </div>

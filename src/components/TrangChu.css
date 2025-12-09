@@ -23,8 +23,8 @@
 /* ===== WELCOME CARD ===== */
 .welcome-card {
   background: white;
-  width: 935px; /* chiều rộng bạn yêu cầu */
-  height: 152px; /* chiều cao bạn yêu cầu */
+  width: 935px;
+  height: 152px;
 
   padding: 18px 22px;
   border-radius: 12px;
@@ -53,10 +53,10 @@
 
 .calendar-card {
   background: white;
-  width: 462px; /* cố định chiều rộng */
-  height: 352px; /* cố định chiều cao */
+  width: 462px;
+  height: 352px;
 
-  padding: 14px 16px; /* giảm padding để vừa hơn */
+  padding: 14px 16px;
   border-radius: 12px;
   box-shadow: 0 3px 8px rgba(0, 0, 0, 0.12);
 
@@ -92,13 +92,29 @@
   margin-bottom: 6px;
 }
 
+/* ✅ Hai nút chuyển tháng đã đổi sang trắng */
 .arrow-btn {
-  border: none;
-  background: #eee;
-  padding: 4px 8px;
+  width: 32px;
+  height: 32px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  border: 1px solid #ccc;
+  background-color: white; /* ✅ Màu nền trắng */
   border-radius: 6px;
+
+  font-size: 16px;
+  font-weight: bold;
+  color: #333; /* ✅ Màu chữ đậm */
+
   cursor: pointer;
-  font-size: 14px;
+  transition: background-color 0.2s ease;
+}
+
+.arrow-btn:hover {
+  background-color: #f0f0f0; /* ✅ Hover xám nhẹ */
 }
 
 .calendar-month {
@@ -125,7 +141,7 @@
 .calendar-day,
 .calendar-today {
   width: 100%;
-  height: 34px; /* THU NHỎ để vừa 352px */
+  height: 34px;
   border-radius: 6px;
   background: #f7f7f7;
   font-size: 13px;

@@ -79,3 +79,14 @@ export interface TaiKhoan {
   maPhong: string;
   vaiTro: string;
 }
+
+export interface DongLuong {
+  id: string;
+  ten: string;
+  thang: string;
+  luongCoBan: number;
+  tongGioLam: number;
+  gioTangCa: number;
+  tongLuong: number;
+  trangThai: "dangCho" | "daDuyet" | "daTra";
+}
