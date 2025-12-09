@@ -8,12 +8,6 @@ const BangThongKe = () => {
   const [danhSachNhanVien, setDanhSachNhanVien] = useState<NhanVien[]>([]);
   const [bangLuongThang, setBangLuongThang] = useState<DongLuong[]>([]);
   const [nam, setNam] = useState(new Date().getFullYear());
-  const thongTinThongKe = bangLuongThang
-    .filter((e) => e.nam === nam)
-    .map((nv) => {
-      const lt = danhSachNhanVien.find((n) => n.maNhanVien === nv.maNhanVien);
-      return { ...nv, ...lt };
-    });
 
   useEffect(() => {
     axios
