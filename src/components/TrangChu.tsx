@@ -1,7 +1,10 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Sidebar from "./Sidebar";
 import Navbar from "./Navbar";
 import "./TrangChu.css";
+import { maNv, NhanVien } from "./TaskData";
+import axios from "axios";
+import BangVang from "./BangVang";
 
 const TrangChu = () => {
   const today = new Date();
@@ -65,6 +68,13 @@ const TrangChu = () => {
     }
     setNgayChon(null);
   };
+  const [danhSachNhanVien, setDanhSachNhanVien] = useState<NhanVien[]>([]);
+  useEffect(() => {
+    axios
+      .get("http://localhost:3000/danhsachnhanvien")
+      .then((res) => setDanhSachNhanVien(res.data))
+      .catch((err) => console.log("Lỗi", err));
+  }, []);
 
   return (
     <div className="trangchu-container">
@@ -75,106 +85,117 @@ const TrangChu = () => {
 
         <div className="trangchu-content">
           {/* Thẻ chào mừng */}
-          <div className="welcome-card">
-            <div className="welcome-icon">✌️</div>
-            <div>
-              <div className="welcome-text">Xin chào,</div>
-              <div className="welcome-text">chào mừng bạn quay lại</div>
+          <div className="hang1">
+            <div className="welcome-card">
+              <div className="welcome-icon">✌️</div>
+              <div>
+                <div className="welcome-text">
+                  Xin chào,{" "}
+                  {
+                    danhSachNhanVien.find((e) => e.maNhanVien === maNv)
+                      ?.tenNhanVien
+                  }
+                </div>
+                <div className="welcome-text">chào mừng bạn quay lại</div>
+              </div>
             </div>
-          </div>
 
-          {/* Thẻ lịch */}
-          <div className="calendar-card">
-            <div className="calendar-header">
-              <div className="calendar-title">Lịch</div>
-            </div>
+            {/* Thẻ lịch */}
 
-            <div className="calendar-month-row">
-              <button className="arrow-btn" onClick={thangTruoc}>
-                {"<"}
-              </button>
-
-              <div className="calendar-month">
-                Tháng {currentMonth + 1}/{currentYear}
+            <div className="calendar-card">
+              <div className="calendar-header">
+                <div className="calendar-title">Lịch</div>
               </div>
 
-              <button className="arrow-btn" onClick={thangSau}>
-                {">"}
-              </button>
-            </div>
-
-            <div className="calendar-grid">
-              {thuTrongTuan.map((d) => (
-                <div key={d} className="calendar-day-header">
-                  {d}
-                </div>
-              ))}
-
-              {cacOTrongLich.map((day, index) => {
-                const isToday =
-                  day === today.getDate() &&
-                  currentMonth === today.getMonth() &&
-                  currentYear === today.getFullYear();
-
-                const key =
-                  typeof day === "number"
-                    ? taoKey(currentYear, currentMonth, day)
-                    : "";
-
-                const coGhiChu = typeof day === "number" && ghiChu[key];
-
-                return (
-                  <div
-                    key={index}
-                    onClick={() =>
-                      typeof day === "number" && moPopupGhiChu(day)
-                    }
-                    className={isToday ? "calendar-today" : "calendar-day"}
-                    style={{
-                      position: "relative",
-                      fontWeight: isToday ? "bold" : "normal",
-                    }}
-                  >
-                    {day}
-                    {coGhiChu && <div className="event-dot"></div>}
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* POPUP GHI CHÚ */}
-      {ngayChon && (
-        <div className="note-popup-overlay">
-          <div className="note-popup">
-            <h3>Ghi chú ngày {ngayChon}</h3>
-
-            <textarea
-              value={inputGhiChu}
-              onChange={(e) => setInputGhiChu(e.target.value)}
-              placeholder="Nhập ghi chú..."
-            ></textarea>
-
-            <div className="popup-buttons">
-              <button onClick={luuGhiChu} className="btn-save">
-                Lưu
-              </button>
-
-              <button onClick={() => setNgayChon(null)} className="btn-cancel">
-                Đóng
-              </button>
-
-              {ghiChu[ngayChon] && (
-                <button onClick={xoaGhiChu} className="btn-delete">
-                  Xóa
+              <div className="calendar-month-row">
+                <button className="arrow-btn" onClick={thangTruoc}>
+                  {"<"}
                 </button>
+
+                <div className="calendar-month">
+                  Tháng {currentMonth + 1}/{currentYear}
+                </div>
+
+                <button className="arrow-btn" onClick={thangSau}>
+                  {">"}
+                </button>
+              </div>
+
+              <div className="calendar-grid">
+                {thuTrongTuan.map((d) => (
+                  <div key={d} className="calendar-day-header">
+                    {d}
+                  </div>
+                ))}
+
+                {cacOTrongLich.map((day, index) => {
+                  const isToday =
+                    day === today.getDate() &&
+                    currentMonth === today.getMonth() &&
+                    currentYear === today.getFullYear();
+
+                  const key =
+                    typeof day === "number"
+                      ? taoKey(currentYear, currentMonth, day)
+                      : "";
+
+                  const coGhiChu = typeof day === "number" && ghiChu[key];
+
+                  return (
+                    <div
+                      key={index}
+                      onClick={() =>
+                        typeof day === "number" && moPopupGhiChu(day)
+                      }
+                      className={isToday ? "calendar-today" : "calendar-day"}
+                      style={{
+                        position: "relative",
+                        fontWeight: isToday ? "bold" : "normal",
+                      }}
+                    >
+                      {day}
+                      {coGhiChu && <div className="event-dot"></div>}
+                    </div>
+                  );
+                })}
+              </div>
+              {ngayChon && (
+                <div className="note-popup-overlay">
+                  <div className="note-popup">
+                    <h3>Ghi chú ngày {ngayChon}</h3>
+
+                    <textarea
+                      value={inputGhiChu}
+                      onChange={(e) => setInputGhiChu(e.target.value)}
+                      placeholder="Nhập ghi chú..."
+                    ></textarea>
+
+                    <div className="popup-buttons">
+                      <button onClick={luuGhiChu} className="btn-save">
+                        Lưu
+                      </button>
+
+                      <button
+                        onClick={() => setNgayChon(null)}
+                        className="btn-cancel"
+                      >
+                        Đóng
+                      </button>
+
+                      {ghiChu[ngayChon] && (
+                        <button onClick={xoaGhiChu} className="btn-delete">
+                          Xóa
+                        </button>
+                      )}
+                    </div>
+                  </div>
+                </div>
               )}
             </div>
           </div>
+          <BangVang danhSachNhanVien={danhSachNhanVien} />
         </div>
-      )}
+      </div>
     </div>
   );
 };

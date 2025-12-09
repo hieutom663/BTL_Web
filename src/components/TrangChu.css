@@ -18,18 +18,17 @@
   display: flex;
   gap: 20px;
   align-items: flex-start;
+  flex-direction: column;
 }
 
 /* ===== WELCOME CARD ===== */
 .welcome-card {
   background: white;
   width: 935px;
-  height: 152px;
-
+  height: 252px;
   padding: 18px 22px;
   border-radius: 12px;
   box-shadow: 0 3px 8px rgba(0, 0, 0, 0.12);
-
   display: flex;
   align-items: center;
   gap: 20px;
@@ -38,11 +37,11 @@
 }
 
 .welcome-icon {
-  font-size: 48px;
+  font-size: 96px;
 }
 
 .welcome-text {
-  font-size: 26px;
+  font-size: 40px;
   font-weight: 600;
   line-height: 1.3;
 }
@@ -235,4 +234,23 @@
   padding: 6px 12px;
   border-radius: 6px;
   border: none;
+}
+
+.hang1 {
+  width: 80vw;
+  display: flex;
+  padding: 20px;
+  align-items: center;
+  justify-content: space-between;
+}
+
+th {
+  background-color: #0056b3;
+  color: white;
+}
+.award {
+  width: 80vw;
+  display: flex;
+
+  gap: 100px;
 }

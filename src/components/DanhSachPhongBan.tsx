@@ -5,6 +5,7 @@ import Sidebar from "./Sidebar";
 import Navbar from "./Navbar";
 import SuaThongTinPhong from "./SuaThongTinPhong";
 import QuanLyPhongBan from "./QuanLyPhongBan";
+import "./danhSachPhongBan.css";
 
 const DanhSachPhongBan = () => {
   const [danhSachPhongBan, setDanhSachPhongBan] = useState<PhongBan[]>([]);

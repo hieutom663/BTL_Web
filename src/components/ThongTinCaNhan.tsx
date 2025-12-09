@@ -98,9 +98,9 @@ const ThongTinCaNhan = () => {
       if (!response.ok) {
         alert(data.message || "Lỗi");
       }
-    setThongBao("Đổi mật khẩu thành công!");
-    setMoFormDoiMatKhau(false);
-    setThongTinMatKhau({ hienTai: "", moi: "", xacNhan: "" });
+      setThongBao("Đổi mật khẩu thành công!");
+      setMoFormDoiMatKhau(false);
+      setThongTinMatKhau({ hienTai: "", moi: "", xacNhan: "" });
     } catch {
       alert("Lỗi khi đổi mật khẩu");
     }
