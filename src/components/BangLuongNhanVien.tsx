@@ -12,6 +12,11 @@ function BangLuongNhanVien() {
   const duLieuNhanVien = bangLuongThang.filter(
     (e) => e.maNhanVien === maNv && e.thang === thang
   );
+  const duLieuAdmin = bangLuongThang.filter((e) => e.thang === thang);
+  const tinhLuong = (nv: DongLuong) => {
+    const donGiaGio = nv.luongCoBan / 171;
+    return Number(nv.luongCoBan) + Number(donGiaGio * nv.tongGioTangCa * 1.5);
+  };
 
   useEffect(() => {
     axios
@@ -57,6 +62,7 @@ function BangLuongNhanVien() {
                 </select>
               </div>
             </div>
+            <hr />
 
             <table className="payroll-table" border={1} cellPadding={10}>
               <thead>
@@ -70,15 +76,17 @@ function BangLuongNhanVien() {
               </thead>
 
               <tbody>
-                {duLieuNhanVien.map((dong) => (
-                  <tr key={dong.maBangLuong}>
-                    <td>{dong.maNhanVien}</td>
-                    <td>{dong.tongGioLam}</td>
-                    <td>{dong.tongGioTangCa}</td>
-                    <td>{dong.luongCoBan}đ</td>
-                    <td>{dong.tongLuongNhan}đ</td>
-                  </tr>
-                ))}
+                {(role === "user" ? duLieuNhanVien : duLieuAdmin).map(
+                  (dong) => (
+                    <tr key={dong.maBangLuong}>
+                      <td>{dong.maNhanVien}</td>
+                      <td>{dong.tongGioLam}</td>
+                      <td>{dong.tongGioTangCa}</td>
+                      <td>{Math.round(dong.luongCoBan)} VND</td>
+                      <td>{Math.round(tinhLuong(dong))} VND</td>
+                    </tr>
+                  )
+                )}
               </tbody>
             </table>
           </div>
