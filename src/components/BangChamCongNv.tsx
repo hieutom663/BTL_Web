@@ -1,4 +1,4 @@
-import { NhanVien, ThongTinChamCongThang, maNv, ngayThang } from "./TaskData";
+import { NhanVien, ThongTinChamCongThang, maNv } from "./TaskData";
 import { useState } from "react";
 import TheChamCong from "./TheChamCong";
 
@@ -14,7 +14,6 @@ const BangChamCongNv = (props: {
     thongTinNhanVien,
     bangThongTinChamCong,
     thang,
-    nam,
     setThoiGianDen,
     setThoiGianVe,
   } = props;

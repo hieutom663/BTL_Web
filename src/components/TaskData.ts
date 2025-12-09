@@ -23,6 +23,13 @@ export const ngayThang = (str: Date) => {
   return ketQua;
 };
 
+export const tinhLuong = (nv: DongLuong) => {
+  const donGiaGio = nv.luongCoBan / 171;
+  return Math.round(
+    Number(nv.luongCoBan) + Number(donGiaGio * nv.tongGioTangCa * 1.5)
+  );
+};
+
 export interface PhongBan {
   maPhong: string;
   tenPhong: string;
