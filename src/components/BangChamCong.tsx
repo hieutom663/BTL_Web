@@ -143,6 +143,7 @@ const BangChamCong = () => {
             thongTinNhanVien={thongTinNhanVien}
             bangThongTinChamCong={bangThongTinChamCong}
             thang={thang}
+            nam={nam}
             setThoiGianDen={setThoiGianDen}
             setThoiGianVe={setThoiGianVe}
           />

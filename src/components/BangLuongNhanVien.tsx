@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 //import "./TinhLuong.css";
-import { DongLuong, maNv, NhanVien, role } from "./TaskData";
+import { DongLuong, maNv, role } from "./TaskData";
 import Sidebar from "./Sidebar";
 import Navbar from "./Navbar";
 
@@ -10,14 +10,20 @@ function BangLuongNhanVien() {
   const [thang, setThang] = useState(new Date().getMonth() + 1);
   const [nam, setNam] = useState(new Date().getFullYear());
   const duLieuNhanVien = bangLuongThang.filter(
-    (e) => e.maNhanVien === maNv && e.thang === thang
+    (e) => e.maNhanVien === maNv && e.nam === nam
   );
   const duLieuAdmin = bangLuongThang.filter((e) => e.thang === thang);
   const tinhLuong = (nv: DongLuong) => {
     const donGiaGio = nv.luongCoBan / 171;
     return Number(nv.luongCoBan) + Number(donGiaGio * nv.tongGioTangCa * 1.5);
   };
-
+  const [page, setPage] = useState(1);
+  const duLieuTrongMotTrang = 23;
+  const viTriBatDau = (page - 1) * duLieuTrongMotTrang;
+  const duLieuTamThoi = duLieuAdmin.slice(
+    viTriBatDau,
+    viTriBatDau + duLieuTrongMotTrang
+  );
   useEffect(() => {
     axios
       .get("http://localhost:3000/bangluongthang")
@@ -37,30 +43,34 @@ function BangLuongNhanVien() {
         <Sidebar />
         <div className="content">
           <div className="payroll-container">
-            <h2 className="title">Tính lương nhân viên</h2>
+            <h2 className="title">Bảng lương</h2>
 
             <div className="controls">
-              <div>
-                <label>Tháng:</label>
-                <select
-                  value={thang}
-                  onChange={(e) => setThang(Number(e.target.value))}
-                >
-                  {[...Array(12)].map((e, t) => (
-                    <option>{t + 1}</option>
-                  ))}
-                </select>
+              {role === "admin" ? (
+                <div>
+                  <label>Tháng:</label>
+                  <select
+                    value={thang}
+                    onChange={(e) => setThang(Number(e.target.value))}
+                  >
+                    {[...Array(12)].map((e, t) => (
+                      <option>{t + 1}</option>
+                    ))}
+                  </select>
 
-                <label>Năm:</label>
-                <select
-                  value={nam}
-                  onChange={(e) => setNam(Number(e.target.value))}
-                >
-                  {[nam].map((n) => (
-                    <option>{n}</option>
-                  ))}
-                </select>
-              </div>
+                  <label>Năm:</label>
+                  <select
+                    value={nam}
+                    onChange={(e) => setNam(Number(e.target.value))}
+                  >
+                    {[nam].map((n) => (
+                      <option>{n}</option>
+                    ))}
+                  </select>
+                </div>
+              ) : (
+                <></>
+              )}
             </div>
             <hr />
 
@@ -76,7 +86,7 @@ function BangLuongNhanVien() {
               </thead>
 
               <tbody>
-                {(role === "user" ? duLieuNhanVien : duLieuAdmin).map(
+                {(role === "user" ? duLieuNhanVien : duLieuTamThoi).map(
                   (dong) => (
                     <tr key={dong.maBangLuong}>
                       <td>{dong.maNhanVien}</td>
@@ -89,6 +99,20 @@ function BangLuongNhanVien() {
                 )}
               </tbody>
             </table>
+            {[...Array(Math.ceil(duLieuAdmin.length / 20))].map((e, i) => {
+              const currentPage = i + 1;
+              const isActive = currentPage === page;
+              return (
+                <button
+                  key={currentPage}
+                  className={`page-btn ${isActive ? "active" : ""}`}
+                  onClick={() => setPage(currentPage)}
+                  aria-current={isActive ? "page" : undefined}
+                >
+                  {currentPage}
+                </button>
+              );
+            })}
           </div>
         </div>
       </div>

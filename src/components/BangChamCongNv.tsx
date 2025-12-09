@@ -1,10 +1,12 @@
 import { NhanVien, ThongTinChamCongThang, maNv, ngayThang } from "./TaskData";
+import { useState } from "react";
 import TheChamCong from "./TheChamCong";
 
 const BangChamCongNv = (props: {
   thongTinNhanVien: NhanVien;
   bangThongTinChamCong: ThongTinChamCongThang[];
   thang: number;
+  nam: number;
   setThoiGianDen: any;
   setThoiGianVe: any;
 }) => {
@@ -12,6 +14,7 @@ const BangChamCongNv = (props: {
     thongTinNhanVien,
     bangThongTinChamCong,
     thang,
+    nam,
     setThoiGianDen,
     setThoiGianVe,
   } = props;
@@ -27,6 +30,13 @@ const BangChamCongNv = (props: {
     const giay = String(now.getSeconds()).padStart(2, "0");
     return `${gio}:${phut}:${giay}`;
   };
+  const [page, setPage] = useState(1);
+  const duLieuTrongMotTrang = 23;
+  const viTriBatDau = (page - 1) * duLieuTrongMotTrang;
+  const duLieuTamThoi = bangThongTinNv.slice(
+    viTriBatDau,
+    viTriBatDau + duLieuTrongMotTrang
+  );
   return (
     <div style={{ width: "85vw" }}>
       <h2>Bảng chấm công tháng: {thang}</h2>
@@ -107,11 +117,25 @@ const BangChamCongNv = (props: {
           </tr>
         </thead>
         <tbody>
-          {bangThongTinNv.map((e) => (
+          {duLieuTamThoi.map((e) => (
             <TheChamCong thongTinChamCong={e} />
           ))}
         </tbody>
       </table>
+      {[...Array(Math.ceil(bangThongTinNv.length / 23))].map((e, i) => {
+        const currentPage = i + 1;
+        const isActive = currentPage === page;
+        return (
+          <button
+            key={currentPage}
+            className={`page-btn ${isActive ? "active" : ""}`}
+            onClick={() => setPage(currentPage)}
+            aria-current={isActive ? "page" : undefined}
+          >
+            {currentPage}
+          </button>
+        );
+      })}
     </div>
   );
 };
