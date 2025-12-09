@@ -51,6 +51,7 @@ app.post("/api/login", async (req, res) => {
       token,
       tenDangNhap: user.tenDangNhap,
       role: user.vaiTro,
+      ten: user.tenNhanVien,
     });
   } catch (error) {
     console.error(error);
@@ -224,14 +225,7 @@ app.delete("/api/xoanhanvien/:id", async (req, res) => {
 //them gioi cham cong den
 app.post("/api/chamcongden", async (req, res) => {
   try {
-    const {
-      maNhanVien,
-      tenNhanVien,
-      ngayLam,
-      gioVaoLam,
-      gioTanLam,
-      //tongGioLam,
-    } = req.body;
+    const { maNhanVien, tenNhanVien, ngayLam, gioVaoLam, gioTanLam } = req.body;
     console.log(req.body);
     await pool.execute(
       "INSERT INTO bangchamcong (maNhanVien, tenNhanVien, ngayLam, gioVaoLam, gioTanLam) VALUES (?,?,?,?,?)",
@@ -331,6 +325,17 @@ app.get("/taikhoan", async (req, res) => {
     res.json({ message: "Lỗi server" });
   }
 });
+
+//Bang luong thang
+app.get("/bangluongthang", async (req, res) => {
+  try {
+    const [rows] = await pool.query("SELECT * FROM bangluongthang");
+    res.json(rows);
+  } catch (error) {
+    res.json({ message: "Lỗi server" });
+  }
+});
+
 app.listen(port, () => {
   console.log(`Server đang chạy tại http://localhost:${port}`);
 });
