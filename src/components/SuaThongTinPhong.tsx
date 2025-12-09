@@ -6,34 +6,29 @@ const SuaThongTinPhong = (props: {
   setFormData: any;
 }) => {
   const { formData, formSua, setFormSua, setFlag, setFormData } = props;
+
   const kiemTra = () => {
     if (formData.maPhong.length !== 3 || formData.tenPhong.length < 10) {
       return false;
     }
     return true;
   };
+
   return (
     <>
-      <div style={{ padding: "20px", fontFamily: "sans-serif", width: "85vw" }}>
-        <h2 style={{ color: "#0056b3", marginBottom: 8 }}>Quản lý phòng ban</h2>
+      <div className="sttp-container">
+        <h2 className="sttp-title">Quản lý phòng ban</h2>
         <hr />
+
         <form
-          style={{
-            border: "1px solid black",
-            borderRadius: 8,
-            margin: "8px 8px 8px 0px",
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            gap: 12,
-            padding: 20,
-          }}
+          className="sttp-form"
           onSubmit={async (e) => {
             e.preventDefault();
             if (!kiemTra()) {
               alert("Vui lòng nhập đầy đủ thông tin phòng ban !");
               return;
             }
+
             try {
               const url = formSua
                 ? `http://localhost:3000/api/suaphongban/${formData.maPhong}`
@@ -45,7 +40,9 @@ const SuaThongTinPhong = (props: {
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(formData),
               });
+
               const data = await response.json();
+
               if (!response.ok) {
                 alert(data.message || "Lỗi");
               } else {
@@ -68,80 +65,60 @@ const SuaThongTinPhong = (props: {
         >
           <h3>{formSua ? "Sửa phòng ban" : "Thêm phòng ban mới"}</h3>
 
-          <div style={{ border: "" }}>
-            <div
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                fontSize: 16,
-              }}
-            >
+          <div>
+            <div className="sttp-input-group">
               <label>Mã phòng:</label>
               <input
                 type="text"
                 placeholder="Mã phòng"
                 value={formData.maPhong}
-                onChange={(e) => {
-                  setFormData({ ...formData, maPhong: e.target.value });
-                }}
+                onChange={(e) =>
+                  setFormData({ ...formData, maPhong: e.target.value })
+                }
                 disabled={formSua}
-              ></input>
+              />
             </div>
-            <div
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                fontSize: 16,
-              }}
-            >
+
+            <div className="sttp-input-group">
               <label>Tên phòng:</label>
               <input
                 type="text"
                 placeholder="Tên phòng"
                 value={formData.tenPhong}
-                onChange={(e) => {
-                  setFormData({ ...formData, tenPhong: e.target.value });
-                }}
-              ></input>
+                onChange={(e) =>
+                  setFormData({ ...formData, tenPhong: e.target.value })
+                }
+              />
             </div>
-            <div
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                fontSize: 16,
-              }}
-            >
+
+            <div className="sttp-input-group">
               <label>Năm thành lập:</label>
               <input
                 type="text"
-                placeholder="Mã phòng"
                 value={formData.namThanhLap}
                 disabled={formSua}
-              ></input>
+              />
             </div>
 
-            <div
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                fontSize: 16,
-              }}
-            >
+            <div className="sttp-input-group">
               <label>Trạng thái:</label>
               <select
-                onChange={(e) => {
-                  setFormData({ ...formData, trangThai: e.target.value });
-                }}
+                onChange={(e) =>
+                  setFormData({ ...formData, trangThai: e.target.value })
+                }
                 disabled={!formSua}
               >
                 <option>Hoạt động</option>
                 <option>Không hoạt động</option>
               </select>
             </div>
-            <button style={{ marginLeft: 60 }}>Lưu</button>
+
+            <button className="btn-save">Lưu</button>
           </div>
         </form>
+
         <button
+          className="btn-back"
           onClick={() => {
             setFlag(false);
             setFormSua(false);
@@ -159,4 +136,5 @@ const SuaThongTinPhong = (props: {
     </>
   );
 };
+
 export default SuaThongTinPhong;

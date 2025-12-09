@@ -5,7 +5,7 @@ import Sidebar from "./Sidebar";
 import Navbar from "./Navbar";
 import SuaThongTinPhong from "./SuaThongTinPhong";
 import QuanLyPhongBan from "./QuanLyPhongBan";
-import "./danhSachPhongBan.css";
+import "./DanhSachPhongBan.css";
 
 const DanhSachPhongBan = () => {
   const [danhSachPhongBan, setDanhSachPhongBan] = useState<PhongBan[]>([]);
@@ -27,7 +27,7 @@ const DanhSachPhongBan = () => {
   return (
     <div>
       <Navbar />
-      <div style={{ display: "flex " }}>
+      <div className="container-body">
         <Sidebar />
         {!flag ? (
           <QuanLyPhongBan

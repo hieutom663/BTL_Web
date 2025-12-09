@@ -69,21 +69,21 @@ button:disabled {
 }
 
 /* Nút chính */
-button:nth-child(1) {
+/* button:nth-child(1) {
   background-color: #007bff;
   color: #fff;
-}
+} */
 
 /* Nút hủy */
-button:nth-child(2) {
-  background-color: #6c757d;
+/* button:nth-child(2) {
+  background-color: #007bff;
   color: #fff;
-}
+} */
 
 /* Nút đổi mật khẩu / chỉnh sửa */
-button:nth-child(3) {
+/* button:nth-child(3) {
   background: none;
   color: #007bff;
   text-decoration: underline;
   padding: 8px 0;
-}
+} */

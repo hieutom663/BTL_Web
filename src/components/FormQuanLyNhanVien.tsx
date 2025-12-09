@@ -46,7 +46,7 @@ function FormQuanLyNhanVien(props: {
           value={
             duLieuForm.maPhong +
             duLieuForm.maChucVu +
-            duLieuForm.thuTuTheoNgayVaoLam.padStart(5, "0")
+            String(duLieuForm.thuTuTheoNgayVaoLam).padStart(5, "0")
           }
           onSelect={(e) =>
             setDuLieuForm({
