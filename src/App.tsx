@@ -1,5 +1,3 @@
-import axios from "axios";
-import { useEffect, useState } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import "./App.css";
 import DangNhap from "./components/DangNhap";
@@ -11,6 +9,7 @@ import ChiTietPhongBan from "./components/ChiTietPhongBan";
 import PhongBan from "./components/PhongBan";
 import DanhSachNhanVien from "./components/DanhSachNhanVien";
 import BangLuongNhanVien from "./components/BangLuongNhanVien";
+import BangThongKe from "./components/BangThongKe";
 function App() {
   return (
     <BrowserRouter>
@@ -24,6 +23,7 @@ function App() {
         <Route path="/timesheet/" element={<BangChamCong />}></Route>
         <Route path="/" element={<Trangchu />}></Route>
         <Route path="/salarysheet" element={<BangLuongNhanVien />}></Route>
+        <Route path="/statistic" element={<BangThongKe />}></Route>
       </Routes>
     </BrowserRouter>
   );

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 //import "./TinhLuong.css";
-import { DongLuong, maNv, role } from "./TaskData";
+import { DongLuong, maNv, role, tinhLuong } from "./TaskData";
 import Sidebar from "./Sidebar";
 import Navbar from "./Navbar";
 
@@ -13,10 +13,7 @@ function BangLuongNhanVien() {
     (e) => e.maNhanVien === maNv && e.nam === nam
   );
   const duLieuAdmin = bangLuongThang.filter((e) => e.thang === thang);
-  const tinhLuong = (nv: DongLuong) => {
-    const donGiaGio = nv.luongCoBan / 171;
-    return Number(nv.luongCoBan) + Number(donGiaGio * nv.tongGioTangCa * 1.5);
-  };
+
   const [page, setPage] = useState(1);
   const duLieuTrongMotTrang = 23;
   const viTriBatDau = (page - 1) * duLieuTrongMotTrang;
@@ -29,7 +26,6 @@ function BangLuongNhanVien() {
       .get("http://localhost:3000/bangluongthang")
       .then((res) => {
         setBangLuongThang(res.data);
-        console.log(res.data);
       })
       .catch((err) => {
         console.log("Lỗi", err);
@@ -93,7 +89,7 @@ function BangLuongNhanVien() {
                       <td>{dong.tongGioLam}</td>
                       <td>{dong.tongGioTangCa}</td>
                       <td>{Math.round(dong.luongCoBan)} VND</td>
-                      <td>{Math.round(tinhLuong(dong))} VND</td>
+                      <td>{tinhLuong(dong)} VND</td>
                     </tr>
                   )
                 )}

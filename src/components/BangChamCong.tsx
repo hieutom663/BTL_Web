@@ -55,7 +55,6 @@ const BangChamCong = () => {
     viTriBatDau,
     viTriBatDau + duLieuTrongMotTrang
   );
-  const isActive = page;
   return (
     <div>
       <Navbar />

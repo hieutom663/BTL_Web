@@ -55,7 +55,17 @@ const Sidebar = () => {
         ) : (
           <></>
         )}
-
+        <li className="menu-item">
+          <Link
+            to={"/profile"}
+            className={`menu-link ${
+              activePath === "/profile" ? "active-link" : ""
+            }`}
+            onClick={() => handleLinkClick("/profile")}
+          >
+            Thông tin cá nhân
+          </Link>
+        </li>
         <li className="menu-item">
           <Link
             to={"/department"}
@@ -90,6 +100,21 @@ const Sidebar = () => {
             Bảng lương
           </Link>
         </li>
+        {role === "admin" ? (
+          <li className="menu-item">
+            <Link
+              to={"/statistic/"}
+              className={`menu-link ${
+                activePath === "/statistic/" ? "active-link" : ""
+              }`}
+              onClick={() => handleLinkClick("/statistic/")}
+            >
+              Bảng thống kê
+            </Link>
+          </li>
+        ) : (
+          <></>
+        )}
       </ul>
 
       {}
