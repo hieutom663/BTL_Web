@@ -1,13 +1,13 @@
 import "./App.css";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import { danhSachNhanVien } from "./TaskData";
-import Login from "./Login";
-import Trangchu from "./Trangchu";
-import MyDepartment from "./MyDepartment";
-import DepartmentManager from "./DepartmentManager";
-import Employee from "./EmployeeList";
-import PositionList from "./PositionList";
-import TinhLuong from "./TinhLuong";
+import { danhSachNhanVien } from "./components/TaskData";
+import Login from "./components/Login";
+import Trangchu from "./components/Trangchu";
+import MyDepartment from "./components/MyDepartment";
+import DepartmentManager from "./components/DepartmentManager";
+import Employee from "./components/EmployeeList";
+import PositionList from "./components/PositionList";
+import TinhLuong from "./components/TinhLuong";
 
 function App() {
   return (
