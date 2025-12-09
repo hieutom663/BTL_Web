@@ -1,4 +1,3 @@
-/* --- Toàn trang --- */
 body {
   font-family: Arial, sans-serif;
   background-color: #f8f9fa;
@@ -67,22 +66,7 @@ button:disabled {
   opacity: 0.6;
 }
 
-/* Nút chính */
 button:nth-child(1) {
   background-color: #007bff;
   color: black;
 }
-
-/* Nút hủy */
-/* button:nth-child(2) {
-  background-color: #007bff;
-  color: #fff;
-} */
-
-/* Nút đổi mật khẩu / chỉnh sửa */
-/* button:nth-child(3) {
-  background: none;
-  color: #007bff;
-  text-decoration: underline;
-  padding: 8px 0;
-} */
