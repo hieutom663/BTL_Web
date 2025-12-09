@@ -47,6 +47,11 @@ const Navbar = () => {
               Danh sách chức vụ
             </Link>
           </li>
+          <li>
+            <Link to={"/payroll-salary"} style={{ textDecoration: "none" }}>
+              Bảng lương
+            </Link>
+          </li>
         </ul>
       </div>
     </div>
