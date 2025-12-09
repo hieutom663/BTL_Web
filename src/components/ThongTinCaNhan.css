@@ -70,7 +70,7 @@ button:disabled {
 /* Nút chính */
 button:nth-child(1) {
   background-color: #007bff;
-  color: #fff;
+  color: black;
 }
 
 /* Nút hủy */
