@@ -67,6 +67,6 @@ button:disabled {
 }
 
 button:nth-child(1) {
-  background-color: #007bff;
+  background-color: #f8f9fa;
   color: black;
 }
