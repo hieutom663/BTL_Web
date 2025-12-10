@@ -20,7 +20,11 @@ const BangVang = (props: { danhSachNhanVien: NhanVien[] }) => {
                   </thead>
                   <tbody>
                     {danhSachNhanVien
-                      .filter((e) => e.maChucVu === "T" || e.maChucVu === "P")
+                      .filter(
+                        (e) =>
+                          (e.maChucVu === "T" || e.maChucVu === "P") &&
+                          e.maNhanVien !== "admin"
+                      )
                       .map((e, i) => (
                         <tr>
                           <td align="center">{i + 1}</td>

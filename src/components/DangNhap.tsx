@@ -69,9 +69,9 @@ const Login = () => {
               localStorage.setItem("token", data.token);
               alert("Đăng nhập thành công");
               navigate("/");
-              window.location.reload();
+              //window.location.reload();
             } catch (error) {
-              console.error("Lỗi kết nối API:", error);
+              console.error(error);
               alert("Lỗi server, vui lòng thử lại");
             }
           }}

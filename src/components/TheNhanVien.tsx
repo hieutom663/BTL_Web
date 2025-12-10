@@ -38,7 +38,6 @@ function TheNhanVien(props: {
     <table className="employee-table" border={1} cellPadding={10}>
       <thead>
         <tr>
-          {/* <th>STT</th> */}
           <th>Mã NV</th>
           <th>Họ Tên</th>
           <th>Phòng ban</th>
