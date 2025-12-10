@@ -11,7 +11,7 @@ import Sidebar from "./Sidebar";
 import Navbar from "./Navbar";
 import TheChamCong from "./TheChamCong";
 import BangChamCongNv from "./BangChamCongNv";
-import "./BangChamCong.css";
+import "./css/BangChamCong.css";
 
 const BangChamCong = () => {
   const [bangThongTinChamCong, setBangThongTinChamCong] = useState<

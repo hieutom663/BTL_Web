@@ -3,7 +3,7 @@ import Navbar from "./Navbar";
 import Sidebar from "./Sidebar";
 import { useEffect, useState } from "react";
 import { DongLuong, NhanVien, tinhLuong } from "./TaskData";
-import "./BangChamCong.css";
+import "./css/BangChamCong.css";
 
 const BangThongKe = () => {
   const [danhSachNhanVien, setDanhSachNhanVien] = useState<NhanVien[]>([]);

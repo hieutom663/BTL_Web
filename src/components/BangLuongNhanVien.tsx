@@ -3,7 +3,7 @@ import axios from "axios";
 import { DongLuong, maNv, role, tinhLuong } from "./TaskData";
 import Sidebar from "./Sidebar";
 import Navbar from "./Navbar";
-import "./BangChamCong.css";
+import "./css/BangChamCong.css";
 
 function BangLuongNhanVien() {
   const [bangLuongThang, setBangLuongThang] = useState<DongLuong[]>([]);

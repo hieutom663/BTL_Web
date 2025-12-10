@@ -1,7 +1,7 @@
 import { Link, useNavigate } from "react-router-dom";
 import logo from "./logo.jpg";
 import { useState, useEffect } from "react";
-import "./Navbar.css";
+import "./css/Navbar.css";
 
 const Navbar = () => {
   const dieuHuong = useNavigate();

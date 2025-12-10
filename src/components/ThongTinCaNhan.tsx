@@ -2,12 +2,13 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import Sidebar from "./Sidebar";
 import Navbar from "./Navbar";
-import "./ThongTinCaNhan.css";
+import "./css/ThongTinCaNhan.css";
 import { maNv, NhanVien, TaiKhoan } from "./TaskData";
 
 const ThongTinCaNhan = () => {
   const [danhSachNhanVien, setDanhSachNhanVien] = useState<NhanVien[]>([]);
   const [danhSachTaiKhoan, setDanhSachTaiKhoan] = useState<TaiKhoan[]>([]);
+
   useEffect(() => {
     axios
       .get("http://localhost:3000/danhsachnhanvien")
@@ -18,6 +19,7 @@ const ThongTinCaNhan = () => {
       .then((res) => setDanhSachTaiKhoan(res.data))
       .catch((err) => console.log("Lỗi", err));
   }, []);
+
   const duLieuKhoiTao = danhSachNhanVien.find((nv) => nv.maNhanVien === maNv);
   const thongTinTaiKhoan = danhSachTaiKhoan.find((e) => e.maNhanVien === maNv);
   const [thongTinCaNhan, setThongTinCaNhan] = useState(

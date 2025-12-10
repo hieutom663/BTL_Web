@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import "./DanhSachNhanVien.css";
+import "./css/DanhSachNhanVien.css";
 import { NhanVien, PhongBan, ChucVu } from "./TaskData";
 import Sidebar from "./Sidebar";
 import Navbar from "./Navbar";

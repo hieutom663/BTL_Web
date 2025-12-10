@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import Sidebar from "./Sidebar";
 import Navbar from "./Navbar";
-import "./TrangChu.css";
+import "./css/TrangChu.css";
 import { maNv, NhanVien } from "./TaskData";
 import axios from "axios";
 import BangVang from "./BangVang";

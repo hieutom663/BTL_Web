@@ -1,7 +1,7 @@
 import { NhanVien, ThongTinChamCongThang, maNv } from "./TaskData";
 import { useState } from "react";
 import TheChamCong from "./TheChamCong";
-import "./BangChamCong.css";
+import "./css/BangChamCong.css";
 
 const BangChamCongNv = (props: {
   thongTinNhanVien: NhanVien;

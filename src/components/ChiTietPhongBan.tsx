@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import "./ChiTietPhongBan.css";
+import "./css/ChiTietPhongBan.css";
 import { useParams, Link } from "react-router-dom";
 import { PhongBan, NhanVien } from "./TaskData";
 import Navbar from "./Navbar";
